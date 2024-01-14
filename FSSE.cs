@@ -67,7 +67,7 @@ string
         {
             string ss = s.ToString();
             string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-            string ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
+            string ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
 
             if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
             {
@@ -157,7 +157,7 @@ nad
 
     //public static bool IsFileHasKnownExtension(string relativeTo)
     //{
-    //    var ext = Path.GetExtension(relativeTo);
+    //    var ext = FS.GetExtension(relativeTo);
     //    ext = FS.NormalizeExtension2(ext);
 
 
@@ -183,7 +183,7 @@ nad
     //{
     //    path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
     //    file = GetFileNameWithoutExtension(fn);
-    //    ext = Path.GetExtension(fn);
+    //    ext = FS.GetExtension(fn);
     //}
 
     ///// <summary>
@@ -197,7 +197,7 @@ nad
     //    {
     //        var ss = s.ToString();
     //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
@@ -704,7 +704,7 @@ nad
     //                }
     //                else
     //                {
-    //                    var ext = Path.GetExtension(selectedFile).ToLower();
+    //                    var ext = FS.GetExtension(selectedFile).ToLower();
     //                    // Musím to kontrolovat jen když je to tmp, logicky
     //                    if (ext == AllExtensions.tmp)
     //                    {
@@ -788,7 +788,7 @@ nad
     //    {
     //        var ss = s.ToString();
     //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
@@ -835,7 +835,7 @@ nad
     //        {
     //            path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
     //            file = Path.GetFileNameWithoutExtension(fn);
-    //            ext = Path.GetExtension(fn);
+    //            ext = FS.GetExtension(fn);
     //        }
     //
     //        public static string PathWithoutExtension(string path)

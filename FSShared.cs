@@ -322,7 +322,7 @@ public partial class FS
     {
         path = FS.WithEndSlash(FS.GetDirectoryName(fn));
         file = Path.GetFileNameWithoutExtension(fn);
-        ext = Path.GetExtension(fn);
+        ext = FS.GetExtension(fn);
     }
 
 
@@ -814,11 +814,12 @@ public partial class FS
 
 
 
+    public static List<string> GetFilesWithoutArgs(string folderPath, string masc, bool? rec)
+    {
+        return GetFiles(folderPath, masc, rec, null);
+    }
 
-
-    public static
-    List<string>
-    GetFiles(string folderPath, string masc, bool? rec, GetFilesArgs a = null)
+    public static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgs a = null)
     {
         SearchOption so = SearchOption.TopDirectoryOnly;
 
@@ -1250,7 +1251,7 @@ public partial class FS
     public static string InsertBetweenFileNameAndExtensionRemovePath(string orig, string whatInsert)
     {
         string fn = Path.GetFileNameWithoutExtension(orig);
-        string e = Path.GetExtension(orig);
+        string e = FS.GetExtension(orig);
         return Path.Combine(fn + whatInsert + e);
     }
 
@@ -1698,7 +1699,7 @@ public partial class FS
         }
 
         StringBuilder sbExt = new StringBuilder();
-        string ext = Path.GetExtension(p);
+        string ext = FS.GetExtension(p);
         if (ext == string.Empty)
         {
             return p;

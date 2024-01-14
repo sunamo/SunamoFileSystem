@@ -43,7 +43,7 @@ public partial class FS : FSSE
         //}
 
 
-        //var ext = Path.GetExtension(ext2);
+        //var ext = FS.GetExtension(ext2);
         //var fn = Path.GetFileNameWithoutExtension(ext2);
         //// isContained must be true, in BundleTsFile if false masc will be .ts, not *.ts and won't found any file
         //var isContained = AllExtensionsHelper.IsContained(ext);
@@ -60,7 +60,7 @@ public partial class FS : FSSE
 
         //var isNoMascEntered = !((ext2.Contains("*") || ext2.Contains("?")));// && !(cis.QuantityLowerChars > 0 || cis.QuantityUpperChars > 0));
         //// From base of logic - isNoMascEntered must be without !. When something another wont working, edit only evaluate of condition above
-        //if (!ext.StartsWith("*.") && isNoMascEntered && isContained && ext == Path.GetExtension( ext2))
+        //if (!ext.StartsWith("*.") && isNoMascEntered && isContained && ext == FS.GetExtension( ext2))
         //{
         //    // Dont understand why, when I insert .aspx.cs, then return just .aspx without *
         //    //if (cis.QuantityUpperChars > 0 || cis.QuantityLowerChars > 0)
@@ -255,7 +255,7 @@ string
         var origS = orig.ToString();
 
         string fn = Path.GetFileNameWithoutExtension(origS);
-        string e = Path.GetExtension(origS);
+        string e = FS.GetExtension(origS);
 
         if (origS.Contains(AllChars.slash) || origS.Contains(AllChars.bs))
         {

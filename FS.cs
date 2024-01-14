@@ -104,8 +104,8 @@ List<string>
     /// <summary>
     ///     Usage: SunamoFubuCsprojFileHelper.GetProjectsInSlnFile
     ///     Cant name GetAbsolutePath because The call is ambiguous between the following methods or properties:
-    ///     'CAChangeContent.ChangeContent(null,List
-    ///     <string>, Func<string, string, string>)' and 'CAChangeContent.ChangeContent(null,List<string>, Func<string, string>)'
+    ///     'CAChangeContent.ChangeContent0(null,List
+    ///     <string>, Func<string, string, string>)' and 'CAChangeContent.ChangeContent0(null,List<string>, Func<string, string>)'
     /// </summary>
     /// <param name="a"></param>
     public static string AbsoluteFromCombinePath(string a)
@@ -276,7 +276,7 @@ List<string>
 
     //public static string GetRelativePath(string relativeTo, string path)
     //{
-    //    return SunamoExceptions.FS.GetRelativePath(relativeTo, path);
+    //    return SunamoExceptions.Path.GetRelativePath(relativeTo, path);
     //}
 
     //public static bool IsAbsolutePath(string path)
@@ -810,7 +810,7 @@ void
     public static string RemoveFile(string fullPathCsproj)
     {
         // Most effecient way to handle csproj and dir
-        var ext = Path.GetExtension(fullPathCsproj);
+        var ext = FS.GetExtension(fullPathCsproj);
         if (ext != string.Empty)
         {
             fullPathCsproj = FS.GetDirectoryName(fullPathCsproj);
@@ -1376,7 +1376,7 @@ void
         CASE.InitFillWith(vr, cesta.Count);
         for (int i = 0; i < vr.Count; i++)
         {
-            vr[i] = Path.GetExtension(cesta[i]);
+            vr[i] = FS.GetExtension(cesta[i]);
         }
         return vr;
     }
@@ -1392,7 +1392,7 @@ void
         Dictionary<string, List<string>> extDict = new Dictionary<string, List<string>>();
         foreach (var item in FS.GetFiles(folder, mask, searchOption))
         {
-            string ext = Path.GetExtension(item);
+            string ext = FS.GetExtension(item);
             string fn = FS.GetFileNameWithoutExtensionLower(item);
 
             if (fn == string.Empty)
@@ -1658,7 +1658,7 @@ void
     public static void GetFileNameWithoutExtensionAndExtension(string fn, out string file, out string ext)
     {
         file = Path.GetFileNameWithoutExtension(fn);
-        ext = Path.GetExtension(file);
+        ext = FS.GetExtension(file);
     }
 
     public static void SaveStream(string path, Stream s)

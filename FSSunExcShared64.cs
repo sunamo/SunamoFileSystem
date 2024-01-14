@@ -87,7 +87,7 @@ bool
             }
             else
             {
-                var ext = Path.GetExtension(selectedFile).ToLower();
+                var ext = FS.GetExtension(selectedFile).ToLower();
                 // Musím to kontrolovat jen když je to tmp, logicky
                 if (ext == AllExtensions.tmp)
                 {

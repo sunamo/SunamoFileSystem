@@ -123,7 +123,7 @@ public partial class FS
         int i = 1;
         foreach (var item in files)
         {
-            FS.RenameFile(item, i + Path.GetExtension(item), FileMoveCollisionOption.DontManipulate);
+            FS.RenameFile(item, i + FS.GetExtension(item), FileMoveCollisionOption.DontManipulate);
             i++;
         }
     }

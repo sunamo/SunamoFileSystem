@@ -44,7 +44,7 @@ public partial class FS
     {
         path = Path.GetDirectoryName(fn) + AllChars.bs;
         file = GetFileNameWithoutExtension(fn);
-        ext = Path.GetExtension(fn);
+        ext = FS.GetExtension(fn);
     }
 
     public static string PathWithoutExtension(string path)
@@ -70,7 +70,7 @@ public partial class FS
     }
 
     ///// <summary>
-    ///// Cant name GetAbsolutePath because The call is ambiguous between the following methods or properties: 'CAChangeContent.ChangeContent(null,List<string>, Func<string, string, string>)' and 'CAChangeContent.ChangeContent(null,List<string>, Func<string, string>)'
+    ///// Cant name GetAbsolutePath because The call is ambiguous between the following methods or properties: 'CAChangeContent.ChangeContent0(null,List<string>, Func<string, string, string>)' and 'CAChangeContent.ChangeContent0(null,List<string>, Func<string, string>)'
     ///// </summary>
     ///// <param name="a"></param>
     //public static string AbsoluteFromCombinePath(string a)
