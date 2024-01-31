@@ -1,5 +1,3 @@
-using SunamoDelegates;
-
 namespace SunamoFileSystem;
 
 /// <summary>
@@ -138,7 +136,7 @@ public class FileSystemWatchers
 
             try
             {
-                existsNew = FS.ExistsFile(e.FullPath);
+                existsNew =File.Exists(e.FullPath);
             }
             catch (Exception)
             {
@@ -146,7 +144,7 @@ public class FileSystemWatchers
 
             try
             {
-                existsOld = FS.ExistsFile(e.OldFullPath);
+                existsOld =File.Exists(e.OldFullPath);
             }
             catch (Exception)
             {
@@ -176,7 +174,7 @@ public class FileSystemWatchers
             lastProcessedFile[e.ChangeType] = e.FullPath;
 
 
-            if (FS.ExistsFile(e.FullPath))
+            if (File.Exists(e.FullPath))
             {
                 _onStop.Invoke(e.FullPath, true);
                 _onStart.Invoke(e.FullPath, true);

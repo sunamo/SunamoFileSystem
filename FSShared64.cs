@@ -1,16 +1,16 @@
-using SunamoCollectionsChangeContent;
-
 namespace SunamoFileSystem;
 
 
 public delegate bool? ExistsDirectory(string path);
 
-public partial class FS : FSSE
+public partial class FS : FSSH
 {
     public static string WithoutEndSlash(string v)
     {
         return WithoutEndSlash(ref v);
     }
+
+
 
 
     public static string WithoutEndSlash(ref string v)
@@ -87,20 +87,20 @@ public partial class FS : FSSE
         return FS.GetFiles(folderPath, FS.MascFromExtension(), recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
     }
 
-    public static
-#if ASYNC
-    async Task<string>
-#else
-string
-#endif
-    ReadAllText(string filename)
-    {
-        return
-#if ASYNC
-        await
-#endif
-        TF.ReadAllText(filename);
-    }
+    //    public static
+    //#if ASYNC
+    //    async Task<string>
+    //#else
+    //string
+    //#endif
+    //    ReadAllText(string filename)
+    //    {
+    //        return
+    //#if ASYNC
+    //        await
+    //#endif
+    //        TF.ReadAllText(filename);
+    //    }
 
     /// <summary>
     /// A2 is path of target file
@@ -117,7 +117,7 @@ string
                 item = FS.MakeUncLongPath(item);
                 fileTo = FS.MakeUncLongPath(fileTo);
 
-                if (co == FileMoveCollisionOption.DontManipulate && FS.ExistsFile(fileTo))
+                if (co == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo))
                 {
                     return;
                 }
@@ -143,12 +143,12 @@ string
         FS.CreateUpfoldersPsysicallyUnlessThere(fileTo);
 
         // Toto tu je důležité, nevím který kokot to zakomentoval
-        if (FS.ExistsFile(fileTo))
+        if (File.Exists(fileTo))
         {
             if (co == FileMoveCollisionOption.AddFileSize)
             {
                 var newFn = FS.InsertBetweenFileNameAndExtension(fileTo, AllStrings.space + FS.GetFileSize(item));
-                if (FS.ExistsFile(newFn))
+                if (File.Exists(newFn))
                 {
                     File.Delete(item);
                     return true;
@@ -161,7 +161,7 @@ string
                 while (true)
                 {
                     var newFn = FS.InsertBetweenFileNameAndExtension(fileTo, " (" + serie + AllStrings.rb);
-                    if (!FS.ExistsFile(newFn))
+                    if (!File.Exists(newFn))
                     {
                         fileTo = newFn;
                         break;
@@ -208,7 +208,7 @@ string
             }
             else if (co == FileMoveCollisionOption.DontManipulate)
             {
-                if (FS.ExistsFile(fileTo))
+                if (File.Exists(fileTo))
                 {
                     return false;
                 }
@@ -237,43 +237,9 @@ string
         return 0;
     }
 
-    public static string InsertBetweenFileNameAndExtension(string orig, string whatInsert)
-    {
-        return InsertBetweenFileNameAndExtension<string, string>(orig, whatInsert, null);
-    }
 
-    /// <summary>
-    /// Vrátí vč. cesty
-    /// </summary>
-    /// <param name="orig"></param>
-    /// <param name="whatInsert"></param>
-    public static StorageFile InsertBetweenFileNameAndExtension<StorageFolder, StorageFile>(StorageFile orig, string whatInsert, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        // Cesta by se zde hodila kvůli FS.CiStorageFile
-        // nicméně StorageFolder nevím zda se používá, takže to bude umět i bez toho
 
-        var origS = orig.ToString();
 
-        string fn = Path.GetFileNameWithoutExtension(origS);
-        string e = FS.GetExtension(origS);
-
-        if (origS.Contains(AllChars.slash) || origS.Contains(AllChars.bs))
-        {
-            string p = FS.GetDirectoryName(origS);
-
-            return FS.CiStorageFile<StorageFolder, StorageFile>(Path.Combine(p, fn + whatInsert + e), ac);
-        }
-        return FS.CiStorageFile<StorageFolder, StorageFile>(fn + whatInsert + e, ac);
-    }
-
-    public static StorageFile CiStorageFile<StorageFolder, StorageFile>(string path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            return (dynamic)path.ToString();
-        }
-        return ac.fs.ciStorageFile.Invoke(path);
-    }
 
 
     public static void CopyAllFilesRecursively(string p, string to, FileMoveCollisionOption co, string contains = null)
@@ -358,7 +324,7 @@ string
         {
             if (co == FileMoveCollisionOption.DontManipulate &&
 
-            FS.ExistsFile(fileTo))
+           File.Exists(fileTo))
             {
                 return;
             }
@@ -424,7 +390,7 @@ string
         var fileTo = fileTo2.ToString();
         if (CopyMoveFilePrepare(ref item, ref fileTo, co))
         {
-            if (co == FileMoveCollisionOption.DontManipulate && FS.ExistsFile(fileTo))
+            if (co == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo))
             {
                 return;
             }
@@ -459,24 +425,6 @@ string
             return FS.TryDeleteFile(v);
         }
         return true;
-    }
-
-    /// <param name="item"></param>
-    public static bool TryDeleteFile(string item)
-    {
-        // TODO: To all code message logging as here
-
-        try
-        {
-            // If file won't exists, wont throw any exception
-            File.Delete(item);
-            return true;
-        }
-        catch
-        {
-            ThisApp.Error(sess.i18n(XlfKeys.FileCanTBeDeleted) + ": " + item);
-            return false;
-        }
     }
 
     //public static Func<string, List<string>> InvokePs;
@@ -528,39 +476,8 @@ string
         return false;
     }
 
-    /// <summary>
-    /// ReplaceIncorrectCharactersFile - can specify char for replace with
-    /// ReplaceInvalidFileNameChars - all wrong chars skip
-    /// </summary>
-    /// <param name="filename"></param>
-    /// <returns></returns>
-    public static string ReplaceInvalidFileNameChars(string filename, params char[] ch)
-    {
-        return filename;
-
-        StringBuilder sb = new StringBuilder();
-        foreach (var item in filename)
-        {
-            if (!s_invalidFileNameChars.Contains(item) || ch.Contains(item))
-            {
-                sb.Append(item);
-            }
-        }
-        return sb.ToString();
-    }
-    readonly static List<char> invalidFileNameChars = Path.GetInvalidFileNameChars().ToList();
-    readonly static List<string> invalidFileNameStrings;
 
 
-    private static List<char> s_invalidPathChars = null;
-
-    /// <summary>
-    /// Field as string because I dont have array and must every time ToArray() to construct string
-    /// </summary>
-    public static string s_invalidFileNameCharsString = null;
-    public static List<char> s_invalidFileNameChars = null;
-    private static List<char> s_invalidCharsForMapPath = null;
-    private static List<char> s_invalidFileNameCharsWithoutDelimiterOfFolders = null;
 
     public static string AllIncludeIfOnlyLetters(string item)
     {
@@ -592,7 +509,7 @@ string
             var s = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
             d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + s + ".txt");
 
-            if (FS.ExistsFile(d))
+            if (File.Exists(d))
             {
                 return TF.ReadAllLinesSync(path);
             }
@@ -659,23 +576,19 @@ string
             }
         }
 
-        if (SH.FirstCharUpper != null)
+
+        if (result.Count > 0)
         {
-            if (result.Count > 0)
-            {
-                result[0] = SH.FirstCharUpper(result[0]);
-            }
+            result[0] = SH.FirstCharUpper(result[0]);
         }
 
-        if (CA.FirstCharUpper != null)
-        {
-            CA.FirstCharUpper(result);
-        }
+        CAChangeContent.ChangeContent0(null, result, SH.FirstCharUpper);
+
 
 #if DEBUG
         if (e.LoadFromFileWhenDebug)
         {
-            if (FS.ExistsFile(d))
+            if (File.Exists(d))
             {
                 TF.WriteAllLines(d, result);
             }
@@ -801,10 +714,8 @@ string
             a = new GetFilesArgs();
         }
 
-        if (SH.FirstCharUpper != null)
-        {
-            CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
-        }
+        CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
+
 
         if (a._trimA1AndLeadingBs)
         {
@@ -818,7 +729,7 @@ string
         {
             foreach (var folder in folders)
             {
-                list = CAChangeContent.ChangeContent0(null, list, d => d = SH.RemoveAfterLast(d, AllChars.dot));
+                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, AllChars.dot));
             }
         }
 
@@ -912,81 +823,20 @@ string
         return Path.Combine(slozka, fn + AllStrings.lowbar + dalsi + ext);
     }
 
-    /// <summary>
-    /// .babelrc etc. return as is. but files which not contains only alphanumeric will be returned when A3 (and A2 is then ignored)
-    ///
-    /// ALL EXT. HAVE TO BE ALWAYS LOWER
-    /// Return in lowercase
-    /// </summary>
-    /// <param name="v"></param>
-    public static string GetExtension(string v, GetExtensionArgs a = null)
-    {
-        if (a == null)
-        {
-            a = new GetExtensionArgs();
-        }
-
-        string result = "";
-        int lastDot = v.LastIndexOf(AllChars.dot);
-        if (lastDot == -1)
-        {
-            return string.Empty;
-        }
-        int lastSlash = v.LastIndexOf(AllChars.slash);
-        int lastBs = v.LastIndexOf(AllChars.bs);
-        if (lastSlash > lastDot)
-        {
-            return string.Empty;
-        }
-        if (lastBs > lastDot)
-        {
-            return string.Empty;
-        }
-        result = v.Substring(lastDot);
-
-
-        if (!IsExtension(result))
-        {
-            if (a.filesWoExtReturnAsIs)
-            {
-                return result;
-            }
-            return string.Empty;
-        }
-
-        if (!a.returnOriginalCase)
-        {
-            result = result.ToLower();
-        }
 
 
 
-        return result;
-    }
 
-    public static bool IsExtension(string result)
-    {
-        if (string.IsNullOrWhiteSpace(result))
-        {
-            return false;
-        }
-        if (!SH.ContainsOnly(result.Substring(1), RandomHelper.vsZnakyWithoutSpecial))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    /// <summary>
-    /// If path ends with backslash, FS.GetDirectoryName returns empty string
-    /// </summary>
-    /// <param name="rp"></param>
-    public static string GetFileName(string rp)
-    {
-        rp = rp.TrimEnd(AllChars.bs);
-        int dex = rp.LastIndexOf(AllChars.bs);
-        return rp.Substring(dex + 1);
-    }
+    ///// <summary>
+    ///// If path ends with backslash, FS.GetDirectoryName returns empty string
+    ///// </summary>
+    ///// <param name="rp"></param>
+    //public static string GetFileName(string rp)
+    //{
+    //    rp = rp.TrimEnd(AllChars.bs);
+    //    int dex = rp.LastIndexOf(AllChars.bs);
+    //    return rp.Substring(dex + 1);
+    //}
 
 
 
@@ -1006,6 +856,7 @@ string
             return BTS.GetValueOfNullable(ac.fs.existsDirectory.Invoke(item));
         }
     }
+
 
 
     public static void MakeUncLongPath<StorageFolder, StorageFile>(ref StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
@@ -1037,11 +888,11 @@ string
     /// For empty or whitespace return false.
     /// </summary>
     /// <param name="selectedFile"></param>
-    public static bool ExistsFile<StorageFolder, StorageFile>(StorageFile selectedFile, AbstractCatalog<StorageFolder, StorageFile> ac = null)
+    public static bool ExistsFileAc<StorageFolder, StorageFile>(StorageFile selectedFile, AbstractCatalog<StorageFolder, StorageFile> ac = null)
     {
         if (ac == null)
         {
-            return ExistsFile(selectedFile.ToString());
+            return File.Exists(selectedFile.ToString());
         }
         return ac.fs.existsFile.Invoke(selectedFile);
     }
@@ -1052,7 +903,7 @@ string
     /// Create all upfolders of A1, if they dont exist
     /// </summary>
     /// <param name="nad"></param>
-    public static void CreateUpfoldersPsysicallyUnlessThere<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
+    public static void CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
     {
         if (ac == null)
         {
@@ -1114,22 +965,22 @@ string
 
     private static Type type = typeof(FS);
 
-    /// <summary>
-    /// All occurences Path's method in sunamo replaced
-    /// </summary>
-    /// <param name="v"></param>
-    public static void CreateDirectory(string v)
-    {
-        try
-        {
-            Directory.CreateDirectory(v);
-        }
-        catch (NotSupportedException)
-        {
+    ///// <summary>
+    ///// All occurences Path's method in sunamo replaced
+    ///// </summary>
+    ///// <param name="v"></param>
+    //public static void CreateDirectory(string v)
+    //{
+    //    try
+    //    {
+    //        Directory.CreateDirectory(v);
+    //    }
+    //    catch (NotSupportedException)
+    //    {
 
 
-        }
-    }
+    //    }
+    //}
 
 
 

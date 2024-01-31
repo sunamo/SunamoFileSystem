@@ -1,6 +1,3 @@
-using SunamoCollectionWithoutDuplicates;
-using SunamoStringJoin;
-
 namespace SunamoFileSystem;
 
 
@@ -21,7 +18,7 @@ public partial class FS
 
     public static string GetFileNameWithoutOneExtension(string path)
     {
-        return SH.RemoveAfterLast(path, "\\");
+        return SHParts.RemoveAfterLast(path, "\\");
     }
 
     public static string GetActualDateTime()
@@ -593,7 +590,7 @@ void
         }
     }
 
-    static void ReplaceInAllFilesWorker(object o)
+    static async Task ReplaceInAllFilesWorker(object o)
     {
         ReplaceInAllFilesArgs p = (ReplaceInAllFilesArgs)o;
 
@@ -638,22 +635,22 @@ void
             }
 
             ThrowEx.DifferentCountInLists("from2", from2, "to2", to2);
-            ReplaceInAllFiles(from2, to2, o as ReplaceInAllFilesArgsBase);
+            await ReplaceInAllFiles(from2, to2, o as ReplaceInAllFilesArgsBase);
         }
         else
         {
-            ReplaceInAllFiles(CA.ToListString(from), CA.ToListString(to), o as ReplaceInAllFilesArgsBase);
+            await ReplaceInAllFiles(CA.ToListString(from), CA.ToListString(to), o as ReplaceInAllFilesArgsBase);
         }
     }
 
 
-    public static void ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase o)
+    public static async Task ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase o)
     {
         ReplaceInAllFilesArgs r = new ReplaceInAllFilesArgs(o);
         r.from = from;
         r.to = to;
 
-        ReplaceInAllFilesWorker(r);
+        await ReplaceInAllFilesWorker(r);
 
         //Thread t = new Thread(new ParameterizedThreadStart(ReplaceInAllFilesWorker));
         //t.Start(r);
@@ -661,12 +658,12 @@ void
 
 
 
-    public static void ReplaceInAllFiles(string folder, string extension, List<string> replaceFrom, List<string> replaceTo, bool isMultilineWithVariousIndent)
+    public static async Task ReplaceInAllFiles(string folder, string extension, List<string> replaceFrom, List<string> replaceTo, bool isMultilineWithVariousIndent)
     {
         var files = FS.GetFiles(folder, FS.MascFromExtension(extension), SearchOption.AllDirectories);
         ThrowEx.DifferentCountInLists("replaceFrom", replaceFrom, "replaceTo", replaceTo);
         Func<StringBuilder, IList<string>, IList<string>, StringBuilder> fasterMethodForReplacing = null;
-        ReplaceInAllFiles(replaceFrom, replaceTo, new ReplaceInAllFilesArgsBase { files = files, isMultilineWithVariousIndent = isMultilineWithVariousIndent, fasterMethodForReplacing = fasterMethodForReplacing });
+        await ReplaceInAllFiles(replaceFrom, replaceTo, new ReplaceInAllFilesArgsBase { files = files, isMultilineWithVariousIndent = isMultilineWithVariousIndent, fasterMethodForReplacing = fasterMethodForReplacing });
     }
     /// <summary>
     /// A4 - whether use s.Contains. A4 - SHReplace.ReplaceAll2
@@ -739,7 +736,7 @@ void
                     //PpkOnDrive ppk = PpkOnDrive.WroteOnDrive;
                     //ppk.Add(DateTime.Now.ToString() + " " + item);
 
-                    TF.WriteAllText(item, content2);
+                    await TF.WriteAllText(item, content2);
 
                     if (writeEveryReadedFileAsStatus)
                     {
@@ -943,7 +940,7 @@ void
                 }
                 string realNewPath = string.Copy(newpath);
                 int vlozeno = 0;
-                while (FS.ExistsFile(realNewPath))
+                while (File.Exists(realNewPath))
                 {
                     realNewPath = FS.InsertBetweenFileNameAndExtension(newpath, vlozeno.ToString());
                     vlozeno++;

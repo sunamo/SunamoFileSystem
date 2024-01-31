@@ -1,6 +1,6 @@
-namespace SunamoFileSystem._sunamo;
+//namespace SunamoFileSystem._sunamo;
 
-internal class NH
-{
-    internal static Func<string, (int, string)> NumberIntUntilWontReachOtherChar;
-}
+//public class NH
+//{
+//    public static Func<string, (int, string)> NumberIntUntilWontReachOtherChar;
+//}

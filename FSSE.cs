@@ -5,34 +5,13 @@ namespace SunamoFileSystem;
 ///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
 ///     konvenci. V názvu souboru to nechám ať vidím na první dobrou co je co.
 /// </summary>
-public partial class FSSE
+public partial class FS
 {
-    /// <summary>
-    /// All occurences Path's method in sunamo replaced
-    /// </summary>
-    /// <param name="v"></param>
-    public static void CreateDirectory(string v)
-    {
-        try
-        {
-            Directory.CreateDirectory(v);
-        }
-        catch (NotSupportedException)
-        {
 
 
-        }
-    }
 
-    public static bool ExistsDirectory(string p)
-    {
-        return Directory.Exists(p);
-    }
 
-    public static bool ExistsFile(string p)
-    {
-        return File.Exists(p);
-    }
+
 
     public static
 #if ASYNC
@@ -66,10 +45,10 @@ string
         if (ac == null)
         {
             string ss = s.ToString();
-            string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-            string ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
+            string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
+            string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
 
-            if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
+            if (!SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial))
             {
                 if (ext != string.Empty)
                 {
@@ -84,65 +63,9 @@ string
         return s;
     }
 
-    public static void CreateUpfoldersPsysicallyUnlessThere(string nad)
-    {
-        CreateFoldersPsysicallyUnlessThere(GetDirectoryName(nad));
-    }
 
-    /// <summary>
-    ///     Create all upfolders of A1 with, if they dont exist
-    /// </summary>
-    /// <param name="nad"></param>
-    public static void CreateFoldersPsysicallyUnlessThere(string nad)
-    {
-        ThrowEx.IsNullOrEmpty("nad", nad);
-        ThrowEx.IsNotWindowsPathFormat("nad", nad);
 
-        MakeUncLongPath(ref nad);
-        if (ExistsDirectory(nad))
-        {
-            return;
-        }
 
-        List<string> slozkyKVytvoreni = new List<string>
-{
-nad
-};
-
-        while (true)
-        {
-            nad = GetDirectoryName(nad);
-
-            // TODO: Tady to nefunguje pro UWP/UAP apps protoze nemaji pristup k celemu disku. Zjistit co to je UWP/UAP/... a jak v nem ziskat/overit jakoukoliv slozku na disku
-            if (ExistsDirectory(nad))
-            {
-                break;
-            }
-
-            string kopia = nad;
-            slozkyKVytvoreni.Add(kopia);
-        }
-
-        slozkyKVytvoreni.Reverse();
-        foreach (string item in slozkyKVytvoreni)
-        {
-            string folder = MakeUncLongPath(item);
-            if (!ExistsDirectory(folder))
-            {
-                CreateDirectoryIfNotExists(folder);
-            }
-        }
-    }
-
-    public static void CreateDirectoryIfNotExists(string p)
-    {
-        MakeUncLongPath(ref p);
-
-        if (!ExistsDirectory(p))
-        {
-            Directory.CreateDirectory(p);
-        }
-    }
 
     public static void ThrowNotImplementedUwp()
     {
@@ -226,36 +149,14 @@ nad
     //}
 
     #region MakeUncLongPath
-    /// <summary>
-    ///     Usage: ExistsDirectoryWorker
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static string MakeUncLongPath(string path)
-    {
-        return MakeUncLongPath(ref path);
-    }
 
-    public static string MakeUncLongPath(ref string path)
-    {
-        if (!path.StartsWith(Consts.UncLongPath))
-        {
-            // V ASP.net mi vrátilo u každé directory.exists false. Byl jsem pod ApplicationPoolIdentity v IIS a bylo nastaveno Full Control pro IIS AppPool\DefaultAppPool
-#if !ASPNET
-            //  asp.net / vps nefunguje, ve windows store apps taktéž, NECHAT TO TRVALE ZAKOMENTOVANÉ
-            // v asp.net toto způsobí akorát zacyklení, IIS začne vyhazovat 0xc00000fd, pak už nejde načíst jediná stránka
-            //path = Consts.UncLongPath + path;
-#endif
-        }
 
-        return path;
-    }
+
     #endregion
 
 
     #region from FSShared64.cs
 
-    public static List<string> filesWhichSurelyExists = new List<string>();
 
     //        /// <summary>
     //        /// Convert to UNC path
@@ -311,66 +212,9 @@ nad
         return result;
     }
 
-    /// <summary>
-    ///     Usage: Exceptions.IsNotWindowsPathFormat
-    /// </summary>
-    /// <param name="argValue"></param>
-    /// <returns></returns>
-    public static bool IsWindowsPathFormat(string argValue)
-    {
-        if (string.IsNullOrWhiteSpace(argValue))
-        {
-            return false;
-        }
 
-        bool badFormat = false;
 
-        if (argValue.Length < 3)
-        {
-            return badFormat;
-        }
 
-        if (!char.IsLetter(argValue[0]))
-        {
-            badFormat = true;
-        }
-
-        if (char.IsLetter(argValue[1]))
-        {
-            badFormat = true;
-        }
-
-        if (argValue.Length > 2)
-        {
-            if (argValue[1] != '\\' && argValue[2] != '\\')
-            {
-                badFormat = true;
-            }
-        }
-
-        return !badFormat;
-    }
-
-    public static string WithEndSlash(string v)
-    {
-        return WithEndSlash(ref v);
-    }
-
-    /// <summary>
-    ///     Usage: Exceptions.FileWasntFoundInDirectory
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    public static string WithEndSlash(ref string v)
-    {
-        if (v != string.Empty)
-        {
-            v = v.TrimEnd(AllCharsSE.bs) + AllCharsSE.bs;
-        }
-
-        FirstCharUpper(ref v);
-        return v;
-    }
 
     /// <summary>
     ///     Usage: Exceptions.FileWasntFoundInDirectory
@@ -384,92 +228,24 @@ nad
         file = GetFileName(fn);
     }
 
-    private static string GetFileName(string fn)
+    public static string GetFileName(string fn)
     {
         return Path.GetFileName(fn);
     }
 
-    public static char DetectPathDelimiterChar(string rp)
-    {
-        var t = DetectPathDelimiter(rp);
-
-        var containsFs = t.Item1;
-        var containsBs = t.Item2;
-
-        char deli = 'a';
-
-        if (containsBs)
-        {
-            deli = AllCharsSE.bs;
-        }
-        else if (containsFs)
-        {
-            deli = AllCharsSE.slash;
-        }
-        else
-        {
-            ThrowEx.Custom("Path contains no delimiter");
-        }
-
-        return deli;
-    }
-
-    public static Tuple<bool, bool> DetectPathDelimiter(string rp)
-    {
-        var containsFs = rp.Contains("/");
-        var containsBs = rp.Contains("\\");
-
-        if (containsBs && containsFs)
-        {
-            ThrowEx.Custom("Path contains both fs & bs");
-        }
-
-        return Tuple.Create(containsFs, containsBs);
-    }
 
 
 
-    /// <summary>
-    ///     Usage: Exceptions.FileWasntFoundInDirectory
-    /// </summary>
-    /// <param name="rp"></param>
-    /// <returns></returns>
-    public static string GetDirectoryName(string rp)
-    {
-        // Zde zároveň vyhazuji výjimky
-        var deli = DetectPathDelimiterChar(rp);
 
 
 
-        if (string.IsNullOrEmpty(rp))
-        {
-            ThrowEx.IsNullOrEmpty("rp", rp);
-        }
 
-        if (!IsWindowsPathFormat(rp))
-        {
-            ThrowEx.IsNotWindowsPathFormat("rp", rp);
-        }
-
-        rp = rp.TrimEnd(deli);
-        int dex = rp.LastIndexOf(deli);
-        if (dex != -1)
-        {
-            string result = rp.Substring(0, dex + 1);
-            FirstCharUpper(ref result);
-            return result;
-        }
-
-
-
-        return "";
-    }
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string NormalizeExtension2(string item)
     {
-        return item.ToLower().TrimStart(AllCharsSE.dot);
+        return item.ToLower().TrimStart(SunamoValues.AllCharsSE.dot);
     }
 
     public static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)

@@ -1,9 +1,7 @@
-using SunamoCollectionsChangeContent;
-
 namespace SunamoFileSystem;
 
 
-public partial class FS
+public partial class FS : FSSH
 {
 
 
@@ -36,17 +34,7 @@ public partial class FS
     //var e = (GetFilesMoreMascArgs)o;
     #endregion
 
-    public static async Task WriteAllTextWithExc(string file, string obsah)
-    {
-        try
-        {
-            await TFSE.WriteAllText(file, obsah);
-        }
-        catch (Exception ex)
-        {
-            TypedSunamoLogger.Instance.Error(Exceptions.TextOfExceptions(ex));
-        }
-    }
+
 
     public static string FilesWithSameName(string vs, string v, SearchOption allDirectories)
     {
@@ -125,7 +113,7 @@ public partial class FS
         {
             foreach (var folder in folders)
             {
-                list = CAChangeContent.ChangeContent0(null, list, d => d = SH.RemoveAfterLast(d, AllChars.dot));
+                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, AllChars.dot));
             }
 
         }
@@ -183,7 +171,7 @@ public partial class FS
 
     public static bool IsFileOlderThanXHours(string path, int hours, bool mustFileExists = false)
     {
-        var exf = FS.ExistsFile(path);
+        var exf = File.Exists(path);
 
         if (mustFileExists)
         {
@@ -460,7 +448,7 @@ public partial class FS
     public static void SaveMemoryStream<StorageFolder, StorageFile>(System.IO.MemoryStream mss, StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
     {
 
-        if (!FS.ExistsFile(path, ac))
+        if (!FS.ExistsFileAc(path, ac))
         {
             if (ac == null)
             {
@@ -554,7 +542,7 @@ public partial class FS
     /// <param name="path"></param>
     public static void DeleteFileIfExists(string path)
     {
-        if (FS.ExistsFile(path))
+        if (File.Exists(path))
         {
             File.Delete(path);
         }
@@ -636,10 +624,9 @@ public partial class FS
             return new List<string>();
         }
 
-        if (SH.FirstCharUpper != null)
-        {
-            CAChangeContent.ChangeContent0(null, dirs, d => SH.FirstCharUpper(d));
-        }
+
+        CAChangeContent.ChangeContent0(null, dirs, d => SH.FirstCharUpper(d));
+
 
         if (_trimA1AndLeadingBs)
         {
@@ -717,8 +704,8 @@ public partial class FS
         ThrowNotImplementedUwp();
         MakeUncLongPath(ref item, ac);
         MakeUncLongPath<StorageFolder, StorageFile>(ref fileTo, ac);
-        FS.CreateUpfoldersPsysicallyUnlessThere<StorageFolder, StorageFile>(fileTo, ac);
-        if (FS.ExistsFile<StorageFolder, StorageFile>(fileTo, ac))
+        FS.CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(fileTo, ac);
+        if (FS.ExistsFileAc<StorageFolder, StorageFile>(fileTo, ac))
         {
         }
         return false;
@@ -751,7 +738,7 @@ public partial class FS
         {
             try
             {
-                if (FS.ExistsFile(nova))
+                if (File.Exists(nova))
                 {
                     File.Delete(nova);
                 }
@@ -1284,7 +1271,7 @@ public partial class FS
         {
             try
             {
-                if (FS.ExistsFile(nova))
+                if (File.Exists(nova))
                 {
                     File.Delete(nova);
                 }
@@ -1510,17 +1497,7 @@ public partial class FS
         return filter;
     }
 
-    public static void CreateFileIfDoesntExists(string path)
-    {
-        CreateFileIfDoesntExists<string, string>(path, null);
-    }
-    public static void CreateFileIfDoesntExists<StorageFolder, StorageFile>(StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (!FS.ExistsFile<StorageFolder, StorageFile>(path, ac))
-        {
-            TF.WriteAllBytes<StorageFolder, StorageFile>(path, CAG.ToList<byte>(), ac);
-        }
-    }
+
 
 
 
@@ -1670,6 +1647,13 @@ public partial class FS
     //    return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
     //}
 
+    public static (string, bool) GetNameWithoutSeriesNoOut(string p, bool path, SerieStyle serieStyle)
+    {
+        int serie;
+        var result = GetNameWithoutSeries(p, path, out var hasSerie, serieStyle, out serie);
+        return (result, hasSerie);
+    }
+
     public static string GetNameWithoutSeries(string p, bool path, out bool hasSerie, SerieStyle serieStyle)
     {
         int serie;
@@ -1707,7 +1691,7 @@ public partial class FS
 
         int pocetSerii = 0;
 
-        p = SH.RemoveAfterLast(p, AllStrings.dot);
+        p = SHParts.RemoveAfterLast(p, AllStrings.dot);
         sbExt.Append(ext);
 
         ext = sbExt.ToString();
@@ -1731,7 +1715,7 @@ public partial class FS
 
                 if (lb != -1 && rb != -1)
                 {
-                    string between = SH.GetTextBetweenTwoChars(g, lb, rb);
+                    string between = SH.GetTextBetweenTwoCharsInts(g, lb, rb);
                     if (SH.IsNumber(between, EmptyArrays.Chars))
                     {
                         serie = int.Parse(between);

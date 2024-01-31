@@ -1,28 +1,28 @@
-namespace SunamoFileSystem._sunamo;
+//namespace SunamoFileSystem._sunamo;
 
-internal class SH
-{
-    internal static Func<string, string, int> OccurencesOfStringIn;
-    internal static Func<string, List<string>> GetLines;
-    internal static Func<string, string, bool, string> WrapWith;
-    internal static Func<int, string, string> JoinTimes;
-    internal static Func<string, bool, string> ReplaceAllDoubleSpaceToSingle2;
-    //internal static Func<string, int, Char[], List<string>> SplitToPartsFromEnd;
-    //internal static Func<string, string, List<string>> Split;
-    internal static Func<IList<string>, IList<string>, bool, string, string> ReplaceAll3;
-    internal static Func<string, bool, string> ReplaceAllDoubleSpaceToSingle;
-    internal static Func<string, bool> ContainsDiacritic;
-    internal static Func<string, string> TextWithoutDiacritic;
-    internal static Func<string, string> WrapWithQm;
-    internal static Func<string, string, string, string> ReplaceOnce;
-    internal static Func<string, string, bool> IsContained;
-    internal static Func<string, bool, bool, bool> ContainsOnlyCase;
+//public class SH
+//{
+//    public static Func<string, string, int> OccurencesOfStringIn;
+//    public static Func<string, List<string>> GetLines;
+//    public static Func<string, string, bool, string> WrapWith;
+//    public static Func<int, string, string> JoinTimes;
+//    public static Func<string, bool, string> ReplaceAllDoubleSpaceToSingle2;
+//    //public static Func<string, int, Char[], List<string>> SplitToPartsFromEnd;
+//    //public static Func<string, string, List<string>> Split;
+//    public static Func<IList<string>, IList<string>, bool, string, string> ReplaceAll3;
+//    public static Func<string, bool, string> ReplaceAllDoubleSpaceToSingle;
+//    public static Func<string, bool> ContainsDiacritic;
+//    public static Func<string, string> TextWithoutDiacritic;
+//    public static Func<string, string> WrapWithQm;
+//    public static Func<string, string, string, string> ReplaceOnce;
+//    public static Func<string, string, bool> IsContained;
+//    public static Func<string, bool, bool, bool> ContainsOnlyCase;
 
-    internal static Func<string, char[], bool> IsNumber;
-    internal static Func<string, int, int, string> GetTextBetweenTwoChars;
-    internal static Func<string, object, string> RemoveAfterLast;
-    internal static Func<string, string, string, string> ReplaceAll2;
-    internal static Func<string, string> FirstCharUpper;
-    internal static Func<string, List<char>, bool> ContainsOnly;
-    internal static Func<string, string, string, string> ReplaceAll;
-}
+//    public static Func<string, char[], bool> IsNumber;
+//    public static Func<string, int, int, string> GetTextBetweenTwoChars;
+//    public static Func<string, object, string> RemoveAfterLast;
+//    public static Func<string, string, string, string> ReplaceAll2;
+//    public static Func<string, string> FirstCharUpper;
+//    public static Func<string, List<char>, bool> ContainsOnly;
+//    public static Func<string, string, string, string> ReplaceAll;
+//}

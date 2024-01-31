@@ -20,7 +20,7 @@ public class SelectFromManyHelper<T>
         filesWithSize.Clear();
         SetBasicVariable(sufficientFileName, defaultFileForLeave);
 
-        string fn = FS.GetFileName(defaultFileForLeave);
+        string fn = Path.GetFileName(defaultFileForLeave);
         var files = FS.GetFiles(folderForSearch, fn, SearchOption.AllDirectories);
 
         ProcessFilesWithoutSize(files);

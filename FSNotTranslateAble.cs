@@ -76,11 +76,11 @@ public partial class FS
     {
         if (c.Count > 0)
         {
-            var f = FS.GetDirectoryName(c[0]);
+            var f = Path.GetDirectoryName(c[0]);
 
             for (int i = 1; i < c.Count; i++)
             {
-                if (FS.GetDirectoryName(c[i]) != f)
+                if (Path.GetDirectoryName(c[i]) != f)
                 {
                     return false;
                 }
@@ -97,7 +97,7 @@ public partial class FS
         foreach (var item in lines)
         {
             var path = Path.Combine(folder, item + ext);
-            if (!FS.ExistsFile(path))
+            if (!File.Exists(path))
             {
                 TF.WriteAllText(path, templateFromContent);
             }
