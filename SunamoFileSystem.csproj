@@ -3,25 +3,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.1.24.1</Version>
+    <Version>24.2.1.2</Version>
     <Description>Overall working with filesystem</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SunamoCollections" Version="24.1.24.1" />
-    <PackageReference Include="SunamoCompare" Version="24.1.14.1" />
-    <PackageReference Include="SunamoFileSystemNoDeps" Version="24.1.23.3" />
-    <PackageReference Include="SunamoFileSystemShared" Version="24.1.23.3" />
-    <PackageReference Include="SunamoNumbers" Version="24.1.14.2" />
-    <PackageReference Include="SunamoRegex" Version="24.1.22.2" />
-    <PackageReference Include="SunamoString" Version="24.1.22.1" />
-    <PackageReference Include="SunamoStringJoin" Version="24.1.14.1" />
-    <PackageReference Include="SunamoConverters" Version="24.1.23.1" />
-    <PackageReference Include="SunamoDictionary" Version="24.1.23.1" />
-    <PackageReference Include="SunamoStopwatch" Version="24.1.14.1" />
-    <PackageReference Include="SunamoStringParts" Version="24.1.23.6" />
-    <PackageReference Include="SunamoThisApp" Version="24.1.14.1" />
-    <PackageReference Include="SunamoUri" Version="24.1.14.1" />
-    <PackageReference Include="SunamoValues" Version="24.1.23.1" />
+    <PackageReference Include="SunamoFileSystemNoDeps" Version="24.2.1.1" />
+    <PackageReference Include="SunamoFileSystemShared" Version="24.2.1.1" />
+    <PackageReference Include="SunamoRegex" Version="24.2.1.1" />
+    <PackageReference Include="SunamoTypeOfMessage" Version="24.2.1.1" />
+    <PackageReference Include="SunamoValues" Version="24.2.1.1" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>

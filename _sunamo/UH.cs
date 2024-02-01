@@ -1,8 +1,10 @@
+namespace SunamoFileSystem._sunamo;
+
 //namespace SunamoFileSystem._sunamo;
 
-//public class UH
+//internal class UH
 //{
-//    public static Func<string, bool> HasHttpProtocol;
-//    public static Func<string, string, string, string> ChangeExtension;
+//    internal static Func<string, bool> HasHttpProtocol;
+//    internal static Func<string, string, string, string> ChangeExtension;
 
 //}

@@ -1,4 +1,9 @@
+
 namespace SunamoFileSystem;
+
+using SunamoFileSystem._sunamo;
+using SunamoFileSystemNoDeps;
+
 public partial class FS
 {
     #region For easy copy from FSShared64.cs
@@ -23,13 +28,13 @@ ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exc.CallingMethod(), "  "+-sess.i1
 
         var item2 = MakeUncLongPath(item);
 
-        // FS.ExistsDirectory if pass SE or only start of Unc return false
+        // Directory.Exists if pass SE or only start of Unc return false
         var result = Directory.Exists(item2);
         if (_falseIfContainsNoFile)
         {
             if (result)
             {
-                var f = FS.GetFiles(item, "*", SearchOption.AllDirectories).Count;
+                var f = GetFiles(item, "*", SearchOption.AllDirectories).Count;
                 result = f > 0;
             }
         }
@@ -87,9 +92,9 @@ bool
             }
             else
             {
-                var ext = FS.GetExtension(selectedFile).ToLower();
+                var ext = Path.GetExtension(selectedFile).ToLower();
                 // Musím to kontrolovat jen když je to tmp, logicky
-                if (ext == AllExtensions.tmp)
+                if (ext == ".tmp")
                 {
                     return false;
                 }
@@ -102,7 +107,7 @@ bool
 #if ASYNC
                         await
 #endif
-                        TF.ReadAllText(selectedFile);
+                        File.ReadAllTextAsync(selectedFile);
                     }
                     catch (Exception ex)
                     {
@@ -115,7 +120,7 @@ bool
 
                     if (c == string.Empty)
                     {
-                        // Měl jsem tu chybu že ač exists bylo true, TF.ReadAllText selhalo protože soubor neexistoval.
+                        // Měl jsem tu chybu že ač exists bylo true, File.ReadAllTextAsync selhalo protože soubor neexistoval.
                         // Vyřešil jsem to kontrolou přípony, snad
                         return false;
                     }
@@ -155,7 +160,11 @@ bool
     /// <param name="s"></param>
     private static string CombineWorker(bool FirstCharUpper, bool file, params string[] s)
     {
-        s = CA.TrimStartChar(AllChars.bs, s.ToList()).ToArray();
+        for (int i = 0; i < s.Length; i++)
+        {
+            s[i] = s[i].TrimStart(AllChars.bs);
+        }
+        //s = CA.TrimStartChar(AllChars.bs, s.ToList()).ToArray();
         var result = Path.Combine(s);
         if (result[2] != AllChars.bs)
         {
@@ -163,16 +172,16 @@ bool
         }
         if (FirstCharUpper)
         {
-            result = FS.FirstCharUpper(ref result);
+            result = SH.FirstCharUpper(ref result);
         }
         else
         {
-            result = FS.FirstCharUpper(ref result);
+            result = SH.FirstCharUpper(ref result);
         }
         if (!file)
         {
             // Cant return with end slash becuase is working also with files
-            FS.WithEndSlash(ref result);
+            FSND.WithEndSlash(ref result);
         }
         return result;
     }
@@ -187,7 +196,7 @@ bool
 
         foreach (var item in f)
         {
-            sizes.Add(FS.GetFileSize(item));
+            sizes.Add(new FileInfo(item).Length);
         }
 
         return sizes;
@@ -244,7 +253,7 @@ bool
 
         foreach (var item in filesInSubfolders)
         {
-            DictionaryHelper.AddOrCreate(result, FS.GetFileName(item), item);
+            DictionaryHelper.AddOrCreate(result, Path.GetFileName(item), item);
         }
 
         return result;
@@ -265,7 +274,7 @@ bool
 
     public static bool HasAnyFoldersOrFiles(string folderWhereToCreate)
     {
-        return FS.GetFiles(folderWhereToCreate).Count > 0 || FS.GetFolders(folderWhereToCreate).Count > 0;
+        return GetFiles(folderWhereToCreate).Count > 0 || Directory.GetDirectories(folderWhereToCreate).Length > 0;
     }
 
     public static
@@ -278,14 +287,14 @@ Dictionary<string, string>
     {
         Dictionary<string, string> r = new Dictionary<string, string>();
 
-        var f = FS.GetFiles(item, v, allDirectories);
+        var f = GetFiles(item, v, allDirectories);
         foreach (var item2 in f)
         {
             r.Add(item2,
 #if ASYNC
             await
 #endif
-            TF.ReadAllText(item2));
+            File.ReadAllTextAsync(item2));
         }
 
         return r;
@@ -298,7 +307,7 @@ Dictionary<string, string>
 
         foreach (var item in f)
         {
-            var files = FS.GetFiles(item, masc, topDirectoryOnly);
+            var files = GetFiles(item, masc, topDirectoryOnly);
             if (files.Count != 0)
             {
                 result.Add(item);
@@ -314,7 +323,7 @@ Dictionary<string, string>
     ///// <param name="result"></param>
     //private static string FirstCharUpper(ref string result)
     //{
-    //    return se.FS.FirstCharUpper(ref result);
+    //    return se.SH.FirstCharUpper(ref result);
 
     //}
 

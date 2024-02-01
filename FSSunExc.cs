@@ -1,4 +1,6 @@
+
 namespace SunamoFileSystem;
+
 public partial class FS
 {
     #region For easy copy
@@ -10,19 +12,23 @@ public partial class FS
 
     public static string NonSpacesFilename(string nameOfPage)
     {
-        var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
-        v = FS.ReplaceInvalidFileNameChars(v);
-        return v;
+        throw new NotImplementedException();
+
+        //var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
+        //v = FS.ReplaceInvalidFileNameChars(v);
+        //return v;
     }
 
     public static bool IsFileHasKnownExtension(string relativeTo)
     {
-        AllExtensionsHelper.Initialize(true);
+        throw new NotImplementedException();
 
-        var ext = FS.GetExtension(relativeTo);
-        ext = FS.NormalizeExtension2(ext);
+        //AllExtensionsHelper.Initialize(true);
 
-        return AllExtensionsHelperWithoutDot.allExtensionsWithoutDot.ContainsKey(ext);
+        //var ext = Path.GetExtension(relativeTo);
+        //ext = FS.NormalizeExtension2(ext);
+
+        //return AllExtensionsHelperWitshoutDot.allExtensionsWithoutDot.ContainsKey(ext);
     }
 
     #endregion

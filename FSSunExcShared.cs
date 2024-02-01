@@ -24,12 +24,12 @@ public partial class FS
 
     //public static string WithEndSlash(ref string v)
     //{
-    //    return se.FS.WithEndSlash(ref v);
+    //    return se.FSND.WithEndSlash(ref v);
     //}
 
     //public static string GetDirectoryName(string rp)
     //{
-    //    return se.FS.GetDirectoryName(rp);
+    //    return se.Path.GetDirectoryName(rp);
     //}
 
     /// <summary>
@@ -44,7 +44,7 @@ public partial class FS
     {
         path = Path.GetDirectoryName(fn) + AllChars.bs;
         file = GetFileNameWithoutExtension(fn);
-        ext = FS.GetExtension(fn);
+        ext = Path.GetExtension(fn);
     }
 
     public static string PathWithoutExtension(string path)

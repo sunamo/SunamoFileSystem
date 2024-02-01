@@ -21,7 +21,7 @@ public class SelectFromManyHelper<T>
         SetBasicVariable(sufficientFileName, defaultFileForLeave);
 
         string fn = Path.GetFileName(defaultFileForLeave);
-        var files = FS.GetFiles(folderForSearch, fn, SearchOption.AllDirectories);
+        var files = Directory.GetFiles(folderForSearch, fn, SearchOption.AllDirectories).ToList();
 
         ProcessFilesWithoutSize(files);
         _selectFromManyControl.AddControls();
@@ -40,7 +40,7 @@ public class SelectFromManyHelper<T>
         {
             foreach (var item in files)
             {
-                filesWithSize.Add(item, FS.GetSizeInAutoString(FS.GetFileSize(item), ComputerSizeUnits.B));
+                filesWithSize.Add(item, FS.GetSizeInAutoString(new FileInfo(item).Length, ComputerSizeUnits.B));
             }
         }
     }
@@ -52,7 +52,7 @@ public class SelectFromManyHelper<T>
 
         if (!sufficientFileName)
         {
-            defaultFileSize = FS.GetSizeInAutoString(FS.GetFileSize(defaultFileForLeave), ComputerSizeUnits.B);
+            defaultFileSize = FS.GetSizeInAutoString(new FileInfo(defaultFileForLeave).Length, ComputerSizeUnits.B);
         }
     }
 

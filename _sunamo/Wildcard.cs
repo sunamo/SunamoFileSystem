@@ -1,7 +1,9 @@
+namespace SunamoFileSystem._sunamo;
+
 //namespace SunamoFileSystem._sunamo;
 
-//public class Wildcard
+//internal class Wildcard
 //{
-//    public static Func<string, string, bool> IsMatch;
+//    internal static Func<string, string, bool> IsMatch;
 
 //}

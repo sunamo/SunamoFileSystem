@@ -1,4 +1,7 @@
+
 namespace SunamoFileSystem;
+using SunamoFileSystem._sunamo;
+
 
 /// <summary>
 ///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
@@ -35,7 +38,7 @@ string
 
 
     /// <summary>
-    ///     Pokud by byla cesta zakončená backslashem, vrátila by metoda FS.GetFileName prázdný řetězec.
+    ///     Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
     ///     if have more extension, remove just one
     /// </summary>
     /// <param name="s"></param>
@@ -48,7 +51,7 @@ string
             string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
             string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
 
-            if (!SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial))
+            if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
             {
                 if (ext != string.Empty)
                 {
@@ -69,7 +72,7 @@ string
 
     public static void ThrowNotImplementedUwp()
     {
-        ThrowEx.Custom("Not implemented in UWP");
+        throw new Exception("Not implemented in UWP");
     }
 
     public static string GetFileNameWithoutExtension(string s)
@@ -80,7 +83,7 @@ string
 
     //public static bool IsFileHasKnownExtension(string relativeTo)
     //{
-    //    var ext = FS.GetExtension(relativeTo);
+    //    var ext = Path.GetExtension(relativeTo);
     //    ext = FS.NormalizeExtension2(ext);
 
 
@@ -106,11 +109,11 @@ string
     //{
     //    path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
     //    file = GetFileNameWithoutExtension(fn);
-    //    ext = FS.GetExtension(fn);
+    //    ext = Path.GetExtension(fn);
     //}
 
     ///// <summary>
-    ///// Pokud by byla cesta zakončená backslashem, vrátila by metoda FS.GetFileName prázdný řetězec.
+    ///// Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
     ///// if have more extension, remove just one
     ///// </summary>
     ///// <param name="s"></param>
@@ -120,7 +123,7 @@ string
     //    {
     //        var ss = s.ToString();
     //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
@@ -179,13 +182,13 @@ string
 
     //            var item2 = MakeUncLongPath(item);
 
-    //            // FS.ExistsDirectory if pass SE or only start of Unc return false
+    //            // Directory.Exists if pass SE or only start of Unc return false
     //            var result = Directory.Exists(item2);
     //            if (_falseIfContainsNoFile)
     //            {
     //                if (result)
     //                {
-    //                    var f = FS.GetFilesSimple(item, "*", SearchOption.AllDirectories).Count;
+    //                    var f = GetFilesSimple(item, "*", SearchOption.AllDirectories).Count;
     //                    result = f > 0;
     //                }
     //            }
@@ -197,11 +200,7 @@ string
     //    return false;
     //}
 
-    /// <summary>
-    ///     Usage: Exceptions.FileWasntFoundInDirectory
-    ///     Use FirstCharUpper instead
-    /// </summary>
-    /// <param name="result"></param>
+    #region FirstCharUpper
     public static string FirstCharUpper(ref string result)
     {
         if (IsWindowsPathFormat(result))
@@ -212,7 +211,22 @@ string
         return result;
     }
 
+    public static string FirstCharUpper(string nazevPP, bool only = false)
+    {
+        if (nazevPP != null)
+        {
+            string sb = nazevPP.Substring(1);
+            if (only)
+            {
+                sb = sb.ToLower();
+            }
 
+            return nazevPP[0].ToString().ToUpper() + sb;
+        }
+
+        return null;
+    }
+    #endregion
 
 
 
@@ -250,12 +264,12 @@ string
 
     public static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
     {
-        return Directory.GetFiles(v1, v2, topDirectoryOnly).ToList();
+        return GetFiles(v1, v2, topDirectoryOnly).ToList();
     }
 
     //private static void ThrowNotImplementedUwp()
     //{
-    //    ThrowEx.Custom("Not implemented in UWP");
+    //    throw new Exception("Not implemented in UWP");
     //}
 
     //        private static Type type = typeof(FS);
@@ -328,7 +342,7 @@ string
     //
     //        public static List<string> GetFiles(string path, string v, SearchOption topDirectoryOnly)
     //        {
-    //            return FS.GetFilesMoreMasc(path, v, topDirectoryOnly).ToList();
+    //            return GetFilesMoreMasc(path, v, topDirectoryOnly).ToList();
     //        }
     //
     //        public static List<string> GetFilesMoreMasc(string path, string v, SearchOption topDirectoryOnly)
@@ -353,7 +367,7 @@ string
     //
     //            foreach (var item in masks)
     //            {
-    //                result.AddRange(Directory.GetFiles(path, item, topDirectoryOnly));
+    //                result.AddRange(GetFiles(path, item, topDirectoryOnly));
     //            }
     //
     //            return result;
@@ -363,7 +377,7 @@ string
     //
     //        public static void CreateUpfoldersPsysicallyUnlessThere(string nad)
     //        {
-    //            CreateFoldersPsysicallyUnlessThere(FS.GetDirectoryName(nad));
+    //            CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
     //        }
     //
     //        /// <summary>
@@ -376,7 +390,7 @@ string
     //            ThrowEx.IsNotWindowsPathFormat("nad", nad);
     //
     //            FS.MakeUncLongPath(ref nad);
-    //            if (FS.ExistsDirectory(nad))
+    //            if (Directory.Exists(nad))
     //            {
     //                return;
     //            }
@@ -387,10 +401,10 @@ string
     //
     //                while (true)
     //                {
-    //                    nad = FS.GetDirectoryName(nad);
+    //                    nad = Path.GetDirectoryName(nad);
     //
     //                    // TODO: Tady to nefunguje pro UWP/UAP apps protoze nemaji pristup k celemu disku. Zjistit co to je UWP/UAP/... a jak v nem ziskat/overit jakoukoliv slozku na disku
-    //                    if (FS.ExistsDirectory(nad))
+    //                    if (Directory.Exists(nad))
     //                    {
     //                        break;
     //                    }
@@ -403,7 +417,7 @@ string
     //                foreach (string item in slozkyKVytvoreni)
     //                {
     //                    string folder = FS.MakeUncLongPath(item);
-    //                    if (!FS.ExistsDirectory(folder))
+    //                    if (!Directory.Exists(folder))
     //                    {
     //                        Directory.CreateDirectory(folder);
     //                    }
@@ -413,7 +427,7 @@ string
     //
     //        public static string ReadAllText(string filename)
     //        {
-    //            return TF.ReadAllText(filename);
+    //            return File.ReadAllTextAsync(filename);
     //        }
     //
     //        #region MyRegion
@@ -432,7 +446,7 @@ string
     //        {
     //            if (!File.Exists(path))
     //            {
-    //                TF.WriteAllText(path, string.Empty);
+    //                File.WriteAllTextAsync(path, string.Empty);
     //            }
     //        }
     //        #endregion
@@ -480,7 +494,7 @@ string
     //                }
     //                else
     //                {
-    //                    var ext = FS.GetExtension(selectedFile).ToLower();
+    //                    var ext = Path.GetExtension(selectedFile).ToLower();
     //                    // Musím to kontrolovat jen když je to tmp, logicky
     //                    if (ext == AllExtensions.tmp)
     //                    {
@@ -491,7 +505,7 @@ string
     //                        var c = string.Empty;
     //                        try
     //                        {
-    //                            c = TF.ReadAllText(selectedFile);
+    //                            c = File.ReadAllTextAsync(selectedFile);
     //                        }
     //                        catch (Exception ex)
     //                        {
@@ -537,14 +551,14 @@ string
     //    var result = Path.Combine(s);
     //    if (FirstCharUpper)
     //    {
-    //        result = FS.FirstCharUpper(ref result);
+    //        result = SH.FirstCharUpper(ref result);
     //    }
     //    else
     //    {
-    //        result = FS.FirstCharUpper(ref result);
+    //        result = SH.FirstCharUpper(ref result);
     //    }
     //    // Cant return with end slash becuase is working also with files
-    //    //FS.WithEndSlash(ref result);
+    //    //FSND.WithEndSlash(ref result);
     //    return result;
     //}
 
@@ -554,7 +568,7 @@ string
     //}
 
     /// <summary>
-    /// Pokud by byla cesta zakončená backslashem, vrátila by metoda FS.GetFileName prázdný řetězec.
+    /// Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
     /// if have more extension, remove just one
     /// </summary>
     /// <param name = "s" ></ param >
@@ -564,7 +578,7 @@ string
     //    {
     //        var ss = s.ToString();
     //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = FS.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
@@ -611,7 +625,7 @@ string
     //        {
     //            path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
     //            file = Path.GetFileNameWithoutExtension(fn);
-    //            ext = FS.GetExtension(fn);
+    //            ext = Path.GetExtension(fn);
     //        }
     //
     //        public static string PathWithoutExtension(string path)
@@ -624,7 +638,7 @@ string
     //        public static string GetFullPath(string vr)
     //        {
     //            var result = Path.GetFullPath(vr);
-    //            FS.FirstCharUpper(ref result);
+    //            SH.FirstCharUpper(ref result);
     //            return result;
     //        }
     //
@@ -632,7 +646,7 @@ string
     //        {
     //            if (!dir.EndsWith(AllStringsSE.bs))
     //            {
-    //                dir = FS.GetDirectoryName(dir);
+    //                dir = Path.GetDirectoryName(dir);
     //            }
     //        }
     //

@@ -1,6 +1,8 @@
+namespace SunamoFileSystem._sunamo;
+
 //namespace SunamoFileSystem._sunamo;
 
-//public class AllCharsSE
+//internal class AllCharsSE
 //{
-//    public static List<char> vsZnakyWithoutSpecial;
+//    internal static List<char> vsZnakyWithoutSpecial;
 //}

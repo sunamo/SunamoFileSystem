@@ -1,5 +1,9 @@
-namespace SunamoFileSystem;
 
+namespace SunamoFileSystem;
+using SunamoFileSystem._sunamo;
+using SunamoFileSystemNoDeps;
+using SunamoFileSystemShared;
+using SunamoRegex;
 
 public partial class FS : FSSH
 {
@@ -38,13 +42,13 @@ public partial class FS : FSSH
 
     public static string FilesWithSameName(string vs, string v, SearchOption allDirectories)
     {
-        FS.WithEndSlash(ref vs);
+        FSND.WithEndSlash(ref vs);
 
         Dictionary<string, List<string>> f = new Dictionary<string, List<string>>();
-        var s = FS.GetFiles(vs, v, allDirectories);
+        var s = GetFiles(vs, v, allDirectories);
         foreach (var item in s)
         {
-            DictionaryHelper.AddOrCreate<string, string>(f, FS.GetFileName(item), item);
+            DictionaryHelper.AddOrCreate<string, string>(f, Path.GetFileName(item), item);
         }
 
         TextOutputGenerator tog = new TextOutputGenerator();
@@ -64,14 +68,14 @@ public partial class FS : FSSH
     /// When is occur Access denied exception, use GetFilesEveryFolder, which find files in every folder
     /// A1 have to be with ending backslash
     /// A4 must have underscore otherwise is suggested while I try type true
-    /// A2 can be delimited by semicolon. In case more extension use FS.GetFilesOfExtensions
+    /// A2 can be delimited by semicolon. In case more extension use GetFilesOfExtensions
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
     /// <param name="searchOption"></param>
     public async static Task<List<string>> GetFilesAsync(string folder2, string mask, SearchOption searchOption, GetFilesArgs getFilesArgs = null)
     {
-        if (!FS.ExistsDirectory(folder2) && !folder2.Contains(";"))
+        if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
             ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
@@ -83,28 +87,42 @@ public partial class FS : FSSH
         }
 
         var folders = SHSplit.Split(folder2, AllStrings.sc);
-        CA.PostfixIfNotEnding(AllStrings.bs, folders);
+        for (int i = 0; i < folders.Count; i++)
+        {
+            folders[i] = folders[i].TrimEnd(AllChars.bs) + AllStrings.bs;
+        }
+        //CA.PostfixIfNotEnding(AllStrings.bs, folders);
 
         List<string> list = new List<string>();
         foreach (var folder in folders)
         {
-            if (!FS.ExistsDirectory(folder))
+            if (!Directory.Exists(folder))
             {
 
             }
             else
             {
-                return FS.GetFilesMoreMasc(folder, mask, searchOption);
+                return GetFilesMoreMasc(folder, mask, searchOption);
             }
         }
 
-        CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
+        //CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i] = SH.FirstCharUpper(list[i]);
+        }
 
         if (getFilesArgs._trimA1AndLeadingBs)
         {
             foreach (var folder in folders)
             {
-                list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, ""));
+                //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, ""));
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i] = list[i].Replace(folder, "");
+                }
             }
 
         }
@@ -114,6 +132,10 @@ public partial class FS : FSSH
             foreach (var folder in folders)
             {
                 list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, AllChars.dot));
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i] = SHParts.RemoveAfterLast(list[i], AllChars.dot);
+                }
             }
 
         }
@@ -123,7 +145,8 @@ public partial class FS : FSSH
             // I want to find files recursively
             foreach (var item in getFilesArgs.excludeFromLocationsCOntains)
             {
-                CA.RemoveWhichContains(list, item, false);
+                list = list.Where(d => !d.Contains(item)).ToList();
+                //CA.RemoveWhichContains(list, item, false);
             }
         }
 
@@ -228,7 +251,7 @@ public partial class FS : FSSH
     /// <param name="nad"></param>
     public static void CopyTo(string v, string nad, FileMoveCollisionOption o)
     {
-        var fileTo = Path.Combine(nad, FS.GetFileName(v));
+        var fileTo = Path.Combine(nad, Path.GetFileName(v));
         CopyFile(v, fileTo, o);
     }
 
@@ -239,29 +262,30 @@ public partial class FS : FSSH
 
 
 
-    public static StorageFolder GetDirectoryNameFolder<StorageFolder, StorageFile>(StorageFolder rp2, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            return ac.fs.getDirectoryNameFolder.Invoke(rp2);
-        }
-        //ThrowEx.Custom("GetDirectoryName");
-        var rp = rp2.ToString();
-        return (dynamic)GetDirectoryName(rp);
-    }
+    //public static StorageFolder GetDirectoryNameFolder<StorageFolder, StorageFile>(StorageFolder rp2, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        return ac.Path.GetDirectoryNameFolder.Invoke(rp2);
+    //    }
+    //    //throw new Exception("GetDirectoryName");
+    //    var rp = rp2.ToString();
+    //    return (dynamic)GetDirectoryName(rp);
+    //}
 
 
-    public static void CreateFoldersPsysicallyUnlessThere<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            CreateFoldersPsysicallyUnlessThere(nad.ToString());
-        }
-        else
-        {
-            ThrowNotImplementedUwp();
-        }
-    }
+    //public static void CreateFoldersPsysicallyUnlessThere<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //    {
+    //        if (ac == null)
+    //        {
+    //            CreateFoldersPsysicallyUnlessThere(nad.ToString());
+    //}
+    //        else
+    //        {
+    //            ThrowNotImplementedUwp();
+    //        }
+    //    }
+
     /// <summary>
     /// change all first (drive) letter to uppercase
     /// </summary>
@@ -308,9 +332,9 @@ public partial class FS : FSSH
     /// <param name="ext"></param>
     public static void GetPathAndFileName(string fn, out string path, out string file, out string ext)
     {
-        path = FS.WithEndSlash(FS.GetDirectoryName(fn));
+        path = FSND.WithEndSlash(Path.GetDirectoryName(fn));
         file = Path.GetFileNameWithoutExtension(fn);
-        ext = FS.GetExtension(fn);
+        ext = Path.GetExtension(fn);
     }
 
 
@@ -414,7 +438,7 @@ public partial class FS : FSSH
         fullPathOriginalFile = SH.FirstCharUpper(fullPathOriginalFile);
         foreach (var item in DefaultPaths.AllPathsToProjects)
         {
-            string replace = FS.WithEndSlash(Path.Combine(item, combineWithA1));
+            string replace = FSND.WithEndSlash(Path.Combine(item, combineWithA1));
             if (fullPathOriginalFile.StartsWith(replace))
             {
                 return fullPathOriginalFile.Replace(replace, empty);
@@ -460,7 +484,7 @@ public partial class FS : FSSH
             }
             else
             {
-                ThrowEx.Custom("SaveMemoryStream");
+                throw new Exception("SaveMemoryStream");
             }
         }
     }
@@ -474,7 +498,7 @@ public partial class FS : FSSH
         if (ac == null)
         {
             var ps = path.ToString();
-            ps = FS.WithEndSlash(ps);
+            ps = FSND.WithEndSlash(ps);
             return (dynamic)ps;
         }
         return ac.fs.ciStorageFolder.Invoke(path);
@@ -492,7 +516,7 @@ public partial class FS : FSSH
             }
         }
         var result = sb.ToString();
-        FS.FirstCharUpper(ref result);
+        SH.FirstCharUpper(ref result);
         return result;
     }
 
@@ -519,7 +543,7 @@ public partial class FS : FSSH
         }
 
         var result = sb.ToString();
-        FS.FirstCharUpper(ref result);
+        SH.FirstCharUpper(ref result);
         return result;
     }
 
@@ -555,7 +579,7 @@ public partial class FS : FSSH
     /// <returns></returns>
     public static List<string> OnlyNamesNoDirectEdit(String[] files2)
     {
-        var tl = CA.ToListMoreString(files2);
+        var tl = files2.ToList();
         return OnlyNamesNoDirectEdit(tl);
     }
 
@@ -570,7 +594,7 @@ public partial class FS : FSSH
         List<string> files = new List<string>(files2.Count);
         for (int i = 0; i < files2.Count; i++)
         {
-            files.Add(FS.GetFileName(files2[i]));
+            files.Add(Path.GetFileName(files2[i]));
         }
         return files;
     }
@@ -587,7 +611,7 @@ public partial class FS : FSSH
         CASE.InitFillWith(ds, fullPaths.Count);
         for (int i = 0; i < fullPaths.Count; i++)
         {
-            ds[i] = appendToStart + FS.GetFileName(fullPaths[i]);
+            ds[i] = appendToStart + Path.GetFileName(fullPaths[i]);
         }
         return ds;
     }
@@ -625,21 +649,45 @@ public partial class FS : FSSH
         }
 
 
-        CAChangeContent.ChangeContent0(null, dirs, d => SH.FirstCharUpper(d));
+        //CAChangeContent.ChangeContent0(null, dirs, d => );
 
+        for (int i = 0; i < dirs.Count; i++)
+        {
+            dirs[i] = SH.FirstCharUpper(dirs[i]);
+        }
 
         if (_trimA1AndLeadingBs)
         {
-            CA.Replace(dirs, folder, string.Empty);
-            CA.TrimEnd(dirs, new Char[] { AllChars.bs });
+
+
+            for (int i = 0; i < dirs.Count; i++)
+            {
+                dirs[i] = SH.FirstCharUpper(dirs[i]);
+            }
+            //CA.Replace(dirs, folder, string.Empty);
+            //CA.TrimEnd(dirs, new Char[] { AllChars.bs });
+
+            for (int i = 0; i < dirs.Count; i++)
+            {
+                dirs[i] = dirs[i].Replace(folder, string.Empty);
+            }
+            for (int i = 0; i < dirs.Count; i++)
+            {
+                dirs[i] = dirs[i].TrimEnd('\\');
+            }
         }
         else
         {
-            // Must have backslash on end - is folder
-            if (CA.PostfixIfNotEnding != null)
+            for (int i = 0; i < dirs.Count; i++)
             {
-                CA.PostfixIfNotEnding(@"\", dirs);
+                dirs[i] = dirs[i].TrimEnd('\\') + "\\";
             }
+
+            // Must have backslash on end - is folder
+            //if (CA.PostfixIfNotEnding != null)
+            //{
+            //    CA.PostfixIfNotEnding(@"\", dirs);
+            //}
         }
 
         return dirs;
@@ -651,10 +699,14 @@ public partial class FS : FSSH
     public static List<string> GetFolders(string v, string contains)
     {
         var folders = GetFolders(v);
-        CA.TrimEnd(folders, new char[] { AllChars.bs });
+        for (int i = 0; i < folders.Count; i++)
+        {
+            folders[i] = folders[i].TrimEnd(AllChars.bs);
+        }
+        //CA.TrimEnd(folders, new char[] { AllChars.bs });
         for (int i = folders.Count - 1; i >= 0; i--)
         {
-            if (!SunamoRegex.Wildcard.IsMatch(FS.GetFileName(folders[i]), contains))
+            if (!SunamoRegex.Wildcard.IsMatch(Path.GetFileName(folders[i]), contains))
             {
                 folders.RemoveAt(i);
             }
@@ -683,33 +735,34 @@ public partial class FS : FSSH
 
 
 
-    /// <summary>
-    /// A1,2 isnt  working like ref
-    /// </summary>
-    /// <typeparam name="StorageFolder"></typeparam>
-    /// <typeparam name="StorageFile"></typeparam>
-    /// <param name="item"></param>
-    /// <param name="fileTo"></param>
-    /// <param name="co"></param>
-    /// <param name="ac"></param>
-    public static bool CopyMoveFilePrepare<StorageFolder, StorageFile>(ref StorageFile item, ref StorageFile fileTo, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            var item2 = item.ToString();
-            var fileTo2 = fileTo.ToString();
-            return CopyMoveFilePrepare(ref item2, ref fileTo2, co);
-        }
+    ///// <summary>
+    ///// A1,2 isnt  working like ref
+    ///// </summary>
+    ///// <typeparam name="StorageFolder"></typeparam>
+    ///// <typeparam name="StorageFile"></typeparam>
+    ///// <param name="item"></param>
+    ///// <param name="fileTo"></param>
+    ///// <param name="co"></param>
+    ///// <param name="ac"></param>
+    //public static bool CopyMoveFilePrepare<StorageFolder, StorageFile>(ref StorageFile item, ref StorageFile fileTo, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        var item2 = item.ToString();
+    //        var fileTo2 = fileTo.ToString();
+    //        return CopyMoveFilePrepare(ref item2, ref fileTo2, co);
+    //    }
 
-        ThrowNotImplementedUwp();
-        MakeUncLongPath(ref item, ac);
-        MakeUncLongPath<StorageFolder, StorageFile>(ref fileTo, ac);
-        FS.CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(fileTo, ac);
-        if (FS.ExistsFileAc<StorageFolder, StorageFile>(fileTo, ac))
-        {
-        }
-        return false;
-    }
+    //    ThrowNotImplementedUwp();
+    //    MakeUncLongPath(ref item, ac);
+    //    MakeUncLongPath<StorageFolder, StorageFile>(ref fileTo, ac);
+    //    //FS.CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(fileTo, ac);
+    //    FS.CreateUpfoldersPsysicallyUnlessThere()
+    //    if (FS.ExistsFileAc<StorageFolder, StorageFile>(fileTo, ac))
+    //    {
+    //    }
+    //    return false;
+    //}
 
     public static bool CopyMoveFilePrepare<StorageFolder, StorageFile>(ref string item, ref StorageFile fileTo2, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac)
     {
@@ -725,12 +778,12 @@ public partial class FS : FSSH
 
     public static string ChangeExtension(string item, string newExt, bool physically)
     {
-        if (UH.HasHttpProtocol(item))
-        {
-            return UH.ChangeExtension(item, FS.GetExtension(item, new GetExtensionArgs { returnOriginalCase = true }), newExt);
-        }
+        //if (UH.HasHttpProtocol(item))
+        //{
+        //    return UH.ChangeExtension(item, Path.GetExtension(item, new GetExtensionArgs { returnOriginalCase = true }), newExt);
+        //}
 
-        string cesta = FS.GetDirectoryName(item);
+        string cesta = Path.GetDirectoryName(item);
         string fnwoe = Path.GetFileNameWithoutExtension(item);
         string nova = Path.Combine(cesta, fnwoe + newExt);
 
@@ -756,7 +809,7 @@ public partial class FS : FSSH
 
     public static string CreateDirectory(string v, DirectoryCreateCollisionOption whenExists, SerieStyle serieStyle, bool reallyCreate)
     {
-        if (FS.ExistsDirectory(v))
+        if (Directory.Exists(v))
         {
             bool hasSerie;
             string nameWithoutSerie = FS.GetNameWithoutSeries(v, false, out hasSerie, serieStyle);
@@ -770,7 +823,7 @@ public partial class FS : FSSH
                 while (true)
                 {
                     string newFn = nameWithoutSerie + " (" + serie + AllStrings.rb;
-                    if (!FS.ExistsDirectory(newFn))
+                    if (!Directory.Exists(newFn))
                     {
                         v = newFn;
                         break;
@@ -822,7 +875,7 @@ public partial class FS : FSSH
 
     public static List<string> GetFiles(string folderPath, string masc)
     {
-        return FS.GetFiles(folderPath, masc, SearchOption.TopDirectoryOnly);
+        return GetFiles(folderPath, masc, SearchOption.TopDirectoryOnly);
     }
 
 
@@ -853,14 +906,20 @@ public partial class FS : FSSH
 
         if (e._trimA1AndLeadingBs)
         {
-            list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart(AllChars.bs));
+            //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart(AllChars.bs));
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace(folder, "").TrimStart(AllChars.bs);
+            }
         }
         if (e.excludeFromLocationsCOntains != null)
         {
             // I want to find files recursively
             foreach (var item in e.excludeFromLocationsCOntains)
             {
-                CA.RemoveWhichContains(list, item, e.wildcard);
+
+                CA.RemoveWhichContains(list, item, e.wildcard, Wildcard.IsMatch);
             }
         }
 
@@ -888,7 +947,7 @@ public partial class FS : FSSH
         {
             folders = Directory.GetDirectories(folder).ToList();
 
-            folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
+            folders = CAChangeContent.ChangeContent0(null, folders, FSND.WithEndSlash);
             //#if DEBUG
             //            if (e.writeToDebugEveryLoadedFolder)
             //            {
@@ -900,7 +959,7 @@ public partial class FS : FSSH
         {
             ThrowEx.DummyNotThrow(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //ThrowEx.Custom("GetFoldersEveryFolder with path: " + folder, ex);
+            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
 
         if (folders != null)
@@ -937,7 +996,7 @@ public partial class FS : FSSH
         {
             ThrowEx.DummyNotThrow(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //ThrowEx.Custom("GetFoldersEveryFolder with path: " + folder, ex);
+            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
     }
 
@@ -977,10 +1036,10 @@ public partial class FS : FSSH
 
         bool measureTime = false;
 
-        if (measureTime)
-        {
-            StopwatchStatic.Start();
-        }
+        //if (measureTime)
+        //{
+        //    //StopwatchStatic.Start();
+        //}
 
         // There is not exc handle needed, its slowly then
         //try
@@ -1031,19 +1090,19 @@ public partial class FS : FSSH
         //}
         //catch (Exception ex)
         //{
-        //    ThrowEx.Custom(sess.i18n(XlfKeys.GetFilesWithPath)+": " + folder);
+        //    throw new Exception(sess.i18n(XlfKeys.GetFilesWithPath)+": " + folder);
         //}
         #endregion
 
-        if (measureTime)
-        {
-            StopwatchStatic.StopAndPrintElapsed("GetFoldersEveryFolder");
-        }
+        //if (measureTime)
+        //{
+        //    StopwatchStatic.StopAndPrintElapsed("GetFoldersEveryFolder");
+        //}
 
-        if (measureTime)
-        {
-            StopwatchStatic.Start();
-        }
+        //if (measureTime)
+        //{
+        //    StopwatchStatic.Start();
+        //}
 
         if (e.usePb)
         {
@@ -1073,7 +1132,7 @@ public partial class FS : FSSH
 #endif
 
                 //d.Clear();
-                var f = FS.GetFiles(item, mask, SearchOption.TopDirectoryOnly);
+                var f = GetFiles(item, mask, SearchOption.TopDirectoryOnly);
 
 
                 d.AddRange(f);
@@ -1136,16 +1195,26 @@ public partial class FS : FSSH
             e.Done();
         }
 
-        if (measureTime)
-        {
-            StopwatchStatic.StopAndPrintElapsed("GetFiles");
-        }
+        //if (measureTime)
+        //{
+        //    StopwatchStatic.StopAndPrintElapsed("GetFiles");
+        //}
 
-        CAChangeContent.ChangeContent0(null, list, d2 => SH.FirstCharUpper(d2));
+        //CAChangeContent.ChangeContent0(null, list, d2 => SH.FirstCharUpper(d2));
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i] = SH.FirstCharUpper(list[i]);
+        }
 
         if (e._trimA1AndLeadingBs)
         {
-            list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart(AllChars.bs));
+            //list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart(AllChars.bs));
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i] = list[i].Replace(folder, "").TrimStart(AllChars.bs);
+            }
         }
         return list;
     }
@@ -1221,7 +1290,7 @@ public partial class FS : FSSH
         {
             return file;
         }
-        if (GetExtension(file) == string.Empty)
+        if (Path.GetExtension(file) == string.Empty)
         {
             return file + ext;
         }
@@ -1238,7 +1307,7 @@ public partial class FS : FSSH
     public static string InsertBetweenFileNameAndExtensionRemovePath(string orig, string whatInsert)
     {
         string fn = Path.GetFileNameWithoutExtension(orig);
-        string e = FS.GetExtension(orig);
+        string e = Path.GetExtension(orig);
         return Path.Combine(fn + whatInsert + e);
     }
 
@@ -1252,7 +1321,7 @@ public partial class FS : FSSH
         Dictionary<string, List<string>> result = new Dictionary<string, List<string>>();
         foreach (var item in files)
         {
-            string filename = FS.GetFileName(item);
+            string filename = Path.GetFileName(item);
             DictionaryHelper.AddOrCreateIfDontExists<string, string>(result, filename, item);
         }
 
@@ -1264,7 +1333,7 @@ public partial class FS : FSSH
 
     public static string ChangeFilename(string item, string newFileNameWithoutPath, bool physically)
     {
-        string cesta = FS.GetDirectoryName(item);
+        string cesta = Path.GetDirectoryName(item);
         string nova = Path.Combine(cesta, newFileNameWithoutPath);
 
         if (physically)
@@ -1313,14 +1382,14 @@ public partial class FS : FSSH
         string result = null;
         if (slash)
         {
-            result = SHReplace.ReplaceAll2(path, AllStrings.slash, AllStrings.bs);
+            result = path.Replace(AllStrings.bs, AllStrings.slash); //SHReplace.ReplaceAll2(path, AllStrings.slash, AllStrings.bs);
         }
         else
         {
-            result = SHReplace.ReplaceAll2(path, AllStrings.bs, AllStrings.slash);
+            result = path.Replace(AllStrings.slash, AllStrings.bs); //SHReplace.ReplaceAll2(path, AllStrings.bs, AllStrings.slash);
         }
 
-        FS.FirstCharUpper(ref result);
+        SH.FirstCharUpper(ref result);
         return result;
     }
 
@@ -1459,7 +1528,7 @@ public partial class FS : FSSH
     {
         if (to == ComputerSizeUnits.Auto)
         {
-            ThrowEx.Custom("Byl specifikov\u00E1n v\u00FDstupn\u00ED ComputerSizeUnit, nem\u016F\u017Eu toto nastaven\u00ED zm\u011Bnit");
+            throw new Exception("Byl specifikov\u00E1n v\u00FDstupn\u00ED ComputerSizeUnit, nem\u016F\u017Eu toto nastaven\u00ED zm\u011Bnit");
         }
         else if (to == ComputerSizeUnits.KB && b != ComputerSizeUnits.KB)
         {
@@ -1560,7 +1629,8 @@ public partial class FS : FSSH
         {
             foreach (char item in replaceAllOfThisByA3)
             {
-                t = SHReplace.ReplaceAll(t, replaceForThis, item.ToString());
+                t = /*SHReplace.ReplaceAll*/ t.Replace(item.ToString(), replaceForThis)
+                    ; //(t, replaceForThis, item.ToString());
             }
 
         }
@@ -1593,8 +1663,8 @@ public partial class FS : FSSH
         }
         if (!string.IsNullOrEmpty(replaceAllOfThisThen))
         {
-            t = SHReplace.ReplaceAll(t, replaceFor, replaceAllOfThisThen);
-            t = SHReplace.ReplaceAll(t, replaceFor, AllStrings.doubleSpace);
+            t = t.Replace(replaceAllOfThisThen, replaceFor);// SHReplace.ReplaceAll(t, replaceFor, replaceAllOfThisThen);
+            t = t.Replace(AllStrings.doubleSpace, replaceFor); //SHReplace.ReplaceAll(t, replaceFor, AllStrings.doubleSpace);
         }
         return t;
     }
@@ -1610,11 +1680,11 @@ public partial class FS : FSSH
     {
         if (folder == null)
         {
-            folder = FS.GetDirectoryName(item);
+            folder = Path.GetDirectoryName(item);
         }
         var outputFolder = Path.Combine(folder, insert);
         FS.CreateFoldersPsysicallyUnlessThere(outputFolder);
-        return Path.Combine(outputFolder, FS.GetFileName(item));
+        return Path.Combine(outputFolder, Path.GetFileName(item));
     }
 
     /// <summary>
@@ -1624,8 +1694,8 @@ public partial class FS : FSSH
     /// <param name="changeFolderTo"></param>
     public static string ChangeDirectory(string fileName, string changeFolderTo)
     {
-        string p = FS.GetDirectoryName(fileName);
-        string fn = FS.GetFileName(fileName);
+        string p = Path.GetDirectoryName(fileName);
+        string fn = Path.GetFileName(fileName);
         return Path.Combine(changeFolderTo, fn);
     }
 
@@ -1679,11 +1749,11 @@ public partial class FS : FSSH
 
         if (a1IsWithPath)
         {
-            dd = FS.WithEndSlash(FS.GetDirectoryName(p));
+            dd = FSND.WithEndSlash(Path.GetDirectoryName(p));
         }
 
         StringBuilder sbExt = new StringBuilder();
-        string ext = FS.GetExtension(p);
+        string ext = Path.GetExtension(p);
         if (ext == string.Empty)
         {
             return p;
@@ -1715,8 +1785,8 @@ public partial class FS : FSSH
 
                 if (lb != -1 && rb != -1)
                 {
-                    string between = SH.GetTextBetweenTwoCharsInts(g, lb, rb);
-                    if (SH.IsNumber(between, EmptyArrays.Chars))
+                    string between = g.Substring(lb, rb - lb); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
+                    if (double.TryParse(between, out var _) /*SH.IsNumber(between, EmptyArrays.Chars)*/)
                     {
                         serie = int.Parse(between);
                         pocetSerii++;
@@ -1808,7 +1878,7 @@ public partial class FS : FSSH
 
     public static List<string> DirectoryListing(string path, string mask, SearchOption so)
     {
-        var p = FS.GetFiles(path, mask, so, new GetFilesArgs { _trimA1AndLeadingBs = true });
+        var p = GetFiles(path, mask, so, new GetFilesArgs { _trimA1AndLeadingBs = true });
 
         return p;
     }

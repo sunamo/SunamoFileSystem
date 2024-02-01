@@ -1,6 +1,8 @@
+namespace SunamoFileSystem._sunamo;
+
 //namespace SunamoFileSystem._sunamo;
 
-//public class CANew
+//internal class CANew
 //{
-//    public static Func<string, string[], bool> ContainsAnyFromArray;
+//    internal static Func<string, string[], bool> ContainsAnyFromArray;
 //}

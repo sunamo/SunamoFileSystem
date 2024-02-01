@@ -1,4 +1,7 @@
+
 namespace SunamoFileSystem;
+using SunamoFileSystemNoDeps;
+
 
 
 public partial class FS
@@ -13,11 +16,11 @@ public partial class FS
     public static int DeleteSerieDirectoryOrCreateNew(string repairedBlogPostsFolder)
     {
         int resultSerie = 1;
-        var folders = FS.GetFolders(repairedBlogPostsFolder);
+        var folders = Directory.GetDirectories(repairedBlogPostsFolder);
 
         bool deleted = true;
         // 0 or 1
-        if (folders.Count < 2)
+        if (folders.Length < 2)
         {
             try
             {
@@ -30,13 +33,13 @@ public partial class FS
             }
         }
 
-        string withEndFlash = FS.WithEndSlash(repairedBlogPostsFolder);
+        string withEndFlash = FSND.WithEndSlash(repairedBlogPostsFolder);
 
         if (!deleted)
         {
             // confuse me, dir can exists
             // Here seems to be OK on 8-7-19 (unit test)
-            FS.CreateDirectory(withEndFlash + @"1" + "\\");
+            Directory.CreateDirectory(withEndFlash + @"1" + "\\");
         }
         else
         {
@@ -48,7 +51,7 @@ public partial class FS
             {
                 generator.sb.Append(resultSerie);
                 string newDirectory = generator.ToString();
-                if (!FS.ExistsDirectory(newDirectory))
+                if (!Directory.Exists(newDirectory))
                 {
                     Directory.CreateDirectory(newDirectory);
                     break;
@@ -69,7 +72,7 @@ public partial class FS
 
     public static void WriteAllText(string path, string content)
     {
-        TF.WriteAllText(path, content);
+        File.WriteAllTextAsync(path, content);
     }
 
     public static bool IsAllInSameFolder(List<string> c)
@@ -99,7 +102,7 @@ public partial class FS
             var path = Path.Combine(folder, item + ext);
             if (!File.Exists(path))
             {
-                TF.WriteAllText(path, templateFromContent);
+                File.WriteAllTextAsync(path, templateFromContent);
             }
         }
     }
@@ -119,11 +122,11 @@ public partial class FS
 
     public static void NumberByDateModified(string folder, string masc, SearchOption so)
     {
-        var files = FS.GetFiles(folder, masc, so, new GetFilesArgs { byDateOfLastModifiedAsc = true });
+        var files = GetFiles(folder, masc, so, new GetFilesArgs { byDateOfLastModifiedAsc = true });
         int i = 1;
         foreach (var item in files)
         {
-            FS.RenameFile(item, i + FS.GetExtension(item), FileMoveCollisionOption.DontManipulate);
+            FS.RenameFile(item, i + Path.GetExtension(item), FileMoveCollisionOption.DontManipulate);
             i++;
         }
     }

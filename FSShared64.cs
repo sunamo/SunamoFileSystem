@@ -1,4 +1,9 @@
+
 namespace SunamoFileSystem;
+using SunamoFileSystem._sunamo;
+using SunamoFileSystemShared;
+using System.Text.RegularExpressions;
+
 
 
 public delegate bool? ExistsDirectory(string path);
@@ -43,7 +48,7 @@ public partial class FS : FSSH
         //}
 
 
-        //var ext = FS.GetExtension(ext2);
+        //var ext = Path.GetExtension(ext2);
         //var fn = Path.GetFileNameWithoutExtension(ext2);
         //// isContained must be true, in BundleTsFile if false masc will be .ts, not *.ts and won't found any file
         //var isContained = AllExtensionsHelper.IsContained(ext);
@@ -60,7 +65,7 @@ public partial class FS : FSSH
 
         //var isNoMascEntered = !((ext2.Contains("*") || ext2.Contains("?")));// && !(cis.QuantityLowerChars > 0 || cis.QuantityUpperChars > 0));
         //// From base of logic - isNoMascEntered must be without !. When something another wont working, edit only evaluate of condition above
-        //if (!ext.StartsWith("*.") && isNoMascEntered && isContained && ext == FS.GetExtension( ext2))
+        //if (!ext.StartsWith("*.") && isNoMascEntered && isContained && ext == Path.GetExtension( ext2))
         //{
         //    // Dont understand why, when I insert .aspx.cs, then return just .aspx without *
         //    //if (cis.QuantityUpperChars > 0 || cis.QuantityLowerChars > 0)
@@ -77,14 +82,14 @@ public partial class FS : FSSH
 
     public static bool IsCountOfFilesMoreThan(string bpMb, string masc, int getNullIfThereIsMoreThanXFiles)
     {
-        var f = FS.GetFilesEveryFolder(bpMb, masc, SearchOption.AllDirectories, new GetFilesEveryFolderArgs { getNullIfThereIsMoreThanXFiles = getNullIfThereIsMoreThanXFiles });
+        var f = GetFilesEveryFolder(bpMb, masc, SearchOption.AllDirectories, new GetFilesEveryFolderArgs { getNullIfThereIsMoreThanXFiles = getNullIfThereIsMoreThanXFiles });
         return f == null;
 
     }
 
     public static List<string> GetFiles(string folderPath, bool recursive)
     {
-        return FS.GetFiles(folderPath, FS.MascFromExtension(), recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        return GetFiles(folderPath, FS.MascFromExtension(), recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
     }
 
     //    public static
@@ -99,7 +104,7 @@ public partial class FS : FSSH
     //#if ASYNC
     //        await
     //#endif
-    //        TF.ReadAllText(filename);
+    //        File.ReadAllTextAsync(filename);
     //    }
 
     /// <summary>
@@ -147,7 +152,7 @@ public partial class FS : FSSH
         {
             if (co == FileMoveCollisionOption.AddFileSize)
             {
-                var newFn = FS.InsertBetweenFileNameAndExtension(fileTo, AllStrings.space + FS.GetFileSize(item));
+                var newFn = FS.InsertBetweenFileNameAndExtension(fileTo, AllStrings.space + new FileInfo(item).Length);
                 if (File.Exists(newFn))
                 {
                     File.Delete(item);
@@ -195,8 +200,8 @@ public partial class FS : FSSH
             }
             else if (co == FileMoveCollisionOption.LeaveLarger)
             {
-                long fsFrom = FS.GetFileSize(item);
-                long fsTo = FS.GetFileSize(fileTo);
+                long fsFrom = new FileInfo(item).Length;
+                long fsTo = new FileInfo(fileTo).Length;
                 if (fsFrom > fsTo)
                 {
                     File.Delete(fileTo);
@@ -268,7 +273,7 @@ public partial class FS : FSSH
     /// <param name="mustContains"></param>
     private static void CopyMoveAllFilesRecursively(string p, string to, FileMoveCollisionOption co, bool move, string mustContains, SearchOption so)
     {
-        var files = FS.GetFiles(p, AllStrings.asterisk, so);
+        var files = GetFiles(p, AllStrings.asterisk, so);
         if (!string.IsNullOrEmpty(mustContains))
         {
             foreach (var item in files)
@@ -436,7 +441,7 @@ public partial class FS : FSSH
     /// <returns></returns>
     public static bool TryDeleteDirectory(string v)
     {
-        if (!FS.ExistsDirectory(v))
+        if (!Directory.Exists(v))
         {
             return true;
         }
@@ -458,7 +463,7 @@ public partial class FS : FSSH
             //}
         }
 
-        var files = FS.GetFiles(v, "*", SearchOption.AllDirectories);
+        var files = GetFiles(v, "*", SearchOption.AllDirectories);
         foreach (var item in files)
         {
             File.SetAttributes(item, FileAttributes.Normal);
@@ -481,13 +486,12 @@ public partial class FS : FSSH
 
     public static string AllIncludeIfOnlyLetters(string item)
     {
-        if (SH.ContainsOnlyCase != null)
-        {
-            if (SH.ContainsOnlyCase(item.ToLower(), false, false))
-            {
-                item = "*." + item;
-            }
-        }
+        item = item.ToLower();
+        //if ( SH.ContainsOnlyCase(item.ToLower(), false, false))
+        //{
+        item = "*." + item;
+        //}
+
 
         return item;
     }
@@ -511,7 +515,7 @@ public partial class FS : FSSH
 
             if (File.Exists(d))
             {
-                return TF.ReadAllLinesSync(path);
+                return File.ReadAllLines(path).ToList();
             }
         }
 #endif
@@ -539,7 +543,7 @@ public partial class FS : FSSH
         //{
         //    foreach (var item in masks)
         //    {
-        //        result.AddRange(Directory.GetFiles(path, item, SearchOption.TopDirectoryOnly));
+        //        result.AddRange(GetFiles(path, item, SearchOption.TopDirectoryOnly));
         //    }
         //}
 
@@ -555,7 +559,7 @@ public partial class FS : FSSH
 
                 try
                 {
-                    result.AddRange(Directory.GetFiles(path, item, searchOption));
+                    result.AddRange(GetFiles(path, item, searchOption));
                 }
                 catch (Exception ex)
                 {
@@ -572,7 +576,7 @@ public partial class FS : FSSH
             foreach (var item2 in masks)
             {
                 var item = AllIncludeIfOnlyLetters(item2);
-                result.AddRange(Directory.GetFiles(path, item, searchOption));
+                result.AddRange(GetFiles(path, item, searchOption));
             }
         }
 
@@ -590,7 +594,7 @@ public partial class FS : FSSH
         {
             if (File.Exists(d))
             {
-                TF.WriteAllLines(d, result);
+                File.WriteAllLinesAsync(d, result);
             }
         }
 #endif
@@ -605,7 +609,7 @@ public partial class FS : FSSH
     /// When is occur Access denied exception, use GetFilesEveryFolder, which find files in every folder
     /// A1 have to be with ending backslash
     /// A4 must have underscore otherwise is suggested while I try type true
-    /// A2 can be delimited by semicolon. In case more extension use FS.GetFilesOfExtensions
+    /// A2 can be delimited by semicolon. In case more extension use GetFilesOfExtensions
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
@@ -619,7 +623,7 @@ public partial class FS : FSSH
         }
 #endif
 
-        if (!FS.ExistsDirectory(folder2) && !folder2.Contains(";"))
+        if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
             ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
@@ -632,24 +636,29 @@ public partial class FS : FSSH
 
         var folders = SHSplit.Split(folder2, AllStrings.sc);
 
-        if (CA.PostfixIfNotEnding != null)
+        //if (CA.PostfixIfNotEnding != null)
+        //{
+        //    CA.PostfixIfNotEnding(AllStrings.bs, folders);
+        //}
+
+        for (int i = 0; i < folders.Count; i++)
         {
-            CA.PostfixIfNotEnding(AllStrings.bs, folders);
+            folders[i] = folders[i].TrimEnd('\\') + "\\";
         }
 
         List<string> list = new List<string>();
         foreach (var folder in folders)
         {
-            if (!FS.ExistsDirectory(folder))
+            if (!Directory.Exists(folder))
             {
 
             }
             else
             {
                 //Task.Run<>(async () => await FunctionAsync());
-                //var r = Task.Run<List<string>>(async () => await FS.GetFilesMoreMascAsync(folder, mask, searchOption));
+                //var r = Task.Run<List<string>>(async () => await GetFilesMoreMascAsync(folder, mask, searchOption));
                 //return r.Result;
-                var l2 = FS.GetFilesMoreMasc(folder, mask, searchOption, new GetFilesMoreMascArgs { followJunctions = a.followJunctions });
+                var l2 = GetFilesMoreMasc(folder, mask, searchOption, new GetFilesMoreMascArgs { followJunctions = a.followJunctions });
                 list.AddRange(l2);
 
                 #region Commented
@@ -668,7 +677,7 @@ public partial class FS : FSSH
 
                 //        try
                 //        {
-                //            list.AddRange(FS.GetFilesMoreMasc(folder, masc, searchOption));
+                //            list.AddRange(GetFilesMoreMasc(folder, masc, searchOption));
                 //        }
                 //        catch (Exception ex)
                 //        {
@@ -692,7 +701,7 @@ public partial class FS : FSSH
                 //        var files = di.GetFiles(masc, searchOption);
                 //        var files2 = files.Select(d => d.FullName);
 
-                //        //list.AddRange(Directory.GetFiles(folder3, masc, searchOption));
+                //        //list.AddRange(GetFiles(folder3, masc, searchOption));
                 //        list.AddRange(files2);
                 //    }
                 //    catch (Exception ex)
@@ -738,7 +747,8 @@ public partial class FS : FSSH
             // I want to find files recursively
             foreach (var item in a.excludeFromLocationsCOntains)
             {
-                CA.RemoveWhichContains(list, item, false);
+                list = list.Where(d => !d.Contains(item)).ToList();
+                //CA.RemoveWhichContains(list, item, false);
             }
         }
 
@@ -790,7 +800,7 @@ public partial class FS : FSSH
     /// <param name="path"></param>
     public static List<string> GetFiles(string path)
     {
-        return FS.GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
+        return GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
     }
 
     /// <summary>
@@ -802,11 +812,11 @@ public partial class FS : FSSH
     public static string GetFileSeries(string slozka, string fn, string ext)
     {
         int dalsi = 0;
-        var soubory = FS.GetFiles(slozka);
+        var soubory = GetFiles(slozka);
         foreach (string item in soubory)
         {
             int p;
-            string withoutFn = SHReplace.ReplaceOnce(FS.GetFileName(item), fn, "");
+            string withoutFn = new Regex(fn).Replace(Path.GetFileName(item), "", 1); /*SHReplace.ReplaceOnce(Path.GetFileName(item), fn, "")));*/
             string withoutFnAndExt = SHReplace.ReplaceOnce(withoutFn, ext, "");
             withoutFnAndExt = withoutFnAndExt.TrimStart(AllChars.lowbar);
             if (int.TryParse(withoutFnAndExt, out p))
@@ -828,7 +838,7 @@ public partial class FS : FSSH
 
 
     ///// <summary>
-    ///// If path ends with backslash, FS.GetDirectoryName returns empty string
+    ///// If path ends with backslash, Path.GetDirectoryName returns empty string
     ///// </summary>
     ///// <param name="rp"></param>
     //public static string GetFileName(string rp)
@@ -844,18 +854,18 @@ public partial class FS : FSSH
 
 
 
-    public static bool ExistsDirectory<StorageFolder, StorageFile>(string item, AbstractCatalog<StorageFolder, StorageFile> ac = null, bool _falseIfContainsNoFile = false)
-    {
-        if (ac == null)
-        {
-            return ExistsDirectoryWorker(item, _falseIfContainsNoFile);
-        }
-        else
-        {
-            // Call from Apps
-            return BTS.GetValueOfNullable(ac.fs.existsDirectory.Invoke(item));
-        }
-    }
+    //public static bool ExistsDirectory<StorageFolder, StorageFile>(string item, AbstractCatalog<StorageFolder, StorageFile> ac = null, bool _falseIfContainsNoFile = false)
+    //{
+    //    if (ac == null)
+    //    {
+    //        return ExistsDirectoryWorker(item, _falseIfContainsNoFile);
+    //    }
+    //    else
+    //    {
+    //        // Call from Apps
+    //        return BTS.GetValueOfNullable(ac.Directory.Exists.Invoke(item));
+    //    }
+    //}
 
 
 
@@ -899,37 +909,37 @@ public partial class FS : FSSH
 
 
 
-    /// <summary>
-    /// Create all upfolders of A1, if they dont exist
-    /// </summary>
-    /// <param name="nad"></param>
-    public static void CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            CreateUpfoldersPsysicallyUnlessThere(nad.ToString());
-        }
-        else
-        {
-            CreateFoldersPsysicallyUnlessThereFolder<StorageFolder, StorageFile>(FS.GetDirectoryName<StorageFolder, StorageFile>(nad, ac), ac);
-        }
-    }
+    ///// <summary>
+    ///// Create all upfolders of A1, if they dont exist
+    ///// </summary>
+    ///// <param name="nad"></param>
+    //public static void CreateUpfoldersPsysicallyUnlessThereAc<StorageFolder, StorageFile>(StorageFile nad, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        CreateUpfoldersPsysicallyUnlessThere(nad.ToString());
+    //    }
+    //    else
+    //    {
+    //        CreateFoldersPsysicallyUnlessThereFolder<StorageFolder, StorageFile>(Path.GetDirectoryName<StorageFolder, StorageFile>(nad, ac), ac);
+    //    }
+    //}
 
-    /// <summary>
-    /// Works with and without end backslash
-    /// Return with backslash
-    /// </summary>
-    /// <param name="rp"></param>
-    public static StorageFolder GetDirectoryName<StorageFolder, StorageFile>(StorageFile rp2, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            return ac.fs.getDirectoryName.Invoke(rp2);
-        }
+    ///// <summary>
+    ///// Works with and without end backslash
+    ///// Return with backslash
+    ///// </summary>
+    ///// <param name="rp"></param>
+    //public static StorageFolder GetDirectoryName<StorageFolder, StorageFile>(StorageFile rp2, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        return ac.Path.GetDirectoryName.Invoke(rp2);
+    //    }
 
-        var rp = rp2.ToString();
-        return (dynamic)GetDirectoryName(rp);
-    }
+    //    var rp = rp2.ToString();
+    //    return (dynamic)GetDirectoryName(rp);
+    //}
 
 
     public static void CreateFoldersPsysicallyUnlessThereFolder<StorageFolder, StorageFile>(StorageFolder nad, AbstractCatalog<StorageFolder, StorageFile> ac)
@@ -956,7 +966,8 @@ public partial class FS : FSSH
 
     public static bool ExistsDirectory(string item, bool _falseIfContainsNoFile = false)
     {
-        return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
+        return Directory.Exists(item);
+        //return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
     }
 
 

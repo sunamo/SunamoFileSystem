@@ -1,3 +1,5 @@
+using SunamoFileSystem._sunamo;
+
 namespace SunamoFileSystem;
 
 /// <summary>
@@ -136,7 +138,7 @@ public class FileSystemWatchers
 
             try
             {
-                existsNew =File.Exists(e.FullPath);
+                existsNew = File.Exists(e.FullPath);
             }
             catch (Exception)
             {
@@ -144,7 +146,7 @@ public class FileSystemWatchers
 
             try
             {
-                existsOld =File.Exists(e.OldFullPath);
+                existsOld = File.Exists(e.OldFullPath);
             }
             catch (Exception)
             {
