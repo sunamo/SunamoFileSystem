@@ -4,7 +4,7 @@ namespace SunamoFileSystem._sunamo;
 
 internal class SH
 {
-    public static string FirstCharUpper(ref string result)
+    internal static string FirstCharUpper(ref string result)
     {
         result = FirstCharUpper(result);
         return result;

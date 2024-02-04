@@ -6,7 +6,7 @@ namespace SunamoFileSystem._sunamo;
 // potřebuji celý SunamoDictionary nuget kvůli genericitě
 internal class DictionaryHelper
 {
-    public static void AddOrSet<T1, T2>(IDictionary<T1, T2> qs, T1 k, T2 v)
+    internal static void AddOrSet<T1, T2>(IDictionary<T1, T2> qs, T1 k, T2 v)
     {
         if (qs.ContainsKey(k))
         {
@@ -18,7 +18,7 @@ internal class DictionaryHelper
         }
     }
 
-    public static void AddOrSet(Dictionary<string, string> qs, string k, string v)
+    internal static void AddOrSet(Dictionary<string, string> qs, string k, string v)
     {
         if (qs.ContainsKey(k))
         {
@@ -30,7 +30,7 @@ internal class DictionaryHelper
         }
     }
 
-    public static Dictionary<T, List<U>> GroupByValues<U, T, ColType>(Dictionary<U, T> dictionary)
+    internal static Dictionary<T, List<U>> GroupByValues<U, T, ColType>(Dictionary<U, T> dictionary)
     {
         Dictionary<T, List<U>> result = new Dictionary<T, List<U>>();
         foreach (var item in dictionary)
