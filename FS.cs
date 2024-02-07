@@ -1,9 +1,13 @@
 
 namespace SunamoFileSystem;
-using Diacritics.Extensions;
 
+using Diacritics.Extensions;
+using SunamoArgs;
+using SunamoCollectionsGeneric;
+using SunamoCollectionWithoutDuplicates;
 using SunamoFileSystem._sunamo;
-using SunamoFileSystemNoDeps;
+using SunamoFileSystem.Args;
+using SunamoXlfKeys;
 using System.Text.RegularExpressions;
 
 
@@ -486,14 +490,14 @@ List<string>
 
 
 
-    public static string StorageFilePath<StorageFolder, StorageFile>(StorageFile item, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            ac.fs.storageFilePath.Invoke(item);
-        }
-        return item.ToString();
-    }
+    //public static string StorageFilePath<StorageFolder, StorageFile>(StorageFile item, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        ac.fs.storageFilePath.Invoke(item);
+    //    }
+    //    return item.ToString();
+    //}
 
     //public static List<StorageFile> GetFilesOfExtensionCaseInsensitiveRecursively<StorageFolder, StorageFile>(StorageFolder sf, string ext, AbstractCatalog<StorageFolder, StorageFile> ac)
     //{
@@ -525,30 +529,30 @@ List<string>
     //    return CAG.ToList<StorageFile>((dynamic)files);
     //}
 
-    public static Stream OpenStreamForReadAsync<StorageFolder, StorageFile>(StorageFile file, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            return ac.fs.openStreamForReadAsync.Invoke(file);
-        }
-        return FS.OpenStream(file.ToString());
-    }
+    //public static Stream OpenStreamForReadAsync<StorageFolder, StorageFile>(StorageFile file, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        return ac.fs.openStreamForReadAsync.Invoke(file);
+    //    }
+    //    return FS.OpenStream(file.ToString());
+    //}
 
     private static Stream OpenStream(string v)
     {
         return new FileStream(v, FileMode.OpenOrCreate);
     }
 
-    public static bool IsFoldersEquals<StorageFolder, StorageFile>(StorageFolder parent, StorageFolder path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            return ac.fs.isFoldersEquals.Invoke(parent, path);
-        }
-        var f1 = parent.ToString();
-        var f2 = path.ToString();
-        return f1 == f2;
-    }
+    //public static bool IsFoldersEquals<StorageFolder, StorageFile>(StorageFolder parent, StorageFolder path, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        return ac.fs.isFoldersEquals.Invoke(parent, path);
+    //    }
+    //    var f1 = parent.ToString();
+    //    var f2 = path.ToString();
+    //    return f1 == f2;
+    //}
 
     //public static string GetFileName<StorageFolder, StorageFile>(StorageFile item, AbstractCatalog<StorageFolder, StorageFile> ac)
     //{
@@ -565,14 +569,14 @@ List<string>
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="v"></param>
-    public static StorageFile GetStorageFile<StorageFolder, StorageFile>(StorageFolder folder, string v, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac != null)
-        {
-            return ((dynamic)ac.fs.getStorageFile(folder, v)).Path;
-        }
-        return (dynamic)Path.Combine(folder.ToString(), v);
-    }
+    //public static StorageFile GetStorageFile<StorageFolder, StorageFile>(StorageFolder folder, string v, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac != null)
+    //    {
+    //        return ((dynamic)ac.fs.getStorageFile(folder, v)).Path;
+    //    }
+    //    return (dynamic)Path.Combine(folder.ToString(), v);
+    //}
 
     public static
 #if ASYNC
@@ -605,7 +609,7 @@ void
         }
     }
 
-    static async Task ReplaceInAllFilesWorker(object o)
+    static async Task ReplaceInAllFilesWorker(object o, Func<string, bool> EncodingHelperIsBinary)
     {
         ReplaceInAllFilesArgs p = (ReplaceInAllFilesArgs)o;
 
@@ -650,22 +654,23 @@ void
             }
 
             ThrowEx.DifferentCountInLists("from2", from2, "to2", to2);
-            await ReplaceInAllFiles(from2, to2, o as ReplaceInAllFilesArgsBase);
+            await ReplaceInAllFiles(from2, to2, o as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
         }
         else
         {
-            await ReplaceInAllFiles(new List<string>([from]), new List<string>([to]), o as ReplaceInAllFilesArgsBase);
+            await ReplaceInAllFiles(new List<string>([from]), new List<string>([to]), o as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
         }
     }
 
 
-    public static async Task ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase o)
+
+    public static async Task ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase o, Func<string, bool> EncodingHelperIsBinary)
     {
         ReplaceInAllFilesArgs r = new ReplaceInAllFilesArgs(o);
         r.from = from;
         r.to = to;
 
-        await ReplaceInAllFilesWorker(r);
+        await ReplaceInAllFilesWorker(r, EncodingHelperIsBinary);
 
         //Thread t = new Thread(new ParameterizedThreadStart(ReplaceInAllFilesWorker));
         //t.Start(r);
@@ -673,13 +678,16 @@ void
 
 
 
-    public static async Task ReplaceInAllFiles(string folder, string extension, List<string> replaceFrom, List<string> replaceTo, bool isMultilineWithVariousIndent)
+    public static async Task ReplaceInAllFiles(string folder, string extension, List<string> replaceFrom, List<string> replaceTo, bool isMultilineWithVariousIndent, Func<string, bool> EncodingHelperIsBinary)
     {
         var files = GetFiles(folder, FS.MascFromExtension(extension), SearchOption.AllDirectories);
         ThrowEx.DifferentCountInLists("replaceFrom", replaceFrom, "replaceTo", replaceTo);
         Func<StringBuilder, IList<string>, IList<string>, StringBuilder> fasterMethodForReplacing = null;
-        await ReplaceInAllFiles(replaceFrom, replaceTo, new ReplaceInAllFilesArgsBase { files = files, isMultilineWithVariousIndent = isMultilineWithVariousIndent, fasterMethodForReplacing = fasterMethodForReplacing });
+        await ReplaceInAllFiles(replaceFrom, replaceTo, new ReplaceInAllFilesArgsBase { files = files, isMultilineWithVariousIndent = isMultilineWithVariousIndent, fasterMethodForReplacing = fasterMethodForReplacing }, EncodingHelperIsBinary);
     }
+
+
+
     /// <summary>
     /// A4 - whether use s.Contains. A4 - SHReplace.ReplaceAll2
     /// </summary>
@@ -693,7 +701,7 @@ void
 #else
 void
 #endif
-    ReplaceInAllFiles(IList<string> replaceFrom, IList<string> replaceTo, ReplaceInAllFilesArgsBase p)
+    ReplaceInAllFiles(IList<string> replaceFrom, IList<string> replaceTo, ReplaceInAllFilesArgsBase p, Func<string, bool> EncodingHelperIsBinary)
     {
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
         // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
@@ -722,11 +730,11 @@ void
             }
 #endif
 
-            if (!EncodingHelper.isBinary(item))
+            if (!EncodingHelperIsBinary(item))
             {
                 if (writeEveryReadedFileAsStatus)
                 {
-                    SunamoTemplateLogger.Instance.LoadedFromStorage(item);
+                    //SunamoTemplateLogger.Instance.LoadedFromStorage(item);
                 }
 
                 // TF.ReadAllText is 20x faster than TF.ReadAllText
@@ -759,13 +767,13 @@ void
 
                     if (writeEveryReadedFileAsStatus)
                     {
-                        SunamoTemplateLogger.Instance.SavedToDrive(item);
+                        //SunamoTemplateLogger.Instance.SavedToDrive(item);
                     }
                 }
             }
             else
             {
-                ThisApp.Warning(sess.i18n(XlfKeys.ContentOf) + " " + item + " couldn't be replaced - contains control chars.");
+                //ThisApp.Warning(sess.i18n(XlfKeys.ContentOf) + " " + item + " couldn't be replaced - contains control chars.");
             }
 
         }
@@ -800,7 +808,7 @@ void
 #if ASYNC
                 await
 #endif
-                TF.WriteAllText(item, df2.RemoveDiacritics());
+                File.WriteAllTextAsync(item, df2.RemoveDiacritics());
                 df2 = SHReplace.ReplaceOnce(df2, "\u010F\u00BB\u017C", "");
 
 #if ASYNC
@@ -811,17 +819,17 @@ void
         }
     }
 
-    public static List<string> PathsOfStorageFiles<StorageFolder, StorageFile>(IList<StorageFile> files1, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        List<string> d = new List<string>(files1.Count());
+    //public static List<string> PathsOfStorageFiles<StorageFolder, StorageFile>(IList<StorageFile> files1, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    List<string> d = new List<string>(files1.Count());
 
-        foreach (var item in files1)
-        {
-            d.Add(FS.StorageFilePath(item, ac));
-        }
+    //    foreach (var item in files1)
+    //    {
+    //        d.Add(FS.StorageFilePath(item, ac));
+    //    }
 
-        return d;
-    }
+    //    return d;
+    //}
 
     public static string RemoveFile(string fullPathCsproj)
     {
@@ -1132,6 +1140,12 @@ void
         }
         return files;
     }
+
+    public static Dictionary<string, List<string>> AllExtensionsInFolderByCategory(List<string> files, GetExtensionArgs a)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// A1 i A2 musí končit backslashem
     /// Může vyhodit výjimku takže je nutné to odchytávat ve volající metodě
@@ -1274,7 +1288,7 @@ void
     /// <param name="files"></param>
     public static void DeleteFilesWithSameContent(List<string> files)
     {
-        DeleteFilesWithSameContentWorking<string, object>(files, TF.ReadAllTextSync);
+        DeleteFilesWithSameContentWorking<string, object>(files, File.ReadAllText);
     }
 
     /// <summary>

@@ -1,9 +1,10 @@
 
 namespace SunamoFileSystem;
+
+using SunamoArgs;
 using SunamoFileSystem._sunamo;
-using SunamoFileSystemNoDeps;
-using SunamoFileSystemShared;
 using SunamoRegex;
+using SunamoXlfKeys;
 
 public partial class FS : FSSH
 {
@@ -40,7 +41,7 @@ public partial class FS : FSSH
 
 
 
-    public static string FilesWithSameName(string vs, string v, SearchOption allDirectories)
+    public static string FilesWithSameName(string vs, string v, SearchOption allDirectories, ITextOutputGenerator tog)
     {
         FSND.WithEndSlash(ref vs);
 
@@ -51,7 +52,7 @@ public partial class FS : FSSH
             DictionaryHelper.AddOrCreate<string, string>(f, Path.GetFileName(item), item);
         }
 
-        TextOutputGenerator tog = new TextOutputGenerator();
+        //TextOutputGenerator tog = new TextOutputGenerator();
         foreach (var item in f)
         {
             if (item.Value.Count > 1)
@@ -77,7 +78,7 @@ public partial class FS : FSSH
     {
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
-            ThisApp.Warning(folder2 + "does not exists");
+            //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         }
 
@@ -466,43 +467,48 @@ public partial class FS : FSSH
 
     public static void SaveMemoryStream(System.IO.MemoryStream mss, string path)
     {
-        SaveMemoryStream<string, string>(mss, path, null);
-    }
-
-    public static void SaveMemoryStream<StorageFolder, StorageFile>(System.IO.MemoryStream mss, StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-
-        if (!FS.ExistsFileAc(path, ac))
+        //SaveMemoryStream<string, string>(mss, path, null);
+        using (System.IO.FileStream fs = new System.IO.FileStream(path.ToString(), System.IO.FileMode.Create, System.IO.FileAccess.Write))
         {
-            if (ac == null)
-            {
-                using (System.IO.FileStream fs = new System.IO.FileStream(path.ToString(), System.IO.FileMode.Create, System.IO.FileAccess.Write))
-                {
-                    byte[] matriz = mss.ToArray();
-                    fs.Write(matriz, 0, matriz.Length);
-                }
-            }
-            else
-            {
-                throw new Exception("SaveMemoryStream");
-            }
+            byte[] matriz = mss.ToArray();
+            fs.Write(matriz, 0, matriz.Length);
         }
     }
 
+    //public static void SaveMemoryStream<StorageFolder, StorageFile>(System.IO.MemoryStream mss, StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+
+    //    if (!FS.ExistsFileAc(path, ac))
+    //    {
+    //        if (ac == null)
+    //        {
+    //            using (System.IO.FileStream fs = new System.IO.FileStream(path.ToString(), System.IO.FileMode.Create, System.IO.FileAccess.Write))
+    //            {
+    //                byte[] matriz = mss.ToArray();
+    //                fs.Write(matriz, 0, matriz.Length);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            throw new Exception("SaveMemoryStream");
+    //        }
+    //    }
+    //}
 
 
 
 
-    public static StorageFolder CiStorageFolder<StorageFolder, StorageFile>(string path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            var ps = path.ToString();
-            ps = FSND.WithEndSlash(ps);
-            return (dynamic)ps;
-        }
-        return ac.fs.ciStorageFolder.Invoke(path);
-    }
+
+    //public static StorageFolder CiStorageFolder<StorageFolder, StorageFile>(string path, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        var ps = path.ToString();
+    //        ps = FSND.WithEndSlash(ps);
+    //        return (dynamic)ps;
+    //    }
+    //    return ac.fs.ciStorageFolder.Invoke(path);
+    //}
 
 
     public static string DeleteWrongCharsInDirectoryName(string p)
@@ -721,17 +727,17 @@ public partial class FS : FSSH
     /// <param name="item"></param>
     /// <param name="fileTo"></param>
     /// <param name="co"></param>
-    public static void CopyFile<StorageFolder, StorageFile>(string item, string fileTo2, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac = null)
-    {
-        if (ac == null)
-        {
-            CopyFile(item, fileTo2, co);
-        }
-        else
-        {
-            ThrowNotImplementedUwp();
-        }
-    }
+    //public static void CopyFile<StorageFolder, StorageFile>(string item, string fileTo2, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac = null)
+    //{
+    //    if (ac == null)
+    //    {
+    //        CopyFile(item, fileTo2, co);
+    //    }
+    //    else
+    //    {
+    //        ThrowNotImplementedUwp();
+    //    }
+    //}
 
 
 
@@ -764,17 +770,17 @@ public partial class FS : FSSH
     //    return false;
     //}
 
-    public static bool CopyMoveFilePrepare<StorageFolder, StorageFile>(ref string item, ref StorageFile fileTo2, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            var fileTo = fileTo2.ToString();
-            return CopyMoveFilePrepare(ref item, ref fileTo, co);
-        }
+    //public static bool CopyMoveFilePrepare<StorageFolder, StorageFile>(ref string item, ref StorageFile fileTo2, FileMoveCollisionOption co, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        var fileTo = fileTo2.ToString();
+    //        return CopyMoveFilePrepare(ref item, ref fileTo, co);
+    //    }
 
-        ThrowNotImplementedUwp();
-        return false;
-    }
+    //    ThrowNotImplementedUwp();
+    //    return false;
+    //}
 
     public static string ChangeExtension(string item, string newExt, bool physically)
     {
@@ -863,7 +869,7 @@ public partial class FS : FSSH
     {
         SearchOption so = SearchOption.TopDirectoryOnly;
 
-        var b = BTS.GetValueOfNullable(rec);
+        var b = rec.Value;
         if (b)
         {
             so = SearchOption.AllDirectories;
@@ -1128,7 +1134,7 @@ public partial class FS : FSSH
             try
             {
 #if ASYNC
-                TF.WaitD();
+                //TF.WaitD();
 #endif
 
                 //d.Clear();
@@ -1362,15 +1368,15 @@ public partial class FS : FSSH
     /// <param name="item"></param>
     /// <param name="newFileName"></param>
     /// <param name="onDrive"></param>
-    public static string ChangeFilename<StorageFolder, StorageFile>(StorageFile item, string newFileName, bool physically, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            ChangeFilename(item.ToString(), newFileName, physically);
-        }
-        ThrowNotImplementedUwp();
-        return null;
-    }
+    //public static string ChangeFilename<StorageFolder, StorageFile>(StorageFile item, string newFileName, bool physically, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        ChangeFilename(item.ToString(), newFileName, physically);
+    //    }
+    //    ThrowNotImplementedUwp();
+    //    return null;
+    //}
 
     /// <summary>
     /// A2 true - bs to slash. false - slash to bs

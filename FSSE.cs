@@ -42,29 +42,29 @@ string
     ///     if have more extension, remove just one
     /// </summary>
     /// <param name="s"></param>
-    public static StorageFile GetFileNameWithoutExtension<StorageFolder, StorageFile>(StorageFile s,
-    AbstractCatalogBase<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            string ss = s.ToString();
-            string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
-            string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
+    //public static StorageFile GetFileNameWithoutExtension<StorageFolder, StorageFile>(StorageFile s,
+    //AbstractCatalogBase<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        string ss = s.ToString();
+    //        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
+    //        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
 
-            if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
-            {
-                if (ext != string.Empty)
-                {
-                    return (dynamic)vr + AllStringsSE.dot + ext;
-                }
-            }
+    //        if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
+    //        {
+    //            if (ext != string.Empty)
+    //            {
+    //                return (dynamic)vr + AllStringsSE.dot + ext;
+    //            }
+    //        }
 
-            return (dynamic)vr;
-        }
+    //        return (dynamic)vr;
+    //    }
 
-        ThrowNotImplementedUwp();
-        return s;
-    }
+    //    ThrowNotImplementedUwp();
+    //    return s;
+    //}
 
 
 
@@ -77,7 +77,8 @@ string
 
     public static string GetFileNameWithoutExtension(string s)
     {
-        return GetFileNameWithoutExtension<string, string>(s, null);
+        return Path.GetFileNameWithoutExtension(s);
+        //return GetFileNameWithoutExtension<string, string>(s, null);
     }
 
 

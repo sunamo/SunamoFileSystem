@@ -1,7 +1,7 @@
 
 namespace SunamoFileSystem;
+
 using SunamoFileSystem._sunamo;
-using SunamoFileSystemShared;
 using System.Text.RegularExpressions;
 
 
@@ -130,7 +130,7 @@ public partial class FS : FSSH
             }
             catch (Exception ex)
             {
-                ThisApp.Error(item + " : " + ex.Message);
+                //ThisApp.Error(item + " : " + ex.Message);
             }
         }
         else
@@ -511,12 +511,12 @@ public partial class FS : FSSH
         if (e.LoadFromFileWhenDebug)
         {
             var s = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
-            d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + s + ".txt");
+            //d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + s + ".txt");
 
-            if (File.Exists(d))
-            {
-                return File.ReadAllLines(path).ToList();
-            }
+            //if (File.Exists(d))
+            //{
+            //    return File.ReadAllLines(path).ToList();
+            //}
         }
 #endif
 
@@ -625,7 +625,7 @@ public partial class FS : FSSH
 
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
-            ThisApp.Warning(folder2 + "does not exists");
+            //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         }
 
@@ -869,18 +869,18 @@ public partial class FS : FSSH
 
 
 
-    public static void MakeUncLongPath<StorageFolder, StorageFile>(ref StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            path = (StorageFile)(dynamic)MakeUncLongPath(path.ToString());
-        }
-        else
-        {
-            ThrowNotImplementedUwp();
-        }
-        //return path;
-    }
+    //public static void MakeUncLongPath<StorageFolder, StorageFile>(ref StorageFile path, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        path = (StorageFile)(dynamic)MakeUncLongPath(path.ToString());
+    //    }
+    //    else
+    //    {
+    //        ThrowNotImplementedUwp();
+    //    }
+    //    //return path;
+    //}
 
 
 
@@ -898,14 +898,14 @@ public partial class FS : FSSH
     /// For empty or whitespace return false.
     /// </summary>
     /// <param name="selectedFile"></param>
-    public static bool ExistsFileAc<StorageFolder, StorageFile>(StorageFile selectedFile, AbstractCatalog<StorageFolder, StorageFile> ac = null)
-    {
-        if (ac == null)
-        {
-            return File.Exists(selectedFile.ToString());
-        }
-        return ac.fs.existsFile.Invoke(selectedFile);
-    }
+    //public static bool ExistsFileAc<StorageFolder, StorageFile>(StorageFile selectedFile, AbstractCatalog<StorageFolder, StorageFile> ac = null)
+    //{
+    //    if (ac == null)
+    //    {
+    //        return File.Exists(selectedFile.ToString());
+    //    }
+    //    return ac.fs.existsFile.Invoke(selectedFile);
+    //}
 
 
 
@@ -942,17 +942,17 @@ public partial class FS : FSSH
     //}
 
 
-    public static void CreateFoldersPsysicallyUnlessThereFolder<StorageFolder, StorageFile>(StorageFolder nad, AbstractCatalog<StorageFolder, StorageFile> ac)
-    {
-        if (ac == null)
-        {
-            CreateFoldersPsysicallyUnlessThere(nad.ToString());
-        }
-        else
-        {
-            ThrowNotImplementedUwp();
-        }
-    }
+    //public static void CreateFoldersPsysicallyUnlessThereFolder<StorageFolder, StorageFile>(StorageFolder nad, AbstractCatalog<StorageFolder, StorageFile> ac)
+    //{
+    //    if (ac == null)
+    //    {
+    //        CreateFoldersPsysicallyUnlessThere(nad.ToString());
+    //    }
+    //    else
+    //    {
+    //        ThrowNotImplementedUwp();
+    //    }
+    //}
 
     public static bool? ExistsDirectoryNull(string item)
     {

@@ -2,7 +2,6 @@
 namespace SunamoFileSystem;
 
 using SunamoFileSystem._sunamo;
-using SunamoFileSystemNoDeps;
 
 public partial class FS
 {
