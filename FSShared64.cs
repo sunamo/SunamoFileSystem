@@ -89,7 +89,7 @@ public partial class FS : FSSH
 
     public static List<string> GetFiles(string folderPath, bool recursive)
     {
-        return GetFiles(folderPath, FS.MascFromExtension(), recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
+        return GetFiles(folderPath, "*.*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).ToList();
     }
 
     //    public static
@@ -486,7 +486,7 @@ public partial class FS : FSSH
 
     public static string AllIncludeIfOnlyLetters(string item)
     {
-        item = item.ToLower();
+        item = item.ToLower().TrimStart('*').TrimStart('.');
         //if ( SH.ContainsOnlyCase(item.ToLower(), false, false))
         //{
         item = "*." + item;

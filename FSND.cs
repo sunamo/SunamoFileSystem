@@ -128,6 +128,12 @@ public class FSND
         return Directory.Exists(p);
     }
 
+    #region MakeUncLongPath
+    public static string MakeUncLongPath(string path)
+    {
+        return MakeUncLongPath(ref path);
+    }
+
     public static string MakeUncLongPath(ref string path)
     {
         if (!path.StartsWith(Consts.UncLongPath))
@@ -142,6 +148,7 @@ public class FSND
 
         return path;
     }
+    #endregion
 
     /// <summary>
     ///     Create all upfolders of A1 with, if they dont exist
@@ -204,15 +211,7 @@ nad
         }
     }
 
-    /// <summary>
-    ///     Usage: ExistsDirectoryWorker
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static string MakeUncLongPath(string path)
-    {
-        return MakeUncLongPath(ref path);
-    }
+
 
     public static void CreateDirectoryIfNotExists(string p)
     {

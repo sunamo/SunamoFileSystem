@@ -380,6 +380,8 @@ List<string>
 
 
     /// <summary>
+    /// Všechny soubory které se podaří přesunout vymažu z A1
+    /// 
     /// A1 MUST BE WITH EXTENSION
     /// A4 can be null if !A5
     /// In A1 will keep files which doesnt exists in A3
@@ -586,7 +588,7 @@ void
 #endif
     DeleteEmptyFiles(string folder, SearchOption so)
     {
-        var files = GetFiles(folder, FS.MascFromExtension(), so);
+        var files = GetFiles(folder, "*.*", so);
         foreach (var item in files)
         {
             var fs = new FileInfo(item).Length;
@@ -1105,29 +1107,46 @@ void
         }
     }
 
-    private static List<TWithInt<string>> DirectoriesWithToken(string v, AscDesc desc)
+    //private static List<TWithInt<string>> DirectoriesWithToken(string v, AscDesc desc)
+    //{
+    //    throw new NotImplementedException();
+    //}
+
+    public static int CompareTWithInt<T>(TWithInt<T> t, TWithInt<T> u)
     {
-        throw new NotImplementedException();
+        if (t.count > u.count)
+        {
+            return 1;
+        }
+        else if (t.count < u.count)
+        {
+            return -1;
+        }
+        return 0;
     }
 
-    //public static List<TWithInt<string>> DirectoriesWithToken(string v, AscDesc sb)
-    //{
-    //    var dirs = Directory.GetDirectories(v, AllStrings.asterisk, SearchOption.AllDirectories);
-    //    List<TWithInt<string>> vr = new List<TWithInt<string>>();
-    //    foreach (var item in dirs)
-    //    {
-    //        vr.Add(new TWithInt<string> { t = item, count = SH.OccurencesOfStringIn(item, AllStrings.bs) });
-    //    }
-    //    if (sb == AscDesc.Asc)
-    //    {
-    //        vr.Sort(new SunamoComparerICompare.TWithIntComparer.Asc<string>(new SunamoComparer.TWithIntSunamoComparer<string>()));
-    //    }
-    //    else if (sb == AscDesc.Desc)
-    //    {
-    //        vr.Sort(new SunamoComparerICompare.TWithIntComparer.Desc<string>(new SunamoComparer.TWithIntSunamoComparer<string>()));
-    //    }
-    //    return vr;
-    //}
+    public static List<TWithInt<string>> DirectoriesWithToken(string v, AscDesc sb)
+    {
+        var dirs = Directory.GetDirectories(v, AllStrings.asterisk, SearchOption.AllDirectories);
+        List<TWithInt<string>> vr = new List<TWithInt<string>>();
+        foreach (var item in dirs)
+        {
+            vr.Add(new TWithInt<string> { t = item, count = SH.OccurencesOfStringIn(item, AllStrings.bs) });
+        }
+
+        vr.Sort(CompareTWithInt);
+
+        if (sb == AscDesc.Desc)
+        {
+            vr.Reverse();
+            //vr.Sort(new SunamoComparerICompare.TWithIntComparer.Asc<string>(new SunamoComparer.TWithIntSunamoComparer<string>()));
+        }
+        //else if (sb == AscDesc.Desc)
+        //{
+        //    vr.Sort(new SunamoComparerICompare.TWithIntComparer.Desc<string>(new SunamoComparer.TWithIntSunamoComparer<string>()));
+        //}
+        return vr;
+    }
     public static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
     {
         List<string> files = new List<string>();
@@ -1674,7 +1693,7 @@ void
     {
         List<string> foundedFiles = new List<string>();
         FS.NormalizeExtensions(extension);
-        var files = Directory.EnumerateFiles(folder, FS.MascFromExtension(), SearchOption.AllDirectories);
+        var files = Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories);
         foreach (var item in files)
         {
             string ext = FS.GetNormalizedExtension(item);

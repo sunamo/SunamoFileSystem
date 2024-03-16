@@ -3,19 +3,16 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>24.2.7.1</Version>
+    <Version>24.3.11.2</Version>
     <Description>Overall working with filesystem</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.27" />
-    <PackageReference Include="SunamoArgs" Version="24.2.6.4" />
     <PackageReference Include="SunamoCollectionsGeneric" Version="24.2.6.2" />
-    <PackageReference Include="SunamoData" Version="24.2.6.2" />
     <PackageReference Include="SunamoFileSystemNoDeps" Version="24.2.5.1" />
     <PackageReference Include="SunamoFileSystemShared" Version="24.2.5.1" />
     <PackageReference Include="SunamoRegex" Version="24.2.6.3" />
     <PackageReference Include="SunamoTypeOfMessage" Version="24.2.6.2" />
-    <PackageReference Include="SunamoValues" Version="24.2.6.3" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>

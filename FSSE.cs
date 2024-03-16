@@ -265,7 +265,7 @@ string
 
     public static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
     {
-        return GetFiles(v1, v2, topDirectoryOnly).ToList();
+        return Directory.GetFiles(v1, v2, topDirectoryOnly).ToList();
     }
 
     //private static void ThrowNotImplementedUwp()
