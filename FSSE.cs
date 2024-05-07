@@ -32,34 +32,48 @@ string
     }
 
 
-
-
-
-
+    public static string GetFileNameWithoutExtension(string s)
+    {
+        var p = s.Split('\\');
+        return p[p.Length - 1];
+    }
 
     /// <summary>
-    ///     Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
-    ///     if have more extension, remove just one
+    /// Problémová metoda
+    /// Píše že nemůže najít SunamoValues, přitom v nugetech je
+    /// 
     /// </summary>
+    /// <typeparam name="StorageFile"></typeparam>
     /// <param name="s"></param>
+    /// <returns></returns>
+    public static StorageFile GetFileNameWithoutExtensionNoAc<StorageFile>(StorageFile s)
+    {
+        string ss = s.ToString();
+        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
+        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
+
+        if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
+        {
+            if (ext != string.Empty)
+            {
+                return (dynamic)vr + AllStringsSE.dot + ext;
+            }
+        }
+
+        return (dynamic)vr;
+    }
+
+    ///// <summary>
+    /////     Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
+    /////     if have more extension, remove just one
+    ///// </summary>
+    ///// <param name="s"></param>
     //public static StorageFile GetFileNameWithoutExtension<StorageFolder, StorageFile>(StorageFile s,
     //AbstractCatalogBase<StorageFolder, StorageFile> ac)
     //{
     //    if (ac == null)
     //    {
-    //        string ss = s.ToString();
-    //        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
-    //        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
-
-    //        if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
-    //        {
-    //            if (ext != string.Empty)
-    //            {
-    //                return (dynamic)vr + AllStringsSE.dot + ext;
-    //            }
-    //        }
-
-    //        return (dynamic)vr;
+    //        return GetFileNameWithoutExtension<StorageFolder, StorageFile>(s, null)
     //    }
 
     //    ThrowNotImplementedUwp();
@@ -74,6 +88,7 @@ string
     {
         throw new Exception("Not implemented in UWP");
     }
+    GetFileNameWithoutExtension
 
     public static string GetFileNameWithoutExtension(string s)
     {
