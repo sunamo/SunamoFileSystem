@@ -17,3 +17,6 @@ global using SunamoValues.Constants;
 global using SunamoDelegates;
 global using SunamoFileSystem.Args;
 global using SunamoArgs;
+global using System.Collections.Generic;
+global using System.Collections;
+

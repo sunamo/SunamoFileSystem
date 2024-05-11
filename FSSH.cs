@@ -14,13 +14,13 @@ public class FSSH : FSND
         }
 
         s_invalidPathChars = new List<char>(Path.GetInvalidPathChars());
-        if (!s_invalidPathChars.Contains(AllCharsSE.slash))
+        if (!s_invalidPathChars.Contains(AllChars.slash))
         {
-            s_invalidPathChars.Add(AllCharsSE.slash);
+            s_invalidPathChars.Add(AllChars.slash);
         }
-        if (!s_invalidPathChars.Contains(AllCharsSE.bs))
+        if (!s_invalidPathChars.Contains(AllChars.bs))
         {
-            s_invalidPathChars.Add(AllCharsSE.bs);
+            s_invalidPathChars.Add(AllChars.bs);
         }
 
 
@@ -41,12 +41,12 @@ public class FSSH : FSND
             }
         }
 
-        s_invalidCharsForMapPath.Remove(AllCharsSE.slash);
+        s_invalidCharsForMapPath.Remove(AllChars.slash);
 
         s_invalidFileNameCharsWithoutDelimiterOfFolders = new List<char>(s_invalidFileNameChars.ToArray());
 
-        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllCharsSE.bs);
-        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllCharsSE.slash);
+        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllChars.bs);
+        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllChars.slash);
     }
 
     public static bool TryDeleteFile(string item)
@@ -111,7 +111,7 @@ public class FSSH : FSND
         string fn = Path.GetFileNameWithoutExtension(origS);
         string e = GetExtension(origS);
 
-        if (origS.Contains(AllCharsSE.slash) || origS.Contains(AllCharsSE.bs))
+        if (origS.Contains(AllChars.slash) || origS.Contains(AllChars.bs))
         {
             string p = Path.GetDirectoryName(origS);
 
@@ -192,13 +192,13 @@ public class FSSH : FSND
         }
 
         string result = "";
-        int lastDot = v.LastIndexOf(AllCharsSE.dot);
+        int lastDot = v.LastIndexOf(AllChars.dot);
         if (lastDot == -1)
         {
             return string.Empty;
         }
-        int lastSlash = v.LastIndexOf(AllCharsSE.slash);
-        int lastBs = v.LastIndexOf(AllCharsSE.bs);
+        int lastSlash = v.LastIndexOf(AllChars.slash);
+        int lastBs = v.LastIndexOf(AllChars.bs);
         if (lastSlash > lastDot)
         {
             return string.Empty;

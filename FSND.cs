@@ -68,11 +68,11 @@ public class FSND
 
         if (containsBs)
         {
-            deli = AllCharsSE.bs;
+            deli = AllChars.bs;
         }
         else if (containsFs)
         {
-            deli = AllCharsSE.slash;
+            deli = AllChars.slash;
         }
         else
         {
@@ -237,7 +237,7 @@ nad
     {
         if (v != string.Empty)
         {
-            v = v.TrimEnd(AllCharsSE.bs) + AllCharsSE.bs;
+            v = v.TrimEnd(AllChars.bs) + AllChars.bs;
         }
 
         FirstCharUpper(ref v);

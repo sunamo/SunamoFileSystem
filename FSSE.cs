@@ -49,14 +49,14 @@ string
     public static StorageFile GetFileNameWithoutExtensionNoAc<StorageFile>(StorageFile s)
     {
         string ss = s.ToString();
-        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllCharsSE.bs));
-        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllCharsSE.dot);
+        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllChars.bs));
+        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllChars.dot);
 
-        if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllCharsSE.vsZnakyWithoutSpecial)*/)
+        if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllChars.vsZnakyWithoutSpecial)*/)
         {
             if (ext != string.Empty)
             {
-                return (dynamic)vr + AllStringsSE.dot + ext;
+                return (dynamic)vr + AllStrings.dot + ext;
             }
         }
 
@@ -123,7 +123,7 @@ string
     ///// <param name="ext"></param>
     //public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
     //{
-    //    path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
+    //    path = Path.GetDirectoryName(fn) + AllChars.bs;
     //    file = GetFileNameWithoutExtension(fn);
     //    ext = Path.GetExtension(fn);
     //}
@@ -138,14 +138,14 @@ string
     //    if (ac == null)
     //    {
     //        var ss = s.ToString();
-    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
+    //        var ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
     //            if (ext != string.Empty)
     //            {
-    //                return (dynamic)vr + AllStringsSE.dot + ext;
+    //                return (dynamic)vr + AllStrings.dot + ext;
     //            }
     //        }
     //        return (dynamic)vr;
@@ -275,7 +275,7 @@ string
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string NormalizeExtension2(string item)
     {
-        return item.ToLower().TrimStart(SunamoValues.AllCharsSE.dot);
+        return item.ToLower().TrimStart(SunamoValues.AllChars.dot);
     }
 
     public static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
@@ -363,8 +363,8 @@ string
     //
     //        public static List<string> GetFilesMoreMasc(string path, string v, SearchOption topDirectoryOnly)
     //        {
-    //            var c = AllStringsSE.comma;
-    //            var sc = AllStringsSE.sc;
+    //            var c = AllStrings.comma;
+    //            var sc = AllStrings.sc;
     //            List<string> result = new List<string>();
     //            List<string> masks = new List<string>();
     //
@@ -563,7 +563,7 @@ string
     ///// <param name="s"></param>
     //private static string CombineWorker(bool FirstCharUpper, params string[] s)
     //{
-    //    s = CA.TrimStart(AllCharsSE.bs, s).ToArray();
+    //    s = CA.TrimStart(AllChars.bs, s).ToArray();
     //    var result = Path.Combine(s);
     //    if (FirstCharUpper)
     //    {
@@ -593,14 +593,14 @@ string
     //    if (ac == null)
     //    {
     //        var ss = s.ToString();
-    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllCharsSE.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllCharsSE.dot);
+    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
+    //        var ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
 
     //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
     //        {
     //            if (ext != string.Empty)
     //            {
-    //                return (dynamic)vr + AllStringsSE.dot + ext;
+    //                return (dynamic)vr + AllStrings.dot + ext;
     //            }
     //        }
     //        return (dynamic)vr;
@@ -639,7 +639,7 @@ string
     //        /// <param name="ext"></param>
     //        public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
     //        {
-    //            path = Path.GetDirectoryName(fn) + AllCharsSE.bs;
+    //            path = Path.GetDirectoryName(fn) + AllChars.bs;
     //            file = Path.GetFileNameWithoutExtension(fn);
     //            ext = Path.GetExtension(fn);
     //        }
@@ -660,7 +660,7 @@ string
     //
     //        public static void FileToDirectory(ref string dir)
     //        {
-    //            if (!dir.EndsWith(AllStringsSE.bs))
+    //            if (!dir.EndsWith(AllStrings.bs))
     //            {
     //                dir = Path.GetDirectoryName(dir);
     //            }
