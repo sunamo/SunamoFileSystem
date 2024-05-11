@@ -1,4 +1,4 @@
-﻿namespace SunamoFileSystem._sunamo;
+namespace SunamoFileSystem;
 internal class sess
 {
     internal static string i18n(string loading)

@@ -1,4 +1,4 @@
-namespace SunamoFileSystem.Args;
+namespace SunamoFileSystem;
 
 public class GetFoldersEveryFolderArgs : GetFilesArgs
 {

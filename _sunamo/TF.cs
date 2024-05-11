@@ -1,4 +1,4 @@
-﻿namespace SunamoFileSystem._sunamo;
+namespace SunamoFileSystem;
 internal class TF
 {
     internal static List<byte> ReadAllBytesSync(string arg)

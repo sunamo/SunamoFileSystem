@@ -1,5 +1,5 @@
 
-namespace SunamoFileSystem._sunamo;
+namespace SunamoFileSystem;
 using System;
 using System.Collections.Generic;
 

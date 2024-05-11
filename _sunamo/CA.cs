@@ -1,4 +1,4 @@
-namespace SunamoFileSystem._sunamo;
+namespace SunamoFileSystem;
 
 //namespace SunamoFileSystem._sunamo;
 

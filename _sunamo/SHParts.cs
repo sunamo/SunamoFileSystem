@@ -1,5 +1,5 @@
 
-namespace SunamoFileSystem._sunamo;
+namespace SunamoFileSystem;
 internal class SHParts
 {
     internal static string RemoveAfterLast(string nameSolution, object delimiter)

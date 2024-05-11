@@ -1,4 +1,4 @@
-namespace SunamoFileSystem.Args;
+namespace SunamoFileSystem;
 
 /// <summary>
 /// In original exists only returnOriginalCase
