@@ -614,7 +614,7 @@ public partial class FS : FSSH
     public static List<string> OnlyNamesNoDirectEdit(string appendToStart, List<string> fullPaths)
     {
         List<string> ds = new List<string>(fullPaths.Count);
-        CASE.InitFillWith(ds, fullPaths.Count);
+        CASunamoExceptions.InitFillWith(ds, fullPaths.Count);
         for (int i = 0; i < fullPaths.Count; i++)
         {
             ds[i] = appendToStart + Path.GetFileName(fullPaths[i]);

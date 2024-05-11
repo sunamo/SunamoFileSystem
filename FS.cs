@@ -1433,7 +1433,7 @@ void
     public static List<string> OnlyExtensions(List<string> cesta)
     {
         List<string> vr = new List<string>(cesta.Count);
-        CASE.InitFillWith(vr, cesta.Count);
+        CASunamoExceptions.InitFillWith(vr, cesta.Count);
         for (int i = 0; i < vr.Count; i++)
         {
             vr[i] = Path.GetExtension(cesta[i]);
@@ -1475,7 +1475,7 @@ void
         a.returnOriginalCase = false;
 
         List<string> vr = new List<string>(cesta.Count);
-        CASE.InitFillWith(vr, cesta.Count);
+        CASunamoExceptions.InitFillWith(vr, cesta.Count);
         for (int i = 0; i < vr.Count; i++)
         {
             vr[i] = Path.GetExtension(cesta[i]).ToLower();
@@ -1485,7 +1485,7 @@ void
     public static List<string> OnlyExtensionsToLowerWithPath(List<string> cesta)
     {
         List<string> vr = new List<string>(cesta.Count);
-        CASE.InitFillWith(vr, cesta.Count);
+        CASunamoExceptions.InitFillWith(vr, cesta.Count);
         for (int i = 0; i < vr.Count; i++)
         {
 
@@ -1739,7 +1739,7 @@ void
     public static List<string> OnlyNamesWithoutExtensionCopy(List<string> p2)
     {
         List<string> p = new List<string>(p2.Count);
-        CASE.InitFillWith(p, p2.Count);
+        CASunamoExceptions.InitFillWith(p, p2.Count);
         for (int i = 0; i < p2.Count; i++)
         {
             p[i] = Path.GetFileNameWithoutExtension(p2[i]);
@@ -1749,7 +1749,7 @@ void
     public static List<string> OnlyNamesWithoutExtension(string appendToStart, List<string> fullPaths)
     {
         List<string> ds = new List<string>(fullPaths.Count);
-        CASE.InitFillWith(ds, fullPaths.Count);
+        CASunamoExceptions.InitFillWith(ds, fullPaths.Count);
         for (int i = 0; i < fullPaths.Count; i++)
         {
             ds[i] = appendToStart + Path.GetFileNameWithoutExtension(fullPaths[i]);
