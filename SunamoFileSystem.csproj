@@ -46,6 +46,31 @@
     <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
     <Compile Include="..\SunamoExceptions\OnlyInSE\Types.cs" Link="_linked\SunamoExceptions\OnlyInSE\Types.cs" />
     <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
+    <Compile Include="..\SunamoCollectionsGeneric\Collections\FsWatcherDictionary.cs" Link="_linked\SunamoCollectionsGeneric\Collections\FsWatcherDictionary.cs" />
+    <Compile Include="..\SunamoDictionary\DictionaryHelper.cs" Link="_linked\SunamoDictionary\DictionaryHelper.cs" />
+    <Compile Include="..\SunamoFubuCore\Attributes.cs" Link="_linked\SunamoFubuCore\Attributes.cs" />
+    <Compile Include="..\SunamoStringParts\SHParts.cs" Link="_linked\SunamoStringParts\SHParts.cs" />
+    <Compile Include="..\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicates.cs" Link="_linked\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicates.cs" />
+    <Compile Include="..\SunamoCollectionsGeneric\CAG.cs" Link="_linked\SunamoCollectionsGeneric\CAG.cs" />
+    <Compile Include="..\SunamoString\SH.cs" Link="_linked\SunamoString\SH.cs" />
+    <Compile Include="..\SunamoStringSplit\SHSplit.cs" Link="_linked\SunamoStringSplit\SHSplit.cs" />
+    <Compile Include="..\SunamoData\Data\ReplaceInAllFilesArgs.cs" Link="_linked\SunamoData\Data\ReplaceInAllFilesArgs.cs" />
+    <Compile Include="..\SunamoStringReplace\SHReplace.cs" Link="_linked\SunamoStringReplace\SHReplace.cs" />
+    <Compile Include="..\SunamoFileIO\TF.cs" Link="_linked\SunamoFileIO\TF.cs" />
+    <Compile Include="..\SunamoParsing\Parse.cs" Link="_linked\SunamoParsing\Parse.cs" />
+    <Compile Include="..\SunamoEnums\Enums\EnvironmentVariables.cs" Link="_linked\SunamoEnums\Enums\EnvironmentVariables.cs" />
+    <Compile Include="..\SunamoExceptions\Delegates\ExistsDirectory.cs" Link="_linked\SunamoExceptions\Delegates\ExistsDirectory.cs" />
+    <Compile Include="..\SunamoTextOutputGenerator\TextOutputGenerator.cs" Link="_linked\SunamoTextOutputGenerator\TextOutputGenerator.cs" />
+    <Compile Include="..\SunamoStringGetLines\SHGetLines.cs" Link="_linked\SunamoStringGetLines\SHGetLines.cs" />
+    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
+    <Compile Include="..\SunamoCollectionsChangeContent\CAChangeContent.cs" Link="_linked\SunamoCollectionsChangeContent\CAChangeContent.cs" />
+    <Compile Include="..\SunamoRegex\Wildcard.cs" Link="_linked\SunamoRegex\Wildcard.cs" />
+    <Compile Include="..\SunamoCollections\CA.cs" Link="_linked\SunamoCollections\CA.cs" />
+    <Compile Include="..\SunamoShared\Args\GetFilesEveryFolder.cs" Link="_linked\SunamoShared\Args\GetFilesEveryFolder.cs" />
+    <Compile Include="..\SunamoCollectionsGeneric\Collections\D.cs" Link="_linked\SunamoCollectionsGeneric\Collections\D.cs" />
+    <Compile Include="..\SunamoString\Enums\Brackets.cs" Link="_linked\SunamoString\Enums\Brackets.cs" />
+    <Compile Include="..\SunamoParsing\TryParse.cs" Link="_linked\SunamoParsing\TryParse.cs" />
+    <Compile Include="..\SunamoArgs\GetFilesMoreMascArgs.cs" Link="_linked\SunamoArgs\GetFilesMoreMascArgs.cs" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem</DefineConstants>
