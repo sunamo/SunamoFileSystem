@@ -8,11 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.27" />
-    <PackageReference Include="SunamoCollectionsGeneric" Version="24.2.6.2" />
-    <PackageReference Include="SunamoFileSystemNoDeps" Version="24.2.5.1" />
-    <PackageReference Include="SunamoFileSystemShared" Version="24.2.5.1" />
-    <PackageReference Include="SunamoRegex" Version="24.2.6.3" />
-    <PackageReference Include="SunamoTypeOfMessage" Version="24.2.6.2" />
     <Compile Include="..\SunamoDelegates\VoidStringT.cs" Link="_linked\SunamoDelegates\VoidStringT.cs" />
     <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
     <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
