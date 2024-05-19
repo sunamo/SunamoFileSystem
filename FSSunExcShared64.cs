@@ -189,17 +189,7 @@ bool
 
 
 
-    public static List<long> GetFilesSizes(List<string> f)
-    {
-        List<long> sizes = new List<long>();
-
-        foreach (var item in f)
-        {
-            sizes.Add(new FileInfo(item).Length);
-        }
-
-        return sizes;
-    }
+    
 
     public static long GetFolderSize(string path)
     {
@@ -273,48 +263,12 @@ bool
 
     public static bool HasAnyFoldersOrFiles(string folderWhereToCreate)
     {
-        return GetFiles(folderWhereToCreate).Count > 0 || Directory.GetDirectories(folderWhereToCreate).Length > 0;
+        return System.IO.Directory.GetFiles(folderWhereToCreate).Length > 0 || System.IO. Directory.GetDirectories(folderWhereToCreate).Length > 0;
     }
 
-    public static
-#if ASYNC
-    async Task<Dictionary<string, string>>
-#else
-Dictionary<string, string>
-#endif
-    GetFilesWithContentInDictionary(string item, string v, SearchOption allDirectories)
-    {
-        Dictionary<string, string> r = new Dictionary<string, string>();
+    
 
-        var f = GetFiles(item, v, allDirectories);
-        foreach (var item2 in f)
-        {
-            r.Add(item2,
-#if ASYNC
-            await
-#endif
-            File.ReadAllTextAsync(item2));
-        }
-
-        return r;
-    }
-
-    public static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
-    {
-        var f = GetFolders(d);
-        List<string> result = new List<string>();
-
-        foreach (var item in f)
-        {
-            var files = GetFiles(item, masc, topDirectoryOnly);
-            if (files.Count != 0)
-            {
-                result.Add(item);
-            }
-        }
-
-        return result;
-    }
+    
 
     ///// <summary>
     ///// Use FirstCharUpper instead

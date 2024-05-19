@@ -2,12 +2,7 @@
 namespace SunamoFileSystem;
 
 using Diacritics.Extensions;
-
-
-
-
-
-
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 
@@ -66,18 +61,7 @@ List<string>
         return opts;
     }
 
-    public static List<string> GetFilesWithoutNodeModules(string item, string masc, bool? rec, GetFilesArgs a = null)
-    {
-        if (a == null)
-        {
-            a = new GetFilesArgs();
-        }
-
-        a.excludeFromLocationsCOntains.Add("de_mo");
-        a.excludeFromLocationsCOntains = a.excludeFromLocationsCOntains.Distinct().ToList();
-
-        return GetFiles(item, masc, rec, a);
-    }
+    
 
     /// <summary>
     /// C:\repos\EOM-7\Marvin\Module.VBtO\Clients\src\apps\vbto\src\pages\Administration\Administration.test.tsx
@@ -172,43 +156,7 @@ List<string>
         return FilesWhichContainsAll(sunamo, masc, mustContains);
     }
 
-    public static
-#if ASYNC
-    async Task<List<string>>
-#else
-List<string>
-#endif
-    FilesWhichContainsAll(object sunamo, string masc, IList<string> mustContains)
-    {
-        var mcl = mustContains.Count();
-
-        List<string> ls = new List<string>();
-        IList<string> f = null;
-
-        if (sunamo is IList<string>)
-        {
-            f = (IList<string>)sunamo;
-        }
-        else
-        {
-            f = GetFiles(sunamo.ToString(), masc, true);
-        }
-
-        foreach (var item in f)
-        {
-            var c =
-#if ASYNC
-            await
-#endif
-            File.ReadAllTextAsync(item);
-            if (mustContains.Where(d => c.Contains(d)).Count() == mcl) /*CA.ContainsAnyFromElement(c, mustContains).Count == mcl*/
-            {
-                ls.Add(item);
-            }
-        }
-
-        return ls;
-    }
+    
 
 
 
@@ -273,20 +221,7 @@ List<string>
     }
 
 
-    /// <summary>
-    /// C:\Users\w\AppData\Roaming\sunamo\
-    /// </summary>
-    /// <param name="item2"></param>
-    /// <param name="exts"></param>
-    public static List<string> GetFilesOfExtensions(string item2, SearchOption so, params string[] exts)
-    {
-        List<string> vr = new List<string>();
-        foreach (string item in exts)
-        {
-            vr.AddRange(GetFiles(item2, AllStrings.asterisk + item, so));
-        }
-        return vr;
-    }
+    
 
     //public static string GetRelativePath(string relativeTo, string path)
     //{
@@ -367,16 +302,7 @@ List<string>
         string naz = Path.GetFileName(nad);
         return Path.Combine(zmenseno, Path.Combine(naz, Path.GetFileName(var)));
     }
-    public static FileInfo[] GetFileInfosOfExtensions(string item2, SearchOption so, params string[] exts)
-    {
-        List<FileInfo> vr = new List<FileInfo>();
-        DirectoryInfo di = new DirectoryInfo(item2);
-        foreach (string item in exts)
-        {
-            vr.AddRange(di.GetFiles(AllStrings.asterisk + item, so));
-        }
-        return vr.ToArray();
-    }
+    
 
 
     /// <summary>
@@ -978,18 +904,7 @@ void
             }
         }
     }
-    public static string GetFilesSize(List<string> winrarFiles)
-    {
-        long size = 0;
-        foreach (var item in winrarFiles)
-        {
-            FileInfo fi = new FileInfo(item);
-
-            size += fi.Length;
-        }
-
-        return GetSizeInAutoString(size);
-    }
+    
     public static string GetUpFolderWhichContainsExtension(string path, string fileExt)
     {
         while (FilesOfExtension(path, fileExt).Count == 0)
@@ -1002,15 +917,7 @@ void
         }
         return path;
     }
-    /// <summary>
-    /// Non recursive
-    /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="fileExt"></param>
-    public static List<string> FilesOfExtension(string folder, string fileExt)
-    {
-        return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
-    }
+    
     public static void TrimContentInFilesOfFolder(string slozka, string searchPattern, SearchOption searchOption)
     {
         var files = GetFiles(slozka, searchPattern, searchOption);
@@ -1147,18 +1054,7 @@ void
         //}
         return vr;
     }
-    public static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
-    {
-        List<string> files = new List<string>();
-        foreach (var item in folders)
-        {
-            foreach (var ext in exts)
-            {
-                files.AddRange(GetFiles(item, FS.MascFromExtension(ext), so, a));
-            }
-        }
-        return files;
-    }
+    
 
     public static Dictionary<string, List<string>> AllExtensionsInFolderByCategory(List<string> files, GetExtensionArgs a)
     {
@@ -1591,26 +1487,7 @@ void
         return sb.ToString();
         //return SHJoin.JoinTimes(i, jumpUp) + file;
     }
-    /// <summary>
-    /// Keys returns with normalized ext
-    /// In case zero files of ext wont be included in dict
-    /// </summary>
-    /// <param name="folderFrom"></param>
-    /// <param name="extensions"></param>
-    public static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
-    {
-        var dict = new Dictionary<string, List<string>>();
-        foreach (var item in extensions)
-        {
-            string ext = FS.NormalizeExtension(item);
-            var files = GetFiles(folderFrom, AllStrings.asterisk + ext, SearchOption.AllDirectories);
-            if (files.Count != 0)
-            {
-                dict.Add(ext, files);
-            }
-        }
-        return dict;
-    }
+    
     /// <summary>
     /// convert to lowercase and remove first dot - to už asi neplatí. Use NormalizeExtension2 for that
     /// </summary>
@@ -1689,21 +1566,7 @@ void
         vr = MoveDirectoryNoRecursive(path, nova, co, fo);
         return vr;
     }
-    public static List<string> FilesOfExtensionsArray(string folder, List<string> extension)
-    {
-        List<string> foundedFiles = new List<string>();
-        FS.NormalizeExtensions(extension);
-        var files = Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories);
-        foreach (var item in files)
-        {
-            string ext = FS.GetNormalizedExtension(item);
-            if (extension.Contains(ext))
-            {
-                foundedFiles.Add(ext);
-            }
-        }
-        return foundedFiles;
-    }
+    
     /// <summary>
     /// convert to lowercase and remove first dot
     /// </summary>
