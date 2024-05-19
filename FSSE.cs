@@ -49,8 +49,8 @@ string
     public static StorageFile GetFileNameWithoutExtensionNoAc<StorageFile>(StorageFile s)
     {
         string ss = s.ToString();
-        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(SunamoValues.AllChars.bs));
-        string ext = Path.GetExtension(ss).TrimStart(SunamoValues.AllChars.dot);
+        string vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
+        string ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
 
         if (!ext.All(d => AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllChars.vsZnakyWithoutSpecial)*/)
         {
@@ -88,13 +88,13 @@ string
     {
         throw new Exception("Not implemented in UWP");
     }
-    GetFileNameWithoutExtension
+    
 
-    public static string GetFileNameWithoutExtension(string s)
-    {
-        return Path.GetFileNameWithoutExtension(s);
-        //return GetFileNameWithoutExtension<string, string>(s, null);
-    }
+    //public static string GetFileNameWithoutExtension(string s)
+    //{
+    //    return Path.GetFileNameWithoutExtension(s);
+    //    //return GetFileNameWithoutExtension<string, string>(s, null);
+    //}
 
 
     //public static bool IsFileHasKnownExtension(string relativeTo)
@@ -275,7 +275,7 @@ string
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string NormalizeExtension2(string item)
     {
-        return item.ToLower().TrimStart(SunamoValues.AllChars.dot);
+        return item.ToLower().TrimStart(AllChars.dot);
     }
 
     

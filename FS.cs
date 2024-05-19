@@ -514,7 +514,7 @@ void
 #endif
     DeleteEmptyFiles(string folder, SearchOption so)
     {
-        var files = GetFiles(folder, "*.*", so);
+        var files = FSGetFiles. GetFiles(folder, "*.*", so);
         foreach (var item in files)
         {
             var fs = new FileInfo(item).Length;

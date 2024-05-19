@@ -46,7 +46,7 @@ public partial class FS : FSSH
         FSND.WithEndSlash(ref vs);
 
         Dictionary<string, List<string>> f = new Dictionary<string, List<string>>();
-        var s = GetFiles(vs, v, allDirectories);
+        var s = FSGetFiles.GetFiles(vs, v, allDirectories);
         foreach (var item in s)
         {
             DictionaryHelper.AddOrCreate<string, string>(f, Path.GetFileName(item), item);

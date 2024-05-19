@@ -8,6 +8,29 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.27" />
+    <Compile Include="..\SunamoValues\AllStrings.cs" Link="_linked\SunamoValues\AllStrings.cs" />
+    <Compile Include="..\SunamoValues\AllChars.cs" Link="_linked\SunamoValues\AllChars.cs" />
+    <Compile Include="..\SunamoCollectionsGeneric\Collections\FsWatcherDictionary.cs" Link="_linked\SunamoCollectionsGeneric\Collections\FsWatcherDictionary.cs" />
+    <Compile Include="..\SunamoInterfaces\Interfaces\ISelectFromMany.cs" Link="_linked\SunamoInterfaces\Interfaces\ISelectFromMany.cs" />
+    <Compile Include="..\SunamoEnums\Enums\FileMoveCollisionOption.cs" Link="_linked\SunamoEnums\Enums\FileMoveCollisionOption.cs" />
+    <Compile Include="..\SunamoEnums\Enums\SerieStyle.cs" Link="_linked\SunamoEnums\Enums\SerieStyle.cs" />
+    <Compile Include="..\SunamoEnums\Enums\ComputerSizeUnits.cs" Link="_linked\SunamoEnums\Enums\ComputerSizeUnits.cs" />
+    <Compile Include="..\SunamoValues\Constants\NumConsts.cs" Link="_linked\SunamoValues\Constants\NumConsts.cs" />
+    <Compile Include="..\SunamoEnums\Enums\DirectoryCreateCollisionOption.cs" Link="_linked\SunamoEnums\Enums\DirectoryCreateCollisionOption.cs" />
+    <Compile Include="..\SunamoInterfaces\Interfaces\ITextOutputGenerator.cs" Link="_linked\SunamoInterfaces\Interfaces\ITextOutputGenerator.cs" />
+    <Compile Include="..\SunamoGetFiles\FSGetFiles.cs" Link="_linked\SunamoGetFiles\FSGetFiles.cs" />
+    <Compile Include="..\SunamoEnums\Enums\DirectoryMoveCollisionOption.cs" Link="_linked\SunamoEnums\Enums\DirectoryMoveCollisionOption.cs" />
+    <Compile Include="..\SunamoEnums\Enums\EnvironmentVariables.cs" Link="_linked\SunamoEnums\Enums\EnvironmentVariables.cs" />
+    <Compile Include="..\SunamoData\Data\TWithInt.cs" Link="_linked\SunamoData\Data\TWithInt.cs" />
+    <Compile Include="..\SunamoEnums\Enums\AscDesc.cs" Link="_linked\SunamoEnums\Enums\AscDesc.cs" />
+    <Compile Include="..\SunamoArgs\GetFilesArgs.cs" Link="_linked\SunamoArgs\GetFilesArgs.cs" />
+    <Compile Include="..\SunamoArgs\GetFilesMoreMascArgs.cs" Link="_linked\SunamoArgs\GetFilesMoreMascArgs.cs" />
+    <Compile Include="..\SunamoData\Data\ReplaceInAllFilesArgsBase.cs" Link="_linked\SunamoData\Data\ReplaceInAllFilesArgsBase.cs" />
+    <Compile Include="..\SunamoArgs\GetFilesEveryFolderArgs.cs" Link="_linked\SunamoArgs\GetFilesEveryFolderArgs.cs" />
+    <Compile Include="..\SunamoData\Data\ReplaceInAllFilesArgs.cs" Link="_linked\SunamoData\Data\ReplaceInAllFilesArgs.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\ThrowEx.cs" Link="_linked\SunamoExceptions\OnlyInSE\ThrowEx.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\Exc.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exc.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\Exceptions.cs" Link="_linked\SunamoExceptions\OnlyInSE\Exceptions.cs" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem</DefineConstants>
