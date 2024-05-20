@@ -1,6 +1,6 @@
 namespace SunamoFileSystem;
 
-//namespace SunamoFileSystem._sunamo;
+//namespace SunamoFileSystem;
 
 internal class CA
 {
