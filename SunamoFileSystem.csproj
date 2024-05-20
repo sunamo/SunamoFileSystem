@@ -34,6 +34,8 @@
     <Compile Include="..\SunamoValues\Consts.cs" Link="_linked\SunamoValues\Consts.cs" />
     <Compile Include="..\SunamoArgs\GetFilesBaseArgs.cs" Link="_linked\SunamoArgs\GetFilesBaseArgs.cs" />
     <Compile Include="..\SunamoDelegates\VoidStringT.cs" Link="_linked\SunamoDelegates\VoidStringT.cs" />
+    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
+    <Compile Include="..\SunamoShared\Args\GetFilesEveryFolder.cs" Link="_linked\SunamoShared\Args\GetFilesEveryFolder.cs" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem</DefineConstants>
