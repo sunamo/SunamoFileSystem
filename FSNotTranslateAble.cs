@@ -45,7 +45,7 @@ public partial class FS
             // When deleting will be successful, create new dir
             TextOutputGenerator generator = new TextOutputGenerator();
             generator.sb.Append(withEndFlash);
-            generator.sb.CanUndo = true;
+            //generator.sb.CanUndo = true;
             for (; resultSerie < int.MaxValue; resultSerie++)
             {
                 generator.sb.Append(resultSerie);
@@ -121,7 +121,7 @@ public partial class FS
 
     public static void NumberByDateModified(string folder, string masc, SearchOption so)
     {
-        var files = GetFiles(folder, masc, so, new GetFilesArgs { byDateOfLastModifiedAsc = true });
+        var files = FSGetFiles.GetFiles(folder, masc, so, new GetFilesArgs { byDateOfLastModifiedAsc = true });
         int i = 1;
         foreach (var item in files)
         {

@@ -36,6 +36,20 @@
     <Compile Include="..\SunamoDelegates\VoidStringT.cs" Link="_linked\SunamoDelegates\VoidStringT.cs" />
     <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\CASunamoExceptions.cs" />
     <Compile Include="..\SunamoShared\Args\GetFilesEveryFolder.cs" Link="_linked\SunamoShared\Args\GetFilesEveryFolder.cs" />
+    <Compile Include="..\SunamoExceptions\OnlyInSE\TranslateAble.cs" Link="_linked\SunamoExceptions\OnlyInSE\TranslateAble.cs" />
+    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\FSSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\FSSunamoExceptions.cs" />
+    <Compile Include="..\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" Link="_linked\SunamoExceptions\_AddedToAllCsproj\SHSunamoExceptions.cs" />
+    <Compile Include="..\SunamoXlfKeys\XlfKeys.cs" Link="_linked\SunamoXlfKeys\XlfKeys.cs" />
+    <Compile Include="..\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicates.cs" Link="_linked\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicates.cs" />
+    <Compile Include="..\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicatesBase.cs" Link="_linked\SunamoCollectionWithoutDuplicates\CollectionWithoutDuplicatesBase.cs" />
+    <Compile Include="..\SunamoTextOutputGenerator\TextOutputGenerator.cs" Link="_linked\SunamoTextOutputGenerator\TextOutputGenerator.cs" />
+    <Compile Include="..\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" Link="_linked\SunamoExceptions\InSunamoIsDerivedFrom\TFSE.cs" />
+    <Compile Include="..\SunamoGetFolders\FSGetFolders.cs" Link="_linked\SunamoGetFolders\FSGetFolders.cs" />
+    <Compile Include="..\SunamoGetFolders\Args\GetFoldersEveryFolderArgs.cs" Link="_linked\SunamoGetFolders\Args\GetFoldersEveryFolderArgs.cs" />
+    <Compile Include="..\SunamoValues\Constants\NetFxExceptionsNotTranslateAble.cs" Link="_linked\SunamoValues\Constants\NetFxExceptionsNotTranslateAble.cs" />
+    <Compile Include="..\SunamoValues\Constants\DTConstants.cs" Link="_linked\SunamoValues\Constants\DTConstants.cs" />
+    <Compile Include="..\SunamoTextOutputGenerator\TextOutputGeneratorArgs.cs" Link="_linked\SunamoTextOutputGenerator\TextOutputGeneratorArgs.cs" />
+    <Compile Include="..\SunamoRegex\Wildcard.cs" Link="_linked\SunamoRegex\Wildcard.cs" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem</DefineConstants>
