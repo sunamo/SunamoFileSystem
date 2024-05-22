@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-public class GetFilesEveryFolder : GetFilesMoreMascArgs
+internal class GetFilesEveryFolder : GetFilesMoreMascArgs
 {
-    public bool _trimA1 = false;
+    internal bool _trimA1 = false;
 }

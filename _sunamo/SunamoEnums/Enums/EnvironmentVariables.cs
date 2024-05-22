@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-public enum EnvironmentVariables
+internal enum EnvironmentVariables
 {
     userprofile
 }

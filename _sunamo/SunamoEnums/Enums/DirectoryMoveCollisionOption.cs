@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-public enum DirectoryMoveCollisionOption
+internal enum DirectoryMoveCollisionOption
 {
     AddSerie,
     Overwrite,

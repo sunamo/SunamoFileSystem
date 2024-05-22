@@ -1,15 +1,15 @@
 namespace SunamoFileSystem;
 
 
-public class ReplaceInAllFilesArgsBase
+internal class ReplaceInAllFilesArgsBase
 {
-    public List<string> files;
-    public bool isMultilineWithVariousIndent;
-    public bool writeEveryReadedFileAsStatus;
-    public bool writeEveryWrittenFileAsStatus;
-    public Func<StringBuilder, IList<string>, IList<string>, StringBuilder> fasterMethodForReplacing;
-    public bool inGitFiles;
-    public bool inDownloadedFolders;
-    public bool inFoldersToDelete;
-    public Action<List<string>, bool, bool, bool> dRemoveGitFiles;
+    internal List<string> files;
+    internal bool isMultilineWithVariousIndent;
+    internal bool writeEveryReadedFileAsStatus;
+    internal bool writeEveryWrittenFileAsStatus;
+    internal Func<StringBuilder, IList<string>, IList<string>, StringBuilder> fasterMethodForReplacing;
+    internal bool inGitFiles;
+    internal bool inDownloadedFolders;
+    internal bool inFoldersToDelete;
+    internal Action<List<string>, bool, bool, bool> dRemoveGitFiles;
 }
