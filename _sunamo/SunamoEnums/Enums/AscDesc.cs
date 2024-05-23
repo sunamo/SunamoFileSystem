@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-internal enum AscDesc
+public enum AscDesc
 {
     Asc,
     Desc

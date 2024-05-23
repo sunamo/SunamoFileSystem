@@ -2,13 +2,13 @@ namespace SunamoFileSystem;
 
 
 
-internal class FSGetFolders
+public class FSGetFolders
 {
-    internal static List<string> GetFolders(string folder, SearchOption so)
+    public static List<string> GetFolders(string folder, SearchOption so)
     {
         return GetFolders(folder, AllStrings.asterisk, so);
     }
-    internal static List<string> GetFolders(string v, string contains)
+    public static List<string> GetFolders(string v, string contains)
     {
         var folders = GetFolders(v);
         for (int i = 0; i < folders.Count; i++)
@@ -25,7 +25,7 @@ internal class FSGetFolders
         }
         return folders;
     }
-    internal static List<string> GetFolders(string folder)
+    public static List<string> GetFolders(string folder)
     {
         return GetFolders(folder, SearchOption.TopDirectoryOnly);
     }
@@ -39,7 +39,7 @@ internal class FSGetFolders
     /// <param name="masc"></param>
     /// <param name="so"></param>
     /// <param name="_trimA1"></param>
-    internal static List<string> GetFolders(string folder, string masc, SearchOption so, bool _trimA1AndLeadingBs = false)
+    public static List<string> GetFolders(string folder, string masc, SearchOption so, bool _trimA1AndLeadingBs = false)
     {
         List<string> dirs = null;
         try
@@ -157,7 +157,7 @@ internal class FSGetFolders
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
-    internal static List<string> GetFoldersEveryFolder(string folder, string mask, GetFilesArgs e = null)
+    public static List<string> GetFoldersEveryFolder(string folder, string mask, GetFilesArgs e = null)
     {
         if (e == null)
         {
@@ -189,7 +189,7 @@ internal class FSGetFolders
         }
         return list;
     }
-    internal static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
+    public static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
     {
         var f = GetFolders(d);
         List<string> result = new List<string>();

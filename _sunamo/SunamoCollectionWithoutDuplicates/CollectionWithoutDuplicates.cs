@@ -1,18 +1,18 @@
 namespace SunamoFileSystem;
 
 
-internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<T>
+public class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<T>
 {
-    internal CollectionWithoutDuplicates() : base()
+    public CollectionWithoutDuplicates() : base()
     {
     }
-    internal CollectionWithoutDuplicates(int count) : base(count)
+    public CollectionWithoutDuplicates(int count) : base(count)
     {
     }
-    internal CollectionWithoutDuplicates(IList<T> l) : base(l)
+    public CollectionWithoutDuplicates(IList<T> l) : base(l)
     {
     }
-    internal override int AddWithIndex(T t2)
+    public override int AddWithIndex(T t2)
     {
         if (IsComparingByString())
         {
@@ -34,7 +34,7 @@ internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<
         }
         return vr;
     }
-    internal override bool? Contains(T t2)
+    public override bool? Contains(T t2)
     {
         if (IsComparingByString())
         {
@@ -54,7 +54,7 @@ internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<
         }
         return true;
     }
-    internal override int IndexOf(T path)
+    public override int IndexOf(T path)
     {
         if (IsComparingByString())
         {

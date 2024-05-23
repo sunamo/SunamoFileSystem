@@ -5,32 +5,32 @@ using System.Runtime.CompilerServices;
 /// <summary>
 /// In Comparing
 /// </summary>
-internal class TextOutputGenerator //: ITextOutputGenerator
+public class TextOutputGenerator //: ITextOutputGenerator
 {
     private readonly static string s_znakNadpisu = AllStrings.asterisk;
     // při převádění na nugety jsem to změnil na ITextBuilder sb = TextBuilder.Create();
     // ale asi to byla blbost, teď mám v _sunamo Create() která je ale null místo abych použil ctor
     // takže vracím nazpět.
-    //internal TextBuilder sb = new TextBuilder();
-    internal StringBuilder sb = new StringBuilder();
-    //internal string prependEveryNoWhite
+    //public TextBuilder sb = new TextBuilder();
+    public StringBuilder sb = new StringBuilder();
+    //public string prependEveryNoWhite
     //{
     //    get => sb.prependEveryNoWhite;
     //    set => sb.prependEveryNoWhite = value;
     //}
-    internal static TextOutputGenerator Create()
+    public static TextOutputGenerator Create()
     {
         return new TextOutputGenerator();
     }
     #region Static texts
-    internal void EndRunTime()
+    public void EndRunTime()
     {
         sb.AppendLine("AppWillBeTerminated");
     }
     /// <summary>
     /// Pouze vypíše "Az budete mit vstupní data, spusťte program znovu."
     /// </summary>
-    internal void NoData()
+    public void NoData()
     {
         sb.AppendLine("NoData");
     }
@@ -40,7 +40,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// Napíše nadpis A1 do konzole
     /// </summary>
     /// <param name="text"></param>
-    internal void StartRunTime(string text)
+    public void StartRunTime(string text)
     {
         int delkaTextu = text.Length;
         string hvezdicky = "";
@@ -50,7 +50,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         sb.AppendLine(text);
         sb.AppendLine(hvezdicky);
     }
-    internal void CountEvery<T>(IList<KeyValuePair<T, int>> eq)
+    public void CountEvery<T>(IList<KeyValuePair<T, int>> eq)
     {
         foreach (var item in eq)
         {
@@ -59,42 +59,42 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     }
     #endregion
     #region AppendLine
-    internal void AppendLine()
+    public void AppendLine()
     {
         AppendLine(string.Empty);
     }
-    internal void AppendLine(StringBuilder text)
+    public void AppendLine(StringBuilder text)
     {
         sb.AppendLine(text.ToString());
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal void Append(string text)
+    public void Append(string text)
     {
         sb.Append(text);
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal void AppendLine(string text)
+    public void AppendLine(string text)
     {
         sb.AppendLine(text);
     }
-    internal void AppendLineFormat(string text, params string[] p)
+    public void AppendLineFormat(string text, params string[] p)
     {
         sb.AppendLine();
         AppendLine(string.Format(text, p));
     }
-    internal void AppendFormat(string text, params string[] p)
+    public void AppendFormat(string text, params string[] p)
     {
         AppendLine(string.Format(text, p));
     }
     #endregion
     #region Other adding methods
-    internal void Header(string v)
+    public void Header(string v)
     {
         sb.AppendLine();
         AppendLine(v);
         sb.AppendLine();
     }
-    internal void SingleCharLine(char paddingChar, int v)
+    public void SingleCharLine(char paddingChar, int v)
     {
         sb.AppendLine(string.Empty.PadLeft(v, paddingChar));
     }
@@ -105,7 +105,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         return ts;
     }
     #region List
-    internal void ListObject(IList files1)
+    public void ListObject(IList files1)
     {
         List<string> l = new List<string>();
         foreach (var item in files1)
@@ -114,7 +114,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         }
         List(l);
     }
-    internal void ListSB(StringBuilder onlyStart, string v)
+    public void ListSB(StringBuilder onlyStart, string v)
     {
         Header(v);
         AppendLine(onlyStart);
@@ -123,11 +123,11 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// If you have StringBuilder, use Paragraph()
     /// </summary>
     /// <param name="files1"></param>
-    internal void List(IList<string> files1)
+    public void List(IList<string> files1)
     {
         List<string>(files1);
     }
-    internal void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = Consts.stringEmpty)
+    public void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = Consts.stringEmpty)
     {
         if (files1.Count() == 0)
         {
@@ -149,15 +149,15 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// <typeparam name="Value"></typeparam>
     /// <param name="files1"></param>
     /// <param name="header"></param>
-    internal void List<Header, Value>(IList<Value> files1, Header header) where Header : IEnumerable<char>
+    public void List<Header, Value>(IList<Value> files1, Header header) where Header : IEnumerable<char>
     {
         List<Header, Value>(files1, header, new TextOutputGeneratorArgs { headerWrappedEmptyLines = true, insertCount = false });
     }
-    internal void List(IList<string> files1, string header)
+    public void List(IList<string> files1, string header)
     {
         List<string, string>(files1, header, new TextOutputGeneratorArgs { headerWrappedEmptyLines = true, insertCount = false });
     }
-    internal void ListString(string list, string header)
+    public void ListString(string list, string header)
     {
         Header(header);
         AppendLine(list);
@@ -171,7 +171,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// <param name="files1"></param>
     /// <param name="header"></param>
     /// <param name="a"></param>
-    internal void List<Header, Value>(IList<Value> files1, Header header, TextOutputGeneratorArgs a) where Header : IEnumerable<char>
+    public void List<Header, Value>(IList<Value> files1, Header header, TextOutputGeneratorArgs a) where Header : IEnumerable<char>
     {
         if (a.insertCount)
         {
@@ -191,7 +191,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     }
     #endregion
     #region Paragraph
-    internal void Paragraph(StringBuilder wrongNumberOfParts, string header)
+    public void Paragraph(StringBuilder wrongNumberOfParts, string header)
     {
         string text = wrongNumberOfParts.ToString().Trim();
         Paragraph(text, header);
@@ -201,7 +201,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// </summary>
     /// <param name="text"></param>
     /// <param name="header"></param>
-    internal void Paragraph(string text, string header)
+    public void Paragraph(string text, string header)
     {
         if (text != string.Empty)
         {
@@ -211,20 +211,20 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         }
     }
     #endregion
-    internal void Undo()
+    public void Undo()
     {
         ThrowEx.NotImplementedMethod();
         //sb.Undo();
     }
     #region Dictionary
-    internal void Dictionary(Dictionary<string, int> charEntity, string delimiter)
+    public void Dictionary(Dictionary<string, int> charEntity, string delimiter)
     {
         foreach (var item in charEntity)
         {
             sb.AppendLine(item.Key + delimiter + item.Value);
         }
     }
-    internal void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered)
+    public void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered)
     {
         Header(header);
         foreach (var item in ordered)
@@ -232,7 +232,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
             sb.AppendLine(item.Key + AllStrings.space + item.Value);
         }
     }
-    internal void IGrouping(IEnumerable<IGrouping<string, string>> g)
+    public void IGrouping(IEnumerable<IGrouping<string, string>> g)
     {
         var d = IGroupingToDictionary(g);
         Dictionary(d);
@@ -246,14 +246,14 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         }
         return l;
     }
-    internal void Dictionary(Dictionary<string, List<string>> ls)
+    public void Dictionary(Dictionary<string, List<string>> ls)
     {
         foreach (var item in ls)
         {
             List(item.Value, item.Key);
         }
     }
-    internal void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false) where Header : IEnumerable<char>
+    public void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false) where Header : IEnumerable<char>
     {
         if (onlyCountInValue)
         {
@@ -276,7 +276,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// vše na 1 řádku, oddělí |
     /// </summary>
     /// <param name="v"></param>
-    internal void Dictionary(Dictionary<string, string> v)
+    public void Dictionary(Dictionary<string, string> v)
     {
         foreach (var item in v)
         {
@@ -290,7 +290,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// <typeparam name="T2"></typeparam>
     /// <param name="d"></param>
     /// <param name="deli"></param>
-    internal void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = AllStrings.verbar)
+    public void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = AllStrings.verbar)
     {
         //StringBuilder sb = new StringBuilder();
         foreach (var item in d)
@@ -309,11 +309,11 @@ internal class TextOutputGenerator //: ITextOutputGenerator
             }
         }
     }
-    internal void PairBullet(string key, string v)
+    public void PairBullet(string key, string v)
     {
         sb.AppendLine(key + ": " + v);
     }
-    internal string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst, string delimiter = AllStrings.space)
+    public string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst, string delimiter = AllStrings.space)
     {
         foreach (var item in sorted)
         {

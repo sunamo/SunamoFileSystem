@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SunamoFileSystem;
-internal class CAG
+public class CAG
 {
     /// <summary>
     /// Return what exists in both
@@ -13,7 +13,7 @@ internal class CAG
     /// </summary>
     /// <param name="c1"></param>
     /// <param name="c2"></param>
-    internal static List<T> CompareList<T>(List<T> c1, List<T> c2) where T : IEquatable<T>
+    public static List<T> CompareList<T>(List<T> c1, List<T> c2) where T : IEquatable<T>
     {
         List<T> existsInBoth = new List<T>();
 

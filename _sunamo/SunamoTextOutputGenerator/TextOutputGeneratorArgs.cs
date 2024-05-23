@@ -1,16 +1,16 @@
 namespace SunamoFileSystem;
 
 
-internal class TextOutputGeneratorArgs
+public class TextOutputGeneratorArgs
 {
-    internal bool headerWrappedEmptyLines = true;
-    internal bool insertCount = false;
-    internal string whenNoEntries = "No entries";
-    internal string delimiter = Environment.NewLine;
-    internal TextOutputGeneratorArgs()
+    public bool headerWrappedEmptyLines = true;
+    public bool insertCount = false;
+    public string whenNoEntries = "No entries";
+    public string delimiter = Environment.NewLine;
+    public TextOutputGeneratorArgs()
     {
     }
-    internal TextOutputGeneratorArgs(bool headerWrappedEmptyLines, bool insertCount)
+    public TextOutputGeneratorArgs(bool headerWrappedEmptyLines, bool insertCount)
     {
         this.headerWrappedEmptyLines = headerWrappedEmptyLines;
         this.insertCount = insertCount;

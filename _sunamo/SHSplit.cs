@@ -1,8 +1,8 @@
 namespace SunamoFileSystem;
-internal class SHSplit
+public class SHSplit
 {
     #region SplitToPartsFromEnd
-    internal static List<string> SplitToPartsFromEnd(string what, int parts, params char[] deli)
+    public static List<string> SplitToPartsFromEnd(string what, int parts, params char[] deli)
     {
         List<char> chs = null;
         List<bool> bw = null;
@@ -54,7 +54,7 @@ internal class SHSplit
         return v;
     }
 
-    internal static void SplitCustom(string what, out List<char> chs, out List<bool> bs, out List<int> delimitersIndexes, params char[] deli)
+    public static void SplitCustom(string what, out List<char> chs, out List<bool> bs, out List<int> delimitersIndexes, params char[] deli)
     {
         chs = new List<char>(what.Length);
         bs = new List<bool>(what.Length);
@@ -79,12 +79,12 @@ internal class SHSplit
     }
     #endregion
 
-    internal static List<string> Split(string item, params string[] space)
+    public static List<string> Split(string item, params string[] space)
     {
         return item.Split(space, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
 
-    internal static List<string> SplitChar(string v1, params char[] v2)
+    public static List<string> SplitChar(string v1, params char[] v2)
     {
         return v1.Split(v2).ToList();
     }

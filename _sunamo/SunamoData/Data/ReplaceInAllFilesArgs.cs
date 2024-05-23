@@ -4,17 +4,17 @@ namespace SunamoFileSystem;
 /// <summary>
 /// Is passed into ReplaceInAllFilesWorker
 /// </summary>
-internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
+public class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 {
-    internal string from;
-    internal string to;
-    internal bool pairLinesInFromAndTo;
-    internal bool replaceWithEmpty;
-    internal bool isNotReplaceInTemporaryFiles;
-    internal ReplaceInAllFilesArgs()
+    public string from;
+    public string to;
+    public bool pairLinesInFromAndTo;
+    public bool replaceWithEmpty;
+    public bool isNotReplaceInTemporaryFiles;
+    public ReplaceInAllFilesArgs()
     {
     }
-    internal ReplaceInAllFilesArgs(ReplaceInAllFilesArgsBase b)
+    public ReplaceInAllFilesArgs(ReplaceInAllFilesArgsBase b)
     {
         files = b.files;
         isMultilineWithVariousIndent = b.isMultilineWithVariousIndent;
