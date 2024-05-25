@@ -37,7 +37,7 @@ public class TFSE
                 WriteAllTextSync(path, string.Empty);
                 return new List<string>();
             }
-        return File.ReadAllText(path).ToList();
+        return SHGetLines.GetLines(File.ReadAllText(path));
     }
     public static void WriteAllLinesSync(string path, List<string> content)
     {

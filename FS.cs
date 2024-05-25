@@ -51,7 +51,7 @@ List<string>
         CollectionWithoutDuplicates<string> c = new CollectionWithoutDuplicates<string>();
         foreach (var item in paths)
         {
-            c.AddRange((
+            c.AddRange(SHGetLines.GetLines (
 #if ASYNC
             await
 #endif

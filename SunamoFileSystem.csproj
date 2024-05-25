@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.27" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_sunamo\SunamoStringGetLines\" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem</DefineConstants>
   </PropertyGroup>
