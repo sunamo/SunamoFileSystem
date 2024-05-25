@@ -55,7 +55,7 @@ List<string>
 #if ASYNC
             await
 #endif
-            File.ReadAllLinesAsync(item)).ToList());
+            File.ReadAllTextAsync(item)).ToList());
         }
 
         CAG.CompareList(opts, c.c);
