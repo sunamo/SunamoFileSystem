@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
-public class sess
+internal class sess
 {
-    public static string i18n(string loading)
+    internal static string i18n(string loading)
     {
         return loading;
     }

@@ -2,9 +2,9 @@ namespace SunamoFileSystem;
 
 
 
-public partial class FSGetFiles
+internal partial class FSGetFiles
 {
-    public static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
+    internal static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
     {
         return Directory.GetFiles(v1, v2, topDirectoryOnly).ToList();
     }
@@ -18,7 +18,7 @@ public partial class FSGetFiles
     /// <param name="folder"></param>
     /// <param name="mask"></param>
     /// <param name="searchOption"></param>
-    public async static Task<List<string>> GetFilesAsync(string folder2, string mask, SearchOption searchOption, GetFilesArgs getFilesArgs = null)
+    internal async static Task<List<string>> GetFilesAsync(string folder2, string mask, SearchOption searchOption, GetFilesArgs getFilesArgs = null)
     {
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
@@ -121,7 +121,7 @@ public partial class FSGetFiles
     /// <param name="ask"></param>
     /// <param name="searchOption"></param>
     /// <param name="_trimA1"></param>
-    public static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption, GetFilesEveryFolderArgs e = null)
+    internal static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption, GetFilesEveryFolderArgs e = null)
     {
 #if DEBUG
         if (folder == @"D:\_Test\EveryLine\EveryLine\SearchCodeElementsUC\")
@@ -280,11 +280,11 @@ public partial class FSGetFiles
         }
         return list;
     }
-    public static List<string> GetFilesWithoutArgs(string folderPath, string masc, bool? rec)
+    internal static List<string> GetFilesWithoutArgs(string folderPath, string masc, bool? rec)
     {
         return GetFiles(folderPath, masc, rec, null);
     }
-    public static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgs a = null)
+    internal static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgs a = null)
     {
         SearchOption so = SearchOption.TopDirectoryOnly;
         var b = rec.Value;
@@ -295,11 +295,11 @@ public partial class FSGetFiles
         return
         GetFiles(folderPath, masc, so, a);
     }
-    public static List<string> GetFiles(string folderPath, string masc)
+    internal static List<string> GetFiles(string folderPath, string masc)
     {
         return GetFiles(folderPath, masc, SearchOption.TopDirectoryOnly);
     }
-    public static
+    internal static
 #if ASYNC
     async Task<Dictionary<string, string>>
 #else
@@ -324,7 +324,7 @@ Dictionary<string, string>
     /// </summary>
     /// <param name="item2"></param>
     /// <param name="exts"></param>
-    public static List<string> GetFilesOfExtensions(string item2, SearchOption so, params string[] exts)
+    internal static List<string> GetFilesOfExtensions(string item2, SearchOption so, params string[] exts)
     {
         List<string> vr = new List<string>();
         foreach (string item in exts)
@@ -343,7 +343,7 @@ Dictionary<string, string>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
     /// <param name="searchOption"></param>
-    public static List<string> GetFiles(string folder2, string mask, SearchOption searchOption, GetFilesArgs a = null)
+    internal static List<string> GetFiles(string folder2, string mask, SearchOption searchOption, GetFilesArgs a = null)
     {
 #if DEBUG
         if (folder2.TrimEnd(AllChars.bs) == @"\monoConsoleSqlClient")
@@ -428,7 +428,7 @@ Dictionary<string, string>
         FilterByGetFilesArgs(list, folders, a);
         return list;
     }
-    public static List<long> GetFilesSizes(List<string> f)
+    internal static List<long> GetFilesSizes(List<string> f)
     {
         List<long> sizes = new List<long>();
         foreach (var item in f)
@@ -437,7 +437,7 @@ Dictionary<string, string>
         }
         return sizes;
     }
-    public static List<string> GetFilesMoreMasc(string path, string masc, SearchOption searchOption, GetFilesMoreMascArgs e = null)
+    internal static List<string> GetFilesMoreMasc(string path, string masc, SearchOption searchOption, GetFilesMoreMascArgs e = null)
     {
         if (e == null)
         {
@@ -525,7 +525,7 @@ Dictionary<string, string>
 #endif
         return result;
     }
-    public static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgs a)
+    internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgs a)
     {
         if (a == null)
         {
@@ -588,11 +588,11 @@ Dictionary<string, string>
     /// No recursive, all extension
     /// </summary>
     /// <param name="path"></param>
-    public static List<string> GetFiles(string path)
+    internal static List<string> GetFiles(string path)
     {
         return GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
     }
-    public static string GetFilesSize(List<string> winrarFiles, ComputerSizeUnits s)
+    internal static string GetFilesSize(List<string> winrarFiles, ComputerSizeUnits s)
     {
         long size = 0;
         foreach (var item in winrarFiles)
@@ -602,7 +602,7 @@ Dictionary<string, string>
         }
         return FS.GetSizeInAutoString((double)size);
     }
-    public static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
+    internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
     {
         List<string> files = new List<string>();
         foreach (var item in folders)
@@ -614,7 +614,7 @@ Dictionary<string, string>
         }
         return files;
     }
-    public static List<string> GetFilesWithoutNodeModules(string item, string masc, bool? rec, GetFilesArgs a = null)
+    internal static List<string> GetFilesWithoutNodeModules(string item, string masc, bool? rec, GetFilesArgs a = null)
     {
         if (a == null)
         {
@@ -624,7 +624,7 @@ Dictionary<string, string>
         a.excludeFromLocationsCOntains = a.excludeFromLocationsCOntains.Distinct().ToList();
         return GetFiles(item, masc, rec, a);
     }
-    public static
+    internal static
 #if ASYNC
     async Task<List<string>>
 #else
@@ -657,7 +657,7 @@ List<string>
         }
         return ls;
     }
-    public static FileInfo[] GetFileInfosOfExtensions(string item2, SearchOption so, params string[] exts)
+    internal static FileInfo[] GetFileInfosOfExtensions(string item2, SearchOption so, params string[] exts)
     {
         List<FileInfo> vr = new List<FileInfo>();
         DirectoryInfo di = new DirectoryInfo(item2);
@@ -669,19 +669,19 @@ List<string>
     }
 }
 
-public partial class FSGetFiles
+internal partial class FSGetFiles
 {
     /// <summary>
     /// Non recursive
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="fileExt"></param>
-    public static List<string> FilesOfExtension(string folder, string fileExt)
+    internal static List<string> FilesOfExtension(string folder, string fileExt)
     {
         return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
     }
 
-    public static List<string> FilesOfExtensionsArray(string folder, List<string> extension)
+    internal static List<string> FilesOfExtensionsArray(string folder, List<string> extension)
     {
         List<string> foundedFiles = new List<string>();
         FS.NormalizeExtensions(extension);
@@ -703,7 +703,7 @@ public partial class FSGetFiles
     /// </summary>
     /// <param name="folderFrom"></param>
     /// <param name="extensions"></param>
-    public static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
+    internal static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
     {
         var dict = new Dictionary<string, List<string>>();
         foreach (var item in extensions)

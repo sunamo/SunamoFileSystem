@@ -1,8 +1,8 @@
 
 namespace SunamoFileSystem;
-public class SHParts
+internal class SHParts
 {
-    public static string RemoveAfterLast(string nameSolution, object delimiter)
+    internal static string RemoveAfterLast(string nameSolution, object delimiter)
     {
         int dex = nameSolution.LastIndexOf(delimiter.ToString());
         if (dex != -1)

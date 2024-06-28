@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 
 
-public class CAChangeContent
+internal class CAChangeContent
 {
-    public static List<string> ChangeContent0(dynamic /*ChangeContentArgs*/ a, List<string> files_in, Func<string, string> func)
+    internal static List<string> ChangeContent0(dynamic /*ChangeContentArgs*/ a, List<string> files_in, Func<string, string> func)
     {
         for (int i = 0; i < files_in.Count; i++)
         {

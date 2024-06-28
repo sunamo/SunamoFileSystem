@@ -4,7 +4,7 @@ namespace SunamoFileSystem;
 /// <summary>
 /// All styles here are taked from FSTests
 /// </summary>
-public enum SerieStyle
+internal enum SerieStyle
 {
     /// <summary>
     /// abc-1.txt

@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
-public class TF
+internal class TF
 {
-    public static List<byte> ReadAllBytesSync(string arg)
+    internal static List<byte> ReadAllBytesSync(string arg)
     {
         return File.ReadAllBytes(arg).ToList();
     }

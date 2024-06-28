@@ -3,14 +3,14 @@ namespace SunamoFileSystem;
 using System.Text.RegularExpressions;
 
 
-public class SHReplace
+internal class SHReplace
 {
-    public static string ReplaceOnce(string input, string what, string zaco)
+    internal static string ReplaceOnce(string input, string what, string zaco)
     {
         return new Regex(what).Replace(input, zaco, 1);
     }
 
-    public static string ReplaceAllDoubleSpaceToSingle2(string text, bool alsoHtml = false)
+    internal static string ReplaceAllDoubleSpaceToSingle2(string text, bool alsoHtml = false)
     {
         if (alsoHtml)
         {

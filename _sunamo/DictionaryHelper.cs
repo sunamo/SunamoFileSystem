@@ -4,9 +4,9 @@ namespace SunamoFileSystem;
 
 
 // potřebuji celý SunamoDictionary nuget kvůli genericitě
-public class DictionaryHelper
+internal class DictionaryHelper
 {
-    public static void AddOrSet<T1, T2>(IDictionary<T1, T2> qs, T1 k, T2 v)
+    internal static void AddOrSet<T1, T2>(IDictionary<T1, T2> qs, T1 k, T2 v)
     {
         if (qs.ContainsKey(k))
         {
@@ -18,7 +18,7 @@ public class DictionaryHelper
         }
     }
 
-    public static void AddOrSet(Dictionary<string, string> qs, string k, string v)
+    internal static void AddOrSet(Dictionary<string, string> qs, string k, string v)
     {
         if (qs.ContainsKey(k))
         {
@@ -30,7 +30,7 @@ public class DictionaryHelper
         }
     }
 
-    public static Dictionary<T, List<U>> GroupByValues<U, T, ColType>(Dictionary<U, T> dictionary)
+    internal static Dictionary<T, List<U>> GroupByValues<U, T, ColType>(Dictionary<U, T> dictionary)
     {
         Dictionary<T, List<U>> result = new Dictionary<T, List<U>>();
         foreach (var item in dictionary)
@@ -54,7 +54,7 @@ public class DictionaryHelper
     /// <param name="sl"></param>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public static void AddOrCreate<Key, Value, ColType>(IDictionary<Key, List<Value>> dict, Key key, Value value,
+    internal static void AddOrCreate<Key, Value, ColType>(IDictionary<Key, List<Value>> dict, Key key, Value value,
         bool withoutDuplicitiesInValue = false, Dictionary<Key, List<string>> dictS = null)
     {
         var compWithString = false;
@@ -159,7 +159,7 @@ public class DictionaryHelper
         }
     }
 
-    public static void AddOrCreate<Key, Value>(IDictionary<Key, List<Value>> sl, Key key, Value value,
+    internal static void AddOrCreate<Key, Value>(IDictionary<Key, List<Value>> sl, Key key, Value value,
         bool withoutDuplicitiesInValue = false, Dictionary<Key, List<string>> dictS = null)
     {
         AddOrCreate<Key, Value, object>(sl, key, value, withoutDuplicitiesInValue, dictS);
@@ -174,7 +174,7 @@ public class DictionaryHelper
     /// <param name = "sl"></param>
     /// <param name = "key"></param>
     /// <param name = "value"></param>
-    public static void AddOrCreateIfDontExists<Key, Value>(Dictionary<Key, List<Value>> sl, Key key, Value value)
+    internal static void AddOrCreateIfDontExists<Key, Value>(Dictionary<Key, List<Value>> sl, Key key, Value value)
     {
         if (sl.ContainsKey(key))
         {

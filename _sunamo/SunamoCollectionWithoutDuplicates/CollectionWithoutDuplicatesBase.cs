@@ -1,17 +1,17 @@
 namespace SunamoFileSystem;
 
 
-public abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
+internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
 {
-    public List<T> c = null;
-    public List<string> sr = null;
+    internal List<T> c = null;
+    internal List<string> sr = null;
     bool? _allowNull = false;
     /// <summary>
     /// true = compareWithString
     /// false = !compareWithString
     /// null = allow null (can't compareWithString)
     /// </summary>
-    public bool? allowNull
+    internal bool? allowNull
     {
         get => _allowNull;
         set
@@ -23,9 +23,9 @@ public abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
             }
         }
     }
-    public static bool br = false;
+    internal static bool br = false;
     int count = 10000;
-    public CollectionWithoutDuplicatesBase()
+    internal CollectionWithoutDuplicatesBase()
     {
         if (br)
         {
@@ -33,16 +33,16 @@ public abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
         }
         c = new List<T>();
     }
-    public CollectionWithoutDuplicatesBase(int count)
+    internal CollectionWithoutDuplicatesBase(int count)
     {
         this.count = count;
         c = new List<T>(count);
     }
-    public CollectionWithoutDuplicatesBase(IList<T> l)
+    internal CollectionWithoutDuplicatesBase(IList<T> l)
     {
         c = new List<T>(l.ToList());
     }
-    public bool Add(T t2)
+    internal bool Add(T t2)
     {
         bool result = false;
         var con = Contains(t2);
@@ -73,16 +73,16 @@ public abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
     }
     protected abstract bool IsComparingByString();
     protected string ts = null;
-    public abstract bool? Contains(T t2);
-    public abstract int AddWithIndex(T t2);
-    public abstract int IndexOf(T path);
+    internal abstract bool? Contains(T t2);
+    internal abstract int AddWithIndex(T t2);
+    internal abstract int IndexOf(T path);
     List<T> wasNotAdded = new List<T>();
     /// <summary>
     /// If I want without checkink, use c.AddRange
     /// </summary>
     /// <param name="enumerable"></param>
     /// <param name="withoutChecking"></param>
-    public List<T> AddRange(IList<T> list)
+    internal List<T> AddRange(IList<T> list)
     {
         wasNotAdded.Clear();
         foreach (var item in list)
@@ -94,7 +94,7 @@ public abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
         }
         return wasNotAdded;
     }
-    public string DumpAsString(string operation, /*DumpAsStringHeaderArgs*/ object dumpAsStringHeaderArgs)
+    internal string DumpAsString(string operation, /*DumpAsStringHeaderArgs*/ object dumpAsStringHeaderArgs)
     {
         throw new Exception("Nemůže tu být protože DumpListAsStringOneLine jsem přesouval do sunamo a tam už zůstane");
         //return c.DumpAsString(operation, a);

@@ -1,9 +1,9 @@
 namespace SunamoFileSystem;
-public class DefaultPaths
+internal class DefaultPaths
 {
-    public static IEnumerable<string> AllPathsToProjects = new List<string>();
+    internal static IEnumerable<string> AllPathsToProjects = new List<string>();
 
-    public static void InitAllPathsToProjects()
+    internal static void InitAllPathsToProjects()
     {
 
     }
