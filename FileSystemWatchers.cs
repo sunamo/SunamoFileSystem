@@ -13,12 +13,12 @@ public class FileSystemWatchers
     /// <summary>
     /// In key are folders (never files), in value instance
     /// </summary>
-    public FsWatcherDictionary<string, FileSystemWatcher> _watchers = new FsWatcherDictionary<string, FileSystemWatcher>();
-    private VoidStringT<bool> _onStart;
-    private VoidStringT<bool> _onStop;
+    FsWatcherDictionary<string, FileSystemWatcher> _watchers = new FsWatcherDictionary<string, FileSystemWatcher>();
+    private Action<string, bool> _onStart;
+    private Action<string, bool> _onStop;
 
     private FileSystemWatcher _fileSystemWatcher = null;
-    public FileSystemWatchers(VoidStringT<bool> onStart, VoidStringT<bool> onStop)
+    public FileSystemWatchers(Action<string, bool> onStart, Action<string, bool> onStop)
     {
         if (watch)
         {

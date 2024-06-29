@@ -15,7 +15,7 @@ public partial class FS : FSSH
 {
     public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
     {
-        
+
         for (int i = 0; i < s.Count; i++)
         {
             s[i] = s[i].Substring(basePath.Length);
@@ -51,7 +51,7 @@ List<string>
         CollectionWithoutDuplicates<string> c = new CollectionWithoutDuplicates<string>();
         foreach (var item in paths)
         {
-            c.AddRange(SHGetLines.GetLines (
+            c.AddRange(SHGetLines.GetLines(
 #if ASYNC
             await
 #endif
@@ -63,7 +63,7 @@ List<string>
         return opts;
     }
 
-    
+
 
     /// <summary>
     /// C:\repos\EOM-7\Marvin\Module.VBtO\Clients\src\apps\vbto\src\pages\Administration\Administration.test.tsx
@@ -158,7 +158,7 @@ List<string>
         return FilesWhichContainsAll(sunamo, masc, mustContains);
     }
 
-    
+
 
 
 
@@ -223,7 +223,7 @@ List<string>
     }
 
 
-    
+
 
     //public static string GetRelativePath(string relativeTo, string path)
     //{
@@ -304,7 +304,7 @@ List<string>
         string naz = Path.GetFileName(nad);
         return Path.Combine(zmenseno, Path.Combine(naz, Path.GetFileName(var)));
     }
-    
+
 
 
     /// <summary>
@@ -516,7 +516,7 @@ void
 #endif
     DeleteEmptyFiles(string folder, SearchOption so)
     {
-        var files = FSGetFiles. GetFiles(folder, "*.*", so);
+        var files = FSGetFiles.GetFiles(folder, "*.*", so);
         foreach (var item in files)
         {
             var fs = new FileInfo(item).Length;
@@ -906,7 +906,7 @@ void
             }
         }
     }
-    
+
     public static string GetUpFolderWhichContainsExtension(string path, string fileExt)
     {
         while (FSGetFiles.FilesOfExtension(path, fileExt).Count == 0)
@@ -919,7 +919,7 @@ void
         }
         return path;
     }
-    
+
     public static void TrimContentInFilesOfFolder(string slozka, string searchPattern, SearchOption searchOption)
     {
         var files = FSGetFiles.GetFiles(slozka, searchPattern, searchOption);
@@ -1056,9 +1056,9 @@ void
         //}
         return vr;
     }
-    
 
-   
+
+
 
     /// <summary>
     /// A1 i A2 musí končit backslashem
@@ -1486,7 +1486,7 @@ void
         return sb.ToString();
         //return SHJoin.JoinTimes(i, jumpUp) + file;
     }
-    
+
     /// <summary>
     /// convert to lowercase and remove first dot - to už asi neplatí. Use NormalizeExtension2 for that
     /// </summary>
@@ -1565,7 +1565,7 @@ void
         vr = MoveDirectoryNoRecursive(path, nova, co, fo);
         return vr;
     }
-    
+
     /// <summary>
     /// convert to lowercase and remove first dot
     /// </summary>
@@ -2591,7 +2591,7 @@ public partial class FS : FSSH
     }
 
     /// <summary>
-    /// Remove path to project folder as are in DefaultPaths.AllPathsToProjects
+    /// Remove path to project folder as are in BasePathsHelper.AllPathsToProjects
     /// A2 is here to remove also solution
     /// </summary>
     /// <param name="fullPathOriginalFile"></param>
@@ -2599,10 +2599,10 @@ public partial class FS : FSSH
     /// <param name="empty"></param>
     public static string ReplaceVsProjectFolder(string fullPathOriginalFile, string combineWithA1, string empty)
     {
-        DefaultPaths.InitAllPathsToProjects();
+        BasePathsHelper.InitAllPathsToProjects();
 
         fullPathOriginalFile = SH.FirstCharUpper(fullPathOriginalFile);
-        foreach (var item in DefaultPaths.AllPathsToProjects)
+        foreach (var item in BasePathsHelper.AllPathsToProjects)
         {
             string replace = FSND.WithEndSlash(Path.Combine(item, combineWithA1));
             if (fullPathOriginalFile.StartsWith(replace))
@@ -2884,7 +2884,7 @@ public partial class FS : FSSH
 
 
 
-    public static string CreateDirectory(string v, DirectoryCreateCollisionOption whenExists, SerieStyle serieStyle, bool reallyCreate)
+    public static string CreateDirectory(string v, DirectoryCreateCollisionOption whenExists, SerieStyleFS serieStyle, bool reallyCreate)
     {
         if (Directory.Exists(v))
         {
@@ -3440,7 +3440,7 @@ public partial class FS : FSSH
     {
         int serie;
         bool hasSerie = false;
-        return GetNameWithoutSeries(p, path, out hasSerie, SerieStyle.Brackets, out serie);
+        return GetNameWithoutSeries(p, path, out hasSerie, SerieStyleFS.Brackets, out serie);
     }
     //public static string GetNameWithoutSeries(string p, bool path, out bool hasSerie, SerieStyle serieStyle)
     //{
@@ -3448,14 +3448,14 @@ public partial class FS : FSSH
     //    return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
     //}
 
-    public static (string, bool) GetNameWithoutSeriesNoOut(string p, bool path, SerieStyle serieStyle)
+    public static (string, bool) GetNameWithoutSeriesNoOut(string p, bool path, SerieStyleFS serieStyle)
     {
         int serie;
         var result = GetNameWithoutSeries(p, path, out var hasSerie, serieStyle, out serie);
         return (result, hasSerie);
     }
 
-    public static string GetNameWithoutSeries(string p, bool path, out bool hasSerie, SerieStyle serieStyle)
+    public static string GetNameWithoutSeries(string p, bool path, out bool hasSerie, SerieStyleFS serieStyle)
     {
         int serie;
         return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
@@ -3472,7 +3472,7 @@ public partial class FS : FSSH
     /// <param name="p"></param>
     /// <param name="a1IsWithPath"></param>
     /// <param name="hasSerie"></param>
-    public static string GetNameWithoutSeries(string p, bool a1IsWithPath, out bool hasSerie, SerieStyle serieStyle, out int serie)
+    public static string GetNameWithoutSeries(string p, bool a1IsWithPath, out bool hasSerie, SerieStyleFS serieStyle, out int serie)
     {
         serie = -1;
         hasSerie = false;
@@ -3506,7 +3506,7 @@ public partial class FS : FSSH
 
         // Nejdříve ořežu všechny přípony a to i tehdy, má li soubor více přípon
 
-        if (serieStyle == SerieStyle.Brackets || serieStyle == SerieStyle.All)
+        if (serieStyle == SerieStyleFS.Brackets || serieStyle == SerieStyleFS.All)
         {
             while (true)
             {
@@ -3536,7 +3536,7 @@ public partial class FS : FSSH
             }
         }
 
-        if (serieStyle == SerieStyle.Dash || serieStyle == SerieStyle.All)
+        if (serieStyle == SerieStyleFS.Dash || serieStyle == SerieStyleFS.All)
         {
             int dex = g.IndexOf(AllChars.dash);
 
@@ -3557,7 +3557,7 @@ public partial class FS : FSSH
             }
         }
 
-        if (serieStyle == SerieStyle.Underscore || serieStyle == SerieStyle.All)
+        if (serieStyle == SerieStyleFS.Underscore || serieStyle == SerieStyleFS.All)
         {
             RemoveSerieUnderscore(ref serie, ref g, ref pocetSerii);
         }
@@ -4301,7 +4301,7 @@ public partial class FS
         //return v;
     }
 
-    
+
 
     #endregion
 }
@@ -4372,7 +4372,7 @@ public partial class FS
     {
         if (!dir.EndsWith(AllStrings.bs))
         {
-            
+
             dir = GetDirectoryName(dir);
         }
     }

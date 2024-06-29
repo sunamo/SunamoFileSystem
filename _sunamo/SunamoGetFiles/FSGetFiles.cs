@@ -592,16 +592,7 @@ Dictionary<string, string>
     {
         return GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
     }
-    internal static string GetFilesSize(List<string> winrarFiles, ComputerSizeUnits s)
-    {
-        long size = 0;
-        foreach (var item in winrarFiles)
-        {
-            FileInfo fi = new FileInfo(item);
-            size += fi.Length;
-        }
-        return FS.GetSizeInAutoString((double)size);
-    }
+
     internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
     {
         List<string> files = new List<string>();
