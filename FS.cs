@@ -2590,28 +2590,7 @@ public partial class FS : FSSH
         }
     }
 
-    /// <summary>
-    /// Remove path to project folder as are in BasePathsHelper.AllPathsToProjects
-    /// A2 is here to remove also solution
-    /// </summary>
-    /// <param name="fullPathOriginalFile"></param>
-    /// <param name="combineWithA1"></param>
-    /// <param name="empty"></param>
-    public static string ReplaceVsProjectFolder(string fullPathOriginalFile, string combineWithA1, string empty)
-    {
-        BasePathsHelper.InitAllPathsToProjects();
 
-        fullPathOriginalFile = SH.FirstCharUpper(fullPathOriginalFile);
-        foreach (var item in BasePathsHelper.AllPathsToProjects)
-        {
-            string replace = FSND.WithEndSlash(Path.Combine(item, combineWithA1));
-            if (fullPathOriginalFile.StartsWith(replace))
-            {
-                return fullPathOriginalFile.Replace(replace, empty);
-            }
-        }
-        return fullPathOriginalFile;
-    }
 
     /// <summary>
     /// Cant return with end slash becuase is working also with files

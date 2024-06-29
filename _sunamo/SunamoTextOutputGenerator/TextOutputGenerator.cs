@@ -99,7 +99,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         sb.AppendLine(string.Empty.PadLeft(v, paddingChar));
     }
     #endregion
-    internal override string ToString()
+    public override string ToString()
     {
         var ts = sb.ToString();
         return ts;
