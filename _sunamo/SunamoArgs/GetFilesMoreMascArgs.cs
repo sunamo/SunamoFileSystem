@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-internal class GetFilesMoreMascArgs : GetFilesBaseArgs
+internal class GetFilesMoreMascArgs : GetFilesBaseArgsFS
 {
     internal bool LoadFromFileWhenDebug = false;
     internal string path;

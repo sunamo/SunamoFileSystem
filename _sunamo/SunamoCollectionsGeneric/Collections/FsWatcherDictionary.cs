@@ -1,11 +1,11 @@
 namespace SunamoFileSystem;
 
 
-internal class FsWatcherDictionary<T, U> : IDictionary<T, U>
+public class FsWatcherDictionary<T, U> : IDictionary<T, U>
 {
     static Type type = typeof(FsWatcherDictionary<T, U>);
     Dictionary<T, U> d = new Dictionary<T, U>();
-    internal U this[T key]
+    public U this[T key]
     {
         get
         {
@@ -20,11 +20,11 @@ internal class FsWatcherDictionary<T, U> : IDictionary<T, U>
             d[key] = value;
         }
     }
-    internal ICollection<T> Keys => d.Keys;
-    internal ICollection<U> Values => d.Values;
-    internal int Count => d.Count;
-    internal bool IsReadOnly => false;
-    internal void Add(T key, U value)
+    public ICollection<T> Keys => d.Keys;
+    public ICollection<U> Values => d.Values;
+    public int Count => d.Count;
+    public bool IsReadOnly => false;
+    public void Add(T key, U value)
     {
         lock (d)
         {
@@ -34,40 +34,40 @@ internal class FsWatcherDictionary<T, U> : IDictionary<T, U>
             }
         }
     }
-    internal void Add(KeyValuePair<T, U> item)
+    public void Add(KeyValuePair<T, U> item)
     {
         Add(item.Key, item.Value);
     }
-    internal void Clear()
+    public void Clear()
     {
         d.Clear();
     }
-    internal bool Contains(KeyValuePair<T, U> item)
+    public bool Contains(KeyValuePair<T, U> item)
     {
         return d.Contains(item);
     }
-    internal bool ContainsKey(T key)
+    public bool ContainsKey(T key)
     {
         return d.ContainsKey(key);
     }
-    internal void CopyTo(KeyValuePair<T, U>[] array, int arrayIndex)
+    public void CopyTo(KeyValuePair<T, U>[] array, int arrayIndex)
     {
         ThrowEx.NotImplementedMethod();
         //DictionaryHelper.CopyTo<T, U>(d, array, arrayIndex);
     }
-    internal IEnumerator<KeyValuePair<T, U>> GetEnumerator()
+    public IEnumerator<KeyValuePair<T, U>> GetEnumerator()
     {
         return d.GetEnumerator();
     }
-    internal bool Remove(T key)
+    public bool Remove(T key)
     {
         return d.Remove(key);
     }
-    internal bool Remove(KeyValuePair<T, U> item)
+    public bool Remove(KeyValuePair<T, U> item)
     {
         return d.Remove(item.Key);
     }
-    internal bool TryGetValue(T key, out U value)
+    public bool TryGetValue(T key, out U value)
     {
         bool vr = d.TryGetValue(key, out value);
         return vr;

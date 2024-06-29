@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-internal class ReplaceInAllFilesArgsBase
+public class ReplaceInAllFilesArgsBase
 {
     internal List<string> files;
     internal bool isMultilineWithVariousIndent;

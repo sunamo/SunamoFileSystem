@@ -96,7 +96,7 @@ internal class FSGetFolders
     /// <param name="folder"></param>
     /// <param name="list"></param>
     /// <param name="e"></param>
-    private static void GetFoldersEveryFolder(string folder, List<string> list, GetFilesArgs e = null)
+    private static void GetFoldersEveryFolder(string folder, List<string> list, GetFilesArgsFS e = null)
     {
         List<string> folders = null;
 #if DEBUG
@@ -157,11 +157,11 @@ internal class FSGetFolders
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
-    internal static List<string> GetFoldersEveryFolder(string folder, string mask, GetFilesArgs e = null)
+    internal static List<string> GetFoldersEveryFolder(string folder, string mask, GetFilesArgsFS e = null)
     {
         if (e == null)
         {
-            e = new GetFilesArgs();
+            e = new GetFilesArgsFS();
         }
         List<string> list = new List<string>();
         // zde progress bar nedává smysl. načítám to rekurzivně, tedy nevím na začátku kolik těch složek bude

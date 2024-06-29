@@ -2,7 +2,7 @@ namespace SunamoFileSystem;
 
 
 // todo nemělo by to dědit z GetFoldersEveryFolderArgs? ve vs2 to tak mám
-internal class GetFilesArgs : GetFilesBaseArgs
+internal class GetFilesArgsFS : GetFilesBaseArgsFS
 {
     // todo s touhle třídou jsou jen problémy. udělat pořádek co tu má být a co tu nemám.
     internal bool _trimExt = false;

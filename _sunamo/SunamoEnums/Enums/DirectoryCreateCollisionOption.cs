@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-internal enum DirectoryCreateCollisionOption
+public enum DirectoryCreateCollisionOption
 {
     Delete,
     Overwrite,

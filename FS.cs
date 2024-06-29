@@ -409,7 +409,7 @@ List<string>
         List<string> wasntExists = new List<string>();
 
         Dictionary<string, List<string>> files2 = new Dictionary<string, List<string>>();
-        var getFiles = FSGetFiles.GetFiles(folderFrom, "*.cs", SearchOption.AllDirectories, new GetFilesArgs { excludeFromLocationsCOntains = new List<string>(["TestFiles"]) });
+        var getFiles = FSGetFiles.GetFiles(folderFrom, "*.cs", SearchOption.AllDirectories, new GetFilesArgsFS { excludeFromLocationsCOntains = new List<string>(["TestFiles"]) });
         foreach (var item in files)
         {
             files2.Add(item, getFiles.Where(d => Path.GetFileName(d) == item).ToList());
@@ -2333,7 +2333,7 @@ public partial class FS : FSSH
 
 
 
-    public static string FilesWithSameName(string vs, string v, SearchOption allDirectories, ITextOutputGenerator tog)
+    public static string FilesWithSameName(string vs, string v, SearchOption allDirectories)
     {
         FSND.WithEndSlash(ref vs);
 
@@ -2344,16 +2344,24 @@ public partial class FS : FSSH
             DictionaryHelper.AddOrCreate<string, string>(f, Path.GetFileName(item), item);
         }
 
+        StringBuilder sb = new StringBuilder();
+
         //TextOutputGenerator tog = new TextOutputGenerator();
         foreach (var item in f)
         {
             if (item.Value.Count > 1)
             {
-                tog.List(item.Value);
+                foreach (var item2 in item.Value)
+                {
+                    sb.AppendLine(item2);
+                }
+                sb.AppendLine();
+                sb.AppendLine();
+                //tog.List(item.Value);
             }
         }
 
-        return tog.ToString();
+        return sb.ToString();
     }
 
 
@@ -3588,7 +3596,7 @@ public partial class FS : FSSH
 
     public static List<string> DirectoryListing(string path, string mask, SearchOption so)
     {
-        var p = FSGetFiles.GetFiles(path, mask, so, new GetFilesArgs { _trimA1AndLeadingBs = true });
+        var p = FSGetFiles.GetFiles(path, mask, so, new GetFilesArgsFS { _trimA1AndLeadingBs = true });
 
         return p;
     }
@@ -3671,7 +3679,7 @@ public partial class FS : FSSH
 
     public static bool IsCountOfFilesMoreThan(string bpMb, string masc, int getNullIfThereIsMoreThanXFiles)
     {
-        var f = FSGetFiles.GetFilesEveryFolder(bpMb, masc, SearchOption.AllDirectories, new GetFilesEveryFolderArgs { getNullIfThereIsMoreThanXFiles = getNullIfThereIsMoreThanXFiles });
+        var f = FSGetFiles.GetFilesEveryFolder(bpMb, masc, SearchOption.AllDirectories, new GetFilesEveryFolderArgsFS { getNullIfThereIsMoreThanXFiles = getNullIfThereIsMoreThanXFiles });
         return f == null;
 
     }

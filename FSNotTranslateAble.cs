@@ -121,7 +121,7 @@ public partial class FS
 
     public static void NumberByDateModified(string folder, string masc, SearchOption so)
     {
-        var files = FSGetFiles.GetFiles(folder, masc, so, new GetFilesArgs { byDateOfLastModifiedAsc = true });
+        var files = FSGetFiles.GetFiles(folder, masc, so, new GetFilesArgsFS { byDateOfLastModifiedAsc = true });
         int i = 1;
         foreach (var item in files)
         {

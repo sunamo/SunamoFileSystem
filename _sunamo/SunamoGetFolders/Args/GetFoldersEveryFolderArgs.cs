@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
 
 
-internal class GetFoldersEveryFolderArgs : GetFilesArgs
+internal class GetFoldersEveryFolderArgs : GetFilesArgsFS
 {
     /// <summary>
     /// Auto call WithEndSlash
@@ -11,7 +11,7 @@ internal class GetFoldersEveryFolderArgs : GetFilesArgs
     // nevím k čemu to je ale zdá se nesmysl, ověřovat můžu přes excludeFromLocationsCOntains != null
     //internal bool excludeFromLocationsCOntainsBool = false;
     internal bool writeToDebugEveryLoadedFolder = false;
-    internal GetFoldersEveryFolderArgs(GetFilesEveryFolderArgs e)
+    internal GetFoldersEveryFolderArgs(GetFilesEveryFolderArgsFS e)
     {
         _trimA1AndLeadingBs = e._trimA1AndLeadingBs;
         followJunctions = e.followJunctions;

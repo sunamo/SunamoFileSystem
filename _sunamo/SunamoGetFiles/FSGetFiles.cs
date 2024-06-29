@@ -18,7 +18,7 @@ internal partial class FSGetFiles
     /// <param name="folder"></param>
     /// <param name="mask"></param>
     /// <param name="searchOption"></param>
-    internal async static Task<List<string>> GetFilesAsync(string folder2, string mask, SearchOption searchOption, GetFilesArgs getFilesArgs = null)
+    internal async static Task<List<string>> GetFilesAsync(string folder2, string mask, SearchOption searchOption, GetFilesArgsFS getFilesArgs = null)
     {
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
         {
@@ -27,7 +27,7 @@ internal partial class FSGetFiles
         }
         if (getFilesArgs == null)
         {
-            getFilesArgs = new GetFilesArgs();
+            getFilesArgs = new GetFilesArgsFS();
         }
         var folders = SHSplit.Split(folder2, AllStrings.sc);
         for (int i = 0; i < folders.Count; i++)
@@ -121,7 +121,7 @@ internal partial class FSGetFiles
     /// <param name="ask"></param>
     /// <param name="searchOption"></param>
     /// <param name="_trimA1"></param>
-    internal static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption, GetFilesEveryFolderArgs e = null)
+    internal static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption, GetFilesEveryFolderArgsFS e = null)
     {
 #if DEBUG
         if (folder == @"D:\_Test\EveryLine\EveryLine\SearchCodeElementsUC\")
@@ -130,7 +130,7 @@ internal partial class FSGetFiles
 #endif
         if (e == null)
         {
-            e = new GetFilesEveryFolderArgs();
+            e = new GetFilesEveryFolderArgsFS();
         }
         // TODO: některé soubory vrací vícekrát. toto je workaround než zjistím proč
         // TODO: je důležité se toho zbavit co nejdříve protože při načítání to zbytečně zpomaluje
@@ -284,7 +284,7 @@ internal partial class FSGetFiles
     {
         return GetFiles(folderPath, masc, rec, null);
     }
-    internal static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgs a = null)
+    internal static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgsFS a = null)
     {
         SearchOption so = SearchOption.TopDirectoryOnly;
         var b = rec.Value;
@@ -343,7 +343,7 @@ Dictionary<string, string>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
     /// <param name="searchOption"></param>
-    internal static List<string> GetFiles(string folder2, string mask, SearchOption searchOption, GetFilesArgs a = null)
+    internal static List<string> GetFiles(string folder2, string mask, SearchOption searchOption, GetFilesArgsFS a = null)
     {
 #if DEBUG
         if (folder2.TrimEnd(AllChars.bs) == @"\monoConsoleSqlClient")
@@ -357,7 +357,7 @@ Dictionary<string, string>
         }
         if (a == null)
         {
-            a = new GetFilesArgs();
+            a = new GetFilesArgsFS();
         }
         var folders = SHSplit.Split(folder2, AllStrings.sc);
         //if (CA.PostfixIfNotEnding != null)
@@ -525,11 +525,11 @@ Dictionary<string, string>
 #endif
         return result;
     }
-    internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgs a)
+    internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgsFS a)
     {
         if (a == null)
         {
-            a = new GetFilesArgs();
+            a = new GetFilesArgsFS();
         }
         CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
         if (a._trimA1AndLeadingBs)
@@ -593,7 +593,7 @@ Dictionary<string, string>
         return GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
     }
 
-    internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgs a = null)
+    internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so, GetFilesArgsFS a = null)
     {
         List<string> files = new List<string>();
         foreach (var item in folders)
@@ -605,11 +605,11 @@ Dictionary<string, string>
         }
         return files;
     }
-    internal static List<string> GetFilesWithoutNodeModules(string item, string masc, bool? rec, GetFilesArgs a = null)
+    internal static List<string> GetFilesWithoutNodeModules(string item, string masc, bool? rec, GetFilesArgsFS a = null)
     {
         if (a == null)
         {
-            a = new GetFilesArgs();
+            a = new GetFilesArgsFS();
         }
         a.excludeFromLocationsCOntains.Add("de_mo");
         a.excludeFromLocationsCOntains = a.excludeFromLocationsCOntains.Distinct().ToList();
