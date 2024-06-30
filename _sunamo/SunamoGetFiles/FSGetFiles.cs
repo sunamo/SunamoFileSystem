@@ -1,9 +1,54 @@
 namespace SunamoFileSystem;
 
-
-
-internal partial class FSGetFiles
+internal class FSGetFiles
 {
+    /// <summary>
+    /// Non recursive
+    /// </summary>
+    /// <param name="folder"></param>
+    /// <param name="fileExt"></param>
+    internal static List<string> FilesOfExtension(string folder, string fileExt)
+    {
+        return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
+    }
+
+    internal static List<string> FilesOfExtensionsArray(string folder, List<string> extension)
+    {
+        List<string> foundedFiles = new List<string>();
+        FS.NormalizeExtensions(extension);
+        var files = Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories);
+        foreach (var item in files)
+        {
+            string ext = FS.GetNormalizedExtension(item);
+            if (extension.Contains(ext))
+            {
+                foundedFiles.Add(ext);
+            }
+        }
+        return foundedFiles;
+    }
+
+    /// <summary>
+    /// Keys returns with normalized ext
+    /// In case zero files of ext wont be included in dict
+    /// </summary>
+    /// <param name="folderFrom"></param>
+    /// <param name="extensions"></param>
+    internal static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
+    {
+        var dict = new Dictionary<string, List<string>>();
+        foreach (var item in extensions)
+        {
+            string ext = FS.NormalizeExtension(item);
+            var files = GetFiles(folderFrom, AllStrings.asterisk + ext, SearchOption.AllDirectories);
+            if (files.Count != 0)
+            {
+                dict.Add(ext, files);
+            }
+        }
+        return dict;
+    }
+
     internal static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
     {
         return Directory.GetFiles(v1, v2, topDirectoryOnly).ToList();
@@ -293,7 +338,7 @@ internal partial class FSGetFiles
             so = SearchOption.AllDirectories;
         }
         return
-        GetFiles(folderPath, masc, so, a);
+            GetFiles(folderPath, masc, so, a);
     }
     internal static List<string> GetFiles(string folderPath, string masc)
     {
@@ -301,11 +346,11 @@ internal partial class FSGetFiles
     }
     internal static
 #if ASYNC
-    async Task<Dictionary<string, string>>
+        async Task<Dictionary<string, string>>
 #else
 Dictionary<string, string>
 #endif
-    GetFilesWithContentInDictionary(string item, string v, SearchOption allDirectories)
+        GetFilesWithContentInDictionary(string item, string v, SearchOption allDirectories)
     {
         Dictionary<string, string> r = new Dictionary<string, string>();
         var f = GetFiles(item, v, allDirectories);
@@ -313,9 +358,9 @@ Dictionary<string, string>
         {
             r.Add(item2,
 #if ASYNC
-            await
+                await
 #endif
-            File.ReadAllTextAsync(item2));
+                    File.ReadAllTextAsync(item2));
         }
         return r;
     }
@@ -617,11 +662,11 @@ Dictionary<string, string>
     }
     internal static
 #if ASYNC
-    async Task<List<string>>
+        async Task<List<string>>
 #else
 List<string>
 #endif
-    FilesWhichContainsAll(object sunamo, string masc, IList<string> mustContains)
+        FilesWhichContainsAll(object sunamo, string masc, IList<string> mustContains)
     {
         var mcl = mustContains.Count();
         List<string> ls = new List<string>();
@@ -638,9 +683,9 @@ List<string>
         {
             var c =
 #if ASYNC
-            await
+                await
 #endif
-            File.ReadAllTextAsync(item);
+                    File.ReadAllTextAsync(item);
             if (mustContains.Where(d => c.Contains(d)).Count() == mcl) /*CA.ContainsAnyFromElement(c, mustContains).Count == mcl*/
             {
                 ls.Add(item);
@@ -657,55 +702,5 @@ List<string>
             vr.AddRange(di.GetFiles(AllStrings.asterisk + item, so));
         }
         return vr.ToArray();
-    }
-}
-
-internal partial class FSGetFiles
-{
-    /// <summary>
-    /// Non recursive
-    /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="fileExt"></param>
-    internal static List<string> FilesOfExtension(string folder, string fileExt)
-    {
-        return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
-    }
-
-    internal static List<string> FilesOfExtensionsArray(string folder, List<string> extension)
-    {
-        List<string> foundedFiles = new List<string>();
-        FS.NormalizeExtensions(extension);
-        var files = Directory.EnumerateFiles(folder, "*.*", SearchOption.AllDirectories);
-        foreach (var item in files)
-        {
-            string ext = FS.GetNormalizedExtension(item);
-            if (extension.Contains(ext))
-            {
-                foundedFiles.Add(ext);
-            }
-        }
-        return foundedFiles;
-    }
-
-    /// <summary>
-    /// Keys returns with normalized ext
-    /// In case zero files of ext wont be included in dict
-    /// </summary>
-    /// <param name="folderFrom"></param>
-    /// <param name="extensions"></param>
-    internal static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
-    {
-        var dict = new Dictionary<string, List<string>>();
-        foreach (var item in extensions)
-        {
-            string ext = FS.NormalizeExtension(item);
-            var files = GetFiles(folderFrom, AllStrings.asterisk + ext, SearchOption.AllDirectories);
-            if (files.Count != 0)
-            {
-                dict.Add(ext, files);
-            }
-        }
-        return dict;
     }
 }
