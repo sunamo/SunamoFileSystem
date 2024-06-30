@@ -10,7 +10,11 @@ using System.Text.RegularExpressions;
 
 
 
-
+/// <summary>
+///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
+///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
+///     konvenci. V názvu souboru to nechám ať vidím na první dobrou co je co.
+/// </summary>
 public partial class FS : FSSH
 {
     public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
@@ -1625,21 +1629,6 @@ void
         FSND.WithEndSlash(ref result);
         return result;
     }
-}
-
-
-
-/// <summary>
-///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
-///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
-///     konvenci. V názvu souboru to nechám ať vidím na první dobrou co je co.
-/// </summary>
-public partial class FS
-{
-
-
-
-
 
 
     public static
@@ -2292,14 +2281,6 @@ string
     //        #endregion
 
     #endregion
-}
-
-
-
-
-
-public partial class FS : FSSH
-{
 
 
     #region GetFilesMoreMasc - in thread
@@ -3600,13 +3581,7 @@ public partial class FS : FSSH
 
         return p;
     }
-}
 
-
-public delegate bool? ExistsDirectory(string path);
-
-public partial class FS : FSSH
-{
     public static string WithoutEndSlash(string v)
     {
         return WithoutEndSlash(ref v);
@@ -4267,10 +4242,7 @@ public partial class FS : FSSH
     }
 
     private static Type type = typeof(FS);
-}
 
-public partial class FS
-{
     #region For easy copy
     //[MethodImpl(MethodImplOptions.AggressiveInlining)]
     //private static string NormalizeExtension2(string item)
@@ -4291,10 +4263,7 @@ public partial class FS
 
 
     #endregion
-}
 
-public partial class FS
-{
     #region For easy copy from FSShared.cs
 
     public static void DeleteFile(string item)
@@ -4373,10 +4342,7 @@ public partial class FS
     //    return se.FS.AbsoluteFromCombinePath(a);
     //}
     #endregion
-}
 
-public partial class FS
-{
     #region For easy copy from FSShared64.cs
     /// <summary>
     /// Convert to UNC path
