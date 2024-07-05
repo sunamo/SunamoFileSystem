@@ -1,7 +1,4 @@
-
 namespace SunamoFileSystem._sunamo.SunamoCollectionsChangeContent;
-using System;
-using System.Collections.Generic;
 
 
 internal class CAChangeContent
@@ -41,4 +38,3 @@ internal class CAChangeContent
         }
     }
 }
-

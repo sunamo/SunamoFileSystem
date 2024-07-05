@@ -46,3 +46,6 @@ global using SunamoFileSystem._sunamo.SunamoInterfaces.Interfaces;
 global using SunamoFileSystem._sunamo.SunamoLang.SunamoI18N;
 global using SunamoFileSystem._sunamo.SunamoShared.Args;
 global using SunamoFileSystem._sunamo.SunamoValues.Constants;
+global using Diacritics.Extensions;
+global using System.Net;
+global using System.Text.RegularExpressions;

@@ -1,6 +1,3 @@
-
-
-
 namespace SunamoFileSystem;
 
 /// <summary>

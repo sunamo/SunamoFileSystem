@@ -1,4 +1,3 @@
-
 namespace SunamoFileSystem.Enums;
 public enum DirectoryMoveCollisionOption
 {

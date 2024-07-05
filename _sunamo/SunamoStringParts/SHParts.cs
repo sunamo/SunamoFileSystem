@@ -1,4 +1,3 @@
-
 namespace SunamoFileSystem._sunamo.SunamoStringParts;
 internal class SHParts
 {
@@ -13,4 +12,3 @@ internal class SHParts
         return nameSolution;
     }
 }
-
