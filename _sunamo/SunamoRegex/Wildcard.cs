@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoRegex;
 
 using System.Text.RegularExpressions;
 

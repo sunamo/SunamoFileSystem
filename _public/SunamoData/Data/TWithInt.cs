@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._public.SunamoData.Data;
 
 
 public class TWithInt<T>

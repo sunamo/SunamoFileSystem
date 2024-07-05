@@ -1,5 +1,5 @@
 
-namespace SunamoFileSystem;
+namespace SunamoFileSystem.Enums;
 public enum DirectoryMoveCollisionOption
 {
     AddSerie,

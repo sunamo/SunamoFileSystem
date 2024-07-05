@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoValues.Constants;
 
 
 internal class DTConstants

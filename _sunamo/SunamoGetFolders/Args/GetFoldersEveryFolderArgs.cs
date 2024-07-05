@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoGetFolders.Args;
 
 
 internal class GetFoldersEveryFolderArgs : GetFilesArgsFS

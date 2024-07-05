@@ -1,5 +1,5 @@
 
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoValues;
 internal class AllChars
 {
     internal static List<char> vsZnakyWithoutSpecial;

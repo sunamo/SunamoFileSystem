@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoCollectionWithoutDuplicates;
 
 
 internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString

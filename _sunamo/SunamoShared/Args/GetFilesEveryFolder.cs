@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoShared.Args;
 
 
 internal class GetFilesEveryFolder : GetFilesMoreMascArgs

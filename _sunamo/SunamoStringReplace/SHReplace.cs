@@ -1,5 +1,5 @@
 
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoStringReplace;
 using System.Text.RegularExpressions;
 
 

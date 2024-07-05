@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._public.SunamoInterfaces.Interfaces;
 
 
 public interface ISelectFromMany<Data>

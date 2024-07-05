@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoStringSplit;
 internal class SHSplit
 {
     #region SplitToPartsFromEnd

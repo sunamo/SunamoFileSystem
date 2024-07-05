@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoCollectionsGeneric;
 internal class CAG
 {
     /// <summary>

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoDictionary;
 
 
 // potřebuji celý SunamoDictionary nuget kvůli genericitě

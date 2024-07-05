@@ -1,4 +1,4 @@
-namespace SunamoFileSystem;
+namespace SunamoFileSystem._sunamo.SunamoCollectionWithoutDuplicates;
 
 
 internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<T>
