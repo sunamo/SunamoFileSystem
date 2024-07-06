@@ -811,7 +811,7 @@ void
         {
             var path = item.Replace(pathDownload, pathVideos0Kb);
             FS.CreateUpfoldersPsysicallyUnlessThere(path);
-            File.WriteAllTextAsync(path, string.Empty);
+            File.WriteAllText(path, string.Empty);
         }
     }
 
@@ -932,7 +932,7 @@ void
             sr.Dispose();
             sr = null;
             string contentTrim = content.Trim();
-            File.WriteAllTextAsync(item, contentTrim, enc);
+            File.WriteAllText(item, contentTrim, enc);
             //}
         }
     }
@@ -2069,7 +2069,7 @@ string
     //        {
     //            if (!File.Exists(path))
     //            {
-    //                File.WriteAllTextAsync(path, string.Empty);
+    //                File.WriteAllText(path, string.Empty);
     //            }
     //        }
     //        #endregion

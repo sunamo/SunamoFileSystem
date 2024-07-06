@@ -67,7 +67,7 @@ public partial class FS
 
     public static void WriteAllText(string path, string content)
     {
-        File.WriteAllTextAsync(path, content);
+        File.WriteAllText(path, content);
     }
 
     public static bool IsAllInSameFolder(List<string> c)
@@ -97,7 +97,7 @@ public partial class FS
             var path = Path.Combine(folder, item + ext);
             if (!File.Exists(path))
             {
-                File.WriteAllTextAsync(path, templateFromContent);
+                File.WriteAllText(path, templateFromContent);
             }
         }
     }
