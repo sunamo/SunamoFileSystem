@@ -1,6 +1,6 @@
 namespace SunamoFileSystem;
 
-
+using PathMs = System.IO.Path;
 
 
 
@@ -32,11 +32,6 @@ public partial class FS : FSSH
     {
         DateTime dt = DateTime.Now;
         return ReplaceIncorrectCharactersFile(dt.ToString());
-    }
-
-    public static string GetDirectoryNamePath(string s)
-    {
-        return Path.GetDirectoryName(s);
     }
 
     public static
@@ -992,7 +987,7 @@ void
     /// Zjistí všechny složky rekurzivně z A1 a prvně maže samozřejmě ty, které mají více tokenů
     /// </summary>
     /// <param name="v"></param>
-    public static void DeleteAllEmptyDirectories(string v, params string[] doNotDeleteWhichContains)
+    public static void DeleteAllEmptyDirectories(string v, bool deleteAlsoA1, params string[] doNotDeleteWhichContains)
     {
         List<TWithInt<string>> dirs = FS.DirectoriesWithToken(v, AscDesc.Desc);
         foreach (var item in dirs)
@@ -1012,6 +1007,11 @@ void
                 }
 
             }
+        }
+
+        if (IsDirectoryEmpty(v, false, true))
+        {
+            FS.TryDeleteDirectory(v);
         }
     }
 
@@ -1098,7 +1098,7 @@ void
             {
             }
         }
-        var files = FSGetFiles.GetFiles(item, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
+        var files = FSGetFiles.GetFiles(item, AllStrings.asterisk, SearchOption.AllDirectories);
         FS.CreateFoldersPsysicallyUnlessThere(nova);
         foreach (var item2 in files)
         {
@@ -1111,12 +1111,9 @@ void
         }
         catch (Exception ex)
         {
-            ThrowEx.CannotMoveFolder(item, nova, ex);
+            //ThrowEx.CannotMoveFolder(item, nova, ex);
         }
-        if (FS.IsDirectoryEmpty(item, true, true))
-        {
-            FS.TryDeleteDirectory(item);
-        }
+        FS.DeleteAllEmptyDirectories(item, true);
         return vr;
     }
     private static bool IsDirectoryEmpty(string item, bool folders, bool files)
@@ -1641,11 +1638,15 @@ string
         TFSE.ReadAllText(path);
     }
 
+    public static string? GetDirectoryName(string s)
+    {
+
+        return PathMs.GetDirectoryName(s);
+    }
 
     public static string GetFileNameWithoutExtension(string s)
     {
-        var p = s.Split('\\');
-        return p[p.Length - 1];
+        return PathMs.GetFileNameWithoutExtension(s.TrimEnd(PathMs.DirectorySeparatorChar));
     }
 
     /// <summary>
@@ -1870,7 +1871,7 @@ string
 
     public static string GetFileName(string fn)
     {
-        return Path.GetFileName(fn);
+        return PathMs.GetFileName(fn.TrimEnd(Path.DirectorySeparatorChar));
     }
 
 

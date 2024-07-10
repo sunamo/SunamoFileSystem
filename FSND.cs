@@ -254,7 +254,7 @@ nad
             /*
 Zde mám chybu:
 System.IO.DirectoryNotFoundException: 'Could not find a part of the path
-            'E:\vs\Projects\sunamoWithoutLocalDep.net\Clients\node_modules\napi-wasm'.'
+            'E:\vs\Projects\PlatformIndependentNuGetPackages.net\Clients\node_modules\napi-wasm'.'
 
             to musí být nějaká <|>, protože zde se mi to má dostat jen při sunamo nebo swod
             nikoliv při sunamo.net
