@@ -12,9 +12,19 @@ using PathMs = System.IO.Path;
 /// </summary>
 public partial class FS : FSSH
 {
+    public static void MoveSubfoldersToFolder(List<string> subfolderNames, string from, string to, FileMoveCollisionOption fo)
+    {
+        foreach (var item in subfolderNames)
+        {
+            var f = Path.Combine(from, item);
+            var t = Path.Combine(to, item);
+
+            FS.MoveAllRecursivelyAndThenDirectory(f, t, fo);
+        }
+    }
+
     public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
     {
-
         for (int i = 0; i < s.Count; i++)
         {
             s[i] = s[i].Substring(basePath.Length);
@@ -56,8 +66,6 @@ List<string>
 
         return opts;
     }
-
-
 
     /// <summary>
     /// C:\repos\EOM-7\Marvin\Module.VBtO\Clients\src\apps\vbto\src\pages\Administration\Administration.test.tsx
@@ -1641,7 +1649,7 @@ string
     public static string? GetDirectoryName(string s)
     {
 
-        return PathMs.GetDirectoryName(s);
+        return PathMs.GetDirectoryName(s.TrimEnd(PathMs.DirectorySeparatorChar));
     }
 
     public static string GetFileNameWithoutExtension(string s)
