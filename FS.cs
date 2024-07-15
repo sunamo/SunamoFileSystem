@@ -1,9 +1,6 @@
-namespace SunamoFileSystem;
-
 using PathMs = System.IO.Path;
 
-
-
+namespace SunamoFileSystem;
 
 /// <summary>
 ///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
@@ -171,10 +168,10 @@ List<string>
         item = item.Trim(AllChars.bs);
 
         item = item.Replace(basePath, string.Empty);
-        var pBasePath = SHSplit.Split(basePath, AllStrings.bs);
+        var pBasePath = SHSplit.SplitMore(basePath, AllStrings.bs);
         var basePathC = pBasePath.Count;
 
-        var p = SHSplit.Split(item, AllStrings.bs);
+        var p = SHSplit.SplitMore(item, AllStrings.bs);
         int i = 0;
         for (; i < p.Count; i++)
         {
@@ -573,8 +570,8 @@ void
 
         if (pairLinesInFromAndTo)
         {
-            var from2 = SHSplit.Split(from, Environment.NewLine);
-            var to2 = SHSplit.Split(to, Environment.NewLine);
+            var from2 = SHSplit.SplitMore(from, Environment.NewLine);
+            var to2 = SHSplit.SplitMore(to, Environment.NewLine);
 
             if (replaceWithEmpty)
             {
@@ -1996,11 +1993,11 @@ string
     //
     //            if (v.Contains(c))
     //            {
-    //                masks.AddRange(SHSplit.Split(v, c));
+    //                masks.AddRange(SHSplit.SplitMore(v, c));
     //            }
     //            else if (v.Contains(sc))
     //            {
-    //                masks.AddRange(SHSplit.Split(v, sc));
+    //                masks.AddRange(SHSplit.SplitMore(v, sc));
     //            }
     //            else
     //            {
@@ -2578,7 +2575,7 @@ string
             deli = AllStrings.slash;
         }
 
-        return SHSplit.Split(relativePath, deli);
+        return SHSplit.SplitMore(relativePath, deli);
     }
 
 

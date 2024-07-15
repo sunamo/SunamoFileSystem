@@ -16,7 +16,7 @@ internal class SHReplace
             text = text.Replace("&nbsp; ", " ");
             text = text.Replace("&nbsp;", " ");
         }
-        var p = text.Split(AllChars.whiteSpacesChars.ToArray()); //SHSunamoExceptions.Split(text, AllChars.whiteSpacesChars.ConvertAll(d => d.ToString()).ToArray());
+        var p = text.Split(AllChars.whiteSpacesChars.ToArray()); //SHSplit.SplitMore(text, AllChars.whiteSpacesChars.ConvertAll(d => d.ToString()).ToArray());
         return string.Join(" ", p);
     }
 }
