@@ -1612,6 +1612,16 @@ void
         }
         return p;
     }
+
+    public static bool DirectoryExistsAndIsNotEmpty(string v)
+    {
+        if (Directory.Exists(v) && Directory.GetFiles(v, "*", SearchOption.AllDirectories).Length != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public static List<string> OnlyNamesWithoutExtension(string appendToStart, List<string> fullPaths)
     {
         List<string> ds = new List<string>(fullPaths.Count);
