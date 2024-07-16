@@ -1,7 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
-
-
 internal class FSGetFolders
 {
     internal static List<string> GetFolders(string folder, SearchOption so)
@@ -107,7 +105,7 @@ internal class FSGetFolders
         try
         {
             folders = Directory.GetDirectories(folder).ToList();
-            folders = CAChangeContent.ChangeContent0(null, folders, FSND.WithEndSlash);
+            folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
             //#if DEBUG
             //            if (e.writeToDebugEveryLoadedFolder)
             //            {

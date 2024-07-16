@@ -1,7 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoExceptions.InSunamoIsDerivedFrom;
 
-
-internal class TFSE
+internal class TF
 {
     internal static string ReadAllTextSync(string path)
     {
@@ -73,7 +72,7 @@ string
             if (isUsed.Invoke(path))
                 return string.Empty;
 #if ASYNC
-        //TFSE.await WaitD();
+        //TF.await WaitD();
 #endif
         //return enc == null ? File.ReadAllText(path) : File.ReadAllText(path, enc);
 #if ASYNC
@@ -126,7 +125,7 @@ byte[]
     #endregion
     #region Bytes
     /// <summary>
-    ///     Only one method where could be TFSE.ReadAllBytes
+    ///     Only one method where could be TF.ReadAllBytes
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>

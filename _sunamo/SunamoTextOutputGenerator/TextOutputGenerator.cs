@@ -1,6 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoTextOutputGenerator;
 
-
 /// <summary>
 /// In Comparing
 /// </summary>

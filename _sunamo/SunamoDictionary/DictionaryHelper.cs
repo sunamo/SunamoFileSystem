@@ -1,6 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoDictionary;
 
-
 // potřebuji celý SunamoDictionary nuget kvůli genericitě
 internal class DictionaryHelper
 {

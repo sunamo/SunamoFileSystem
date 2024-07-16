@@ -1,6 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoStringReplace;
 
-
 internal class SHReplace
 {
     internal static string ReplaceOnce(string input, string what, string zaco)

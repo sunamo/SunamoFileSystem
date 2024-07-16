@@ -1,7 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoCollections;
 
-//namespace SunamoFileSystem;
-
 internal class CA
 {
     //    internal static Func<char, List<string>, List<string>> TrimStartChar;

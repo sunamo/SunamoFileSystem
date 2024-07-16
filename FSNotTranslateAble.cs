@@ -1,4 +1,5 @@
 namespace SunamoFileSystem;
+
 public partial class FS
 {
     #region Making problem in translate
@@ -28,7 +29,7 @@ public partial class FS
             }
         }
 
-        string withEndFlash = FSND.WithEndSlash(repairedBlogPostsFolder);
+        string withEndFlash = FS.WithEndSlash(repairedBlogPostsFolder);
 
         if (!deleted)
         {

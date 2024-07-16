@@ -1,7 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoString;
 
-//namespace SunamoFileSystem;
-
 internal class SH
 {
     internal static string FirstCharUpper(ref string result)
