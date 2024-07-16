@@ -2066,23 +2066,7 @@ void
         return result;
     }
 
-    //public static Dictionary<TypeOfExtension, List<string>> AllExtensionsInFolderByCategory(List<string> files, GetExtensionArgs gea = null)
-    //{
-    //    AllExtensionsHelper.Initialize(true);
 
-    //    var exts = AllExtensionsInFolders(files, gea);
-
-    //    Dictionary<TypeOfExtension, List<string>> dict = new Dictionary<TypeOfExtension, List<string>>();
-
-    //    foreach (var item in exts)
-    //    {
-    //        var type = AllExtensionsHelper.FindTypeWithDot(item);
-    //        DictionaryHelper.AddOrCreate(dict, type, item);
-    //    }
-
-    //    return dict;
-    //    //return TextOutputGeneratorStatic.DictionaryWithCount(dict);
-    //}
 
 
     public static List<string> AllExtensionsInFolders(SearchOption so, params string[] folders)
