@@ -7,7 +7,7 @@ using PathMs = System.IO.Path;
 ///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
 ///     konvenci. V názvu souboru to nechám ať vidím na první dobrou co je co.
 /// </summary>
-class FS
+public class FS
 {
     #region Making problem in translate
     /// <summary>

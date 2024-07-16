@@ -39,3 +39,5 @@ global using SunamoFileSystem._sunamo.SunamoValues.Constants;
 global using Diacritics.Extensions;
 global using System.Net;
 global using System.Text.RegularExpressions;
+global using SunamoFileSystem._sunamo.SunamoCollections;
+global using SunamoFileSystem._sunamo.SunamoString;

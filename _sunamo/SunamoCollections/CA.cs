@@ -1,4 +1,4 @@
-//namespace SunamoFileSystem._sunamo.SunamoCollections;
+namespace SunamoFileSystem._sunamo.SunamoCollections;
 
 internal class CA
 {
