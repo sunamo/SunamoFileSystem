@@ -1,5 +1,5 @@
-namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
+namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 internal class FSGetFiles
 {
     /// <summary>
