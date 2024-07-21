@@ -1682,7 +1682,7 @@ void
             }
         }
 
-        if (IsDirectoryEmpty(v, false, true))
+        if (IsDirectoryEmpty(v, false, true) && !doNotDeleteWhichContains.Any())
         {
             FS.TryDeleteDirectory(v);
         }
