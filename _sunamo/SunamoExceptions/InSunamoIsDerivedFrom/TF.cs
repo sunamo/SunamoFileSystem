@@ -2,10 +2,13 @@ namespace SunamoFileSystem._sunamo.SunamoExceptions.InSunamoIsDerivedFrom;
 
 internal class TF
 {
+    internal static Func<string, bool> isUsed = null;
+
     internal static string ReadAllTextSync(string path)
     {
         return ReadAllTextSync(path, false);
     }
+
     internal static string ReadAllTextSync(string path, bool createEmptyIfWasNotExists = false)
     {
         if (createEmptyIfWasNotExists)
@@ -14,20 +17,25 @@ internal class TF
                 WriteAllTextSync(path, string.Empty);
                 return string.Empty;
             }
+
         return File.ReadAllText(path);
     }
+
     internal static void WriteAllTextSync(string path, string content)
     {
         File.WriteAllText(path, content);
     }
+
     internal static void AppendAllTextSync(string path, string content)
     {
         File.AppendAllText(path, content);
     }
+
     internal static List<string> ReadAllLinesSync(string path)
     {
         return ReadAllLinesSync(path, false);
     }
+
     internal static List<string> ReadAllLinesSync(string path, bool createEmptyIfWasNotExists = false)
     {
         if (createEmptyIfWasNotExists)
@@ -36,30 +44,47 @@ internal class TF
                 WriteAllTextSync(path, string.Empty);
                 return new List<string>();
             }
+
         return SHGetLines.GetLines(File.ReadAllText(path));
     }
+
     internal static void WriteAllLinesSync(string path, List<string> content)
     {
         File.WriteAllLines(path, content.ToArray());
     }
+
     internal static void AppendAllLinesSync(string path, List<string> content)
     {
         File.AppendAllLines(path, content.ToArray());
     }
+
     internal static List<byte> ReadAllBytesSync(string path)
     {
         return File.ReadAllBytes(path).ToList();
     }
+
     internal static void WriteAllBytesSync(string path, List<byte> content)
     {
         File.WriteAllBytes(path, content.ToArray());
     }
-    internal static Func<string, bool> isUsed = null;
+#if ASYNC
+    internal static async Task<string> WaitD()
+    {
+        /*
+        Vůbec nevím proč tu mám tuto metodu
+        ale protože WaitD jsem volal na více místech, nechám tu metodu tu jako prázdnou
+        */
+        return await Task.Run(() => "");
+    }
+#endif
+
     #region
+
     protected static bool LockedByBitLocker(string path)
     {
         return ThrowEx.LockedByBitLocker(path);
     }
+
     internal static
 #if ASYNC
         async Task<string>
@@ -81,7 +106,9 @@ string
 return File.ReadAllText(path, enc);
 #endif
     }
+
     #region Array
+
     internal static
 #if ASYNC
         async Task
@@ -95,6 +122,7 @@ void
 #endif
             WriteAllLines(path, c.ToList());
     }
+
     internal static
 #if ASYNC
         async Task
@@ -108,6 +136,7 @@ void
 #endif
             WriteAllBytes(path, c.ToList());
     }
+
     internal static
 #if ASYNC
         async Task<byte[]>
@@ -122,8 +151,11 @@ byte[]
 #endif
                 ReadAllBytes(path)).ToArray();
     }
+
     #endregion
+
     #region Bytes
+
     /// <summary>
     ///     Only one method where could be TF.ReadAllBytes
     /// </summary>
@@ -148,6 +180,7 @@ List<byte>
 File.ReadAllBytes(file).ToList();
 #endif
     }
+
     internal static
 #if ASYNC
         async Task
@@ -163,8 +196,11 @@ void
 File.WriteAllBytes(file, b.ToArray());
 #endif
     }
+
     #endregion
+
     #region Lines
+
     internal static
 #if ASYNC
         async Task
@@ -181,6 +217,7 @@ File.WriteAllLines
 #endif
             (file, lines.ToArray());
     }
+
     internal static
 #if ASYNC
         async Task<List<string>>
@@ -202,8 +239,11 @@ File.ReadAllText(file).ToList();
         if (trim) result = result.Where(d => !string.IsNullOrWhiteSpace(d)).ToList();
         return result;
     }
+
     #endregion
+
     #region Text
+
     internal static
 #if ASYNC
         async Task
@@ -219,6 +259,7 @@ void
 File.WriteAllText(path, content);
 #endif
     }
+
     internal static
 #if ASYNC
         async Task<string>
@@ -244,6 +285,7 @@ return File.ReadAllText(f);
             return string.Empty;
         }
     }
+
     internal static
 #if ASYNC
         async Task
@@ -268,16 +310,8 @@ File.AppendAllText(path, content);
         {
         }
     }
+
     #endregion
+
     #endregion
-#if ASYNC
-    internal static async Task<string> WaitD()
-    {
-        /*
-        Vůbec nevím proč tu mám tuto metodu
-        ale protože WaitD jsem volal na více místech, nechám tu metodu tu jako prázdnou
-        */
-        return await Task.Run(() => "");
-    }
-#endif
 }

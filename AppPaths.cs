@@ -1,10 +1,7 @@
 namespace SunamoFileSystem;
 
-
-
-
 /// <summary>
-/// Must be here because is use in SunamoIni and others
+///     Must be here because is use in SunamoIni and others
 /// </summary>
 public class AppPaths
 {

@@ -1,11 +1,7 @@
 namespace SunamoFileSystem._public.SunamoEnums.Enums;
 
-
 public enum ComputerSizeUnits : byte
 {
-    
-    
-    
     Auto = 0,
     B = 1,
     KB = 2,

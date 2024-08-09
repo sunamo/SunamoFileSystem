@@ -12,12 +12,10 @@ internal class SH
     {
         return WrapWithQm(commitMessage, true);
     }
+
     internal static string WrapWithQm(string item, bool? forceNotIncludeQm)
     {
-        if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault())
-        {
-            return SH.WrapWithQm(item);
-        }
+        if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return WrapWithQm(item);
         return item;
     }
 
@@ -26,23 +24,20 @@ internal class SH
     {
         return h + value + h;
     }
+
     internal static int OccurencesOfStringIn(string source, string p_2)
     {
-        return source.Split(new string[] { p_2 }, StringSplitOptions.None).Length - 1;
+        return source.Split(new[] { p_2 }, StringSplitOptions.None).Length - 1;
     }
+
     internal static bool IsContained(string item, string contains)
     {
         var (negation, contains2) = IsNegationTuple(contains);
         contains = contains2;
 
         if (negation && item.Contains(contains))
-        {
             return false;
-        }
-        else if (!negation && !item.Contains(contains))
-        {
-            return false;
-        }
+        if (!negation && !item.Contains(contains)) return false;
 
         return true;
     }
@@ -100,12 +95,9 @@ internal class SH
 
     internal static string FirstCharUpper(string nazevPP)
     {
-        if (nazevPP.Length == 1)
-        {
-            return nazevPP.ToUpper();
-        }
+        if (nazevPP.Length == 1) return nazevPP.ToUpper();
 
-        string sb = nazevPP.Substring(1);
+        var sb = nazevPP.Substring(1);
         return nazevPP[0].ToString().ToUpper() + sb;
     }
 
@@ -117,23 +109,27 @@ internal class SH
         r = sb.ToString();
         return r;
     }
+
     internal static List<string> SplitCharMore(string s, params char[] dot)
     {
         return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
+
     internal static List<string> SplitMore(string s, params string[] dot)
     {
         return s.Split(dot, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
+
     internal static List<string> SplitNone(string text, params string[] deli)
     {
         return text.Split(deli, StringSplitOptions.None).ToList();
     }
+
     internal static string NullToStringOrDefault(object n)
     {
-        
         return n == null ? " " + Consts.nulled : AllStrings.space + n;
     }
+
     internal static string TrimEnd(string name, string ext)
     {
         while (name.EndsWith(ext)) return name.Substring(0, name.Length - ext.Length);

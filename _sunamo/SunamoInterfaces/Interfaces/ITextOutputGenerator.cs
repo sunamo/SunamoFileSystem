@@ -1,10 +1,9 @@
 namespace SunamoFileSystem._sunamo.SunamoInterfaces.Interfaces;
 
-
 internal interface ITextOutputGenerator
 {
-    void PairBullet(string key, string v);
     string prependEveryNoWhite { get; set; }
+    void PairBullet(string key, string v);
     void Append(string text);
     void AppendFormat(string text, params string[] p);
     void AppendLine();
@@ -15,16 +14,25 @@ internal interface ITextOutputGenerator
     void Dictionary(Dictionary<string, int> charEntity, string delimiter);
     void Dictionary(Dictionary<string, List<string>> ls);
     void Dictionary(Dictionary<string, string> v);
-    void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false) where Header : IEnumerable<char>;
+
+    void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false)
+        where Header : IEnumerable<char>;
+
     void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = "|");
-    string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst, string delimiter = " ");
+
+    string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst,
+        string delimiter = " ");
+
     void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered);
     void EndRunTime();
     void Header(string v);
     void List(IList<string> files1);
     void List(IList<string> files1, string header);
     void List<Header, Value>(IList<Value> files1, Header header) where Header : IEnumerable<char>;
-    void List<Header, Value>(IList<Value> files1, Header header, object textOutputGeneratorArgs) where Header : IEnumerable<char>;
+
+    void List<Header, Value>(IList<Value> files1, Header header, object textOutputGeneratorArgs)
+        where Header : IEnumerable<char>;
+
     void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = "");
     void ListObject(IList files1);
     void ListSB(StringBuilder onlyStart, string v);

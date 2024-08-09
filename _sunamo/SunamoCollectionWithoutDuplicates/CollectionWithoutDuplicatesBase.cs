@@ -1,15 +1,36 @@
 namespace SunamoFileSystem._sunamo.SunamoCollectionWithoutDuplicates;
 
-
 internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
 {
-    internal List<T> c = null;
-    internal List<string> sr = null;
-    bool? _allowNull = false;
+    internal static bool br = false;
+    private readonly int count = 10000;
+    private readonly List<T> wasNotAdded = new();
+    private bool? _allowNull = false;
+    internal List<T> c;
+    internal List<string> sr;
+    protected string ts = null;
+
+    internal CollectionWithoutDuplicatesBase()
+    {
+        if (br) Debugger.Break();
+        c = new List<T>();
+    }
+
+    internal CollectionWithoutDuplicatesBase(int count)
+    {
+        this.count = count;
+        c = new List<T>(count);
+    }
+
+    internal CollectionWithoutDuplicatesBase(IList<T> l)
+    {
+        c = new List<T>(l.ToList());
+    }
+
     /// <summary>
-    /// true = compareWithString
-    /// false = !compareWithString
-    /// null = allow null (can't compareWithString)
+    ///     true = compareWithString
+    ///     false = !compareWithString
+    ///     null = allow null (can't compareWithString)
     /// </summary>
     internal bool? allowNull
     {
@@ -17,34 +38,13 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
         set
         {
             _allowNull = value;
-            if (value.HasValue && value.Value)
-            {
-                sr = new List<string>(count);
-            }
+            if (value.HasValue && value.Value) sr = new List<string>(count);
         }
     }
-    internal static bool br = false;
-    int count = 10000;
-    internal CollectionWithoutDuplicatesBase()
-    {
-        if (br)
-        {
-            System.Diagnostics.Debugger.Break();
-        }
-        c = new List<T>();
-    }
-    internal CollectionWithoutDuplicatesBase(int count)
-    {
-        this.count = count;
-        c = new List<T>(count);
-    }
-    internal CollectionWithoutDuplicatesBase(IList<T> l)
-    {
-        c = new List<T>(l.ToList());
-    }
+
     internal bool Add(T t2)
     {
-        bool result = false;
+        var result = false;
         var con = Contains(t2);
         if (con.HasValue)
         {
@@ -62,23 +62,20 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
                 result = true;
             }
         }
+
         if (result)
-        {
             if (IsComparingByString())
-            {
                 sr.Add(ts);
-            }
-        }
         return result;
     }
+
     protected abstract bool IsComparingByString();
-    protected string ts = null;
     internal abstract bool? Contains(T t2);
     internal abstract int AddWithIndex(T t2);
     internal abstract int IndexOf(T path);
-    List<T> wasNotAdded = new List<T>();
+
     /// <summary>
-    /// If I want without checkink, use c.AddRange
+    ///     If I want without checkink, use c.AddRange
     /// </summary>
     /// <param name="enumerable"></param>
     /// <param name="withoutChecking"></param>
@@ -86,14 +83,11 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
     {
         wasNotAdded.Clear();
         foreach (var item in list)
-        {
             if (!Add(item))
-            {
                 wasNotAdded.Add(item);
-            }
-        }
         return wasNotAdded;
     }
+
     internal string DumpAsString(string operation, /*DumpAsStringHeaderArgs*/ object dumpAsStringHeaderArgs)
     {
         throw new Exception("Nemůže tu být protože DumpListAsStringOneLine jsem přesouval do sunamo a tam už zůstane");
