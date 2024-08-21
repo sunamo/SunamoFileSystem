@@ -17,6 +17,21 @@ public class FS
     protected static readonly List<char> invalidFileNameChars = Path.GetInvalidFileNameChars().ToList();
     protected static readonly List<string> invalidFileNameStrings;
 
+    /// <summary>
+    /// Use CopyAllFilesRecursively instead
+    /// </summary>
+    /// <param name="sourceDir"></param>
+    /// <param name="targetDir"></param>
+    public static void CopyFolder(string sourceDir, string targetDir)
+    {
+        Directory.CreateDirectory(targetDir);
+
+        foreach (var file in Directory.GetFiles(sourceDir))
+            File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
+
+        foreach (var directory in Directory.GetDirectories(sourceDir))
+            CopyFolder(directory, Path.Combine(targetDir, Path.GetFileName(directory)));
+    }
 
     protected static List<char> s_invalidPathChars;
 
