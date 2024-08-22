@@ -1,7 +1,6 @@
-using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
 namespace SunamoFileSystem;
-
+using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 using SunamoFileSystem._sunamo;
 using PathMs = Path;
 
@@ -16,6 +15,14 @@ public class FS
 
     protected static readonly List<char> invalidFileNameChars = Path.GetInvalidFileNameChars().ToList();
     protected static readonly List<string> invalidFileNameStrings;
+
+    public static bool IsAbsolutePath(string path)
+    {
+        return !String.IsNullOrWhiteSpace(path)
+            && path.IndexOfAny(System.IO.Path.GetInvalidPathChars()) == -1
+            && Path.IsPathRooted(path)
+            && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
+    }
 
     /// <summary>
     /// Use CopyAllFilesRecursively instead
