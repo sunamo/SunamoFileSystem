@@ -1,4 +1,3 @@
-
 namespace SunamoFileSystem;
 using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 using SunamoFileSystem._sunamo;
@@ -106,7 +105,7 @@ public class FS
     public static void CreateFoldersPsysicallyUnlessThere(string nad)
     {
         ThrowEx.IsNullOrEmpty("nad", nad);
-        ThrowEx.IsNotWindowsPathFormat("nad", nad);
+        //ThrowEx.IsNotWindowsPathFormat("nad", nad);
 
 
         if (Directory.Exists(nad)) return;
@@ -970,7 +969,7 @@ void
                     //SunamoTemplateLogger.Instance.LoadedFromStorage(item);
                 }
 
-                // TF.ReadAllText is 20x faster than TF.ReadAllText
+                // File.ReadAllText is 20x faster than File.ReadAllText
                 var content =
 #if ASYNC
                     await
@@ -1184,7 +1183,7 @@ void
                 }
                 catch (Exception ex)
                 {
-                    ThrowEx.DummyNotThrow(ex);
+                    ThrowEx.Custom(ex);
                     File.Delete(item);
                     continue;
                 }
@@ -1572,7 +1571,7 @@ void
     public static List<string> OnlyExtensions(List<string> cesta)
     {
         var vr = new List<string>(cesta.Count);
-        CA.InitFillWith(vr, cesta.Count);
+        //CA.InitFillWith(vr, cesta.Count);
         for (var i = 0; i < vr.Count; i++) vr[i] = Path.GetExtension(cesta[i]);
         return vr;
     }
@@ -1612,7 +1611,7 @@ void
         a.returnOriginalCase = false;
 
         var vr = new List<string>(cesta.Count);
-        CA.InitFillWith(vr, cesta.Count);
+        //CA.InitFillWith(vr, cesta.Count);
         for (var i = 0; i < vr.Count; i++) vr[i] = Path.GetExtension(cesta[i]).ToLower();
         return vr;
     }
@@ -1620,7 +1619,7 @@ void
     public static List<string> OnlyExtensionsToLowerWithPath(List<string> cesta)
     {
         var vr = new List<string>(cesta.Count);
-        CA.InitFillWith(vr, cesta.Count);
+        //CA.InitFillWith(vr, cesta.Count);
         for (var i = 0; i < vr.Count; i++) vr[i] = OnlyExtensionToLowerWithPath(cesta[i]);
         return vr;
     }
@@ -1818,7 +1817,7 @@ void
     public static List<string> OnlyNamesWithoutExtensionCopy(List<string> p2)
     {
         var p = new List<string>(p2.Count);
-        CA.InitFillWith(p, p2.Count);
+        //CA.InitFillWith(p, p2.Count);
         for (var i = 0; i < p2.Count; i++) p[i] = Path.GetFileNameWithoutExtension(p2[i]);
         return p;
     }
@@ -1832,7 +1831,7 @@ void
     public static List<string> OnlyNamesWithoutExtension(string appendToStart, List<string> fullPaths)
     {
         var ds = new List<string>(fullPaths.Count);
-        CA.InitFillWith(ds, fullPaths.Count);
+        //CA.InitFillWith(ds, fullPaths.Count);
         for (var i = 0; i < fullPaths.Count; i++)
             ds[i] = appendToStart + Path.GetFileNameWithoutExtension(fullPaths[i]);
         return ds;
@@ -2238,7 +2237,7 @@ string
     public static List<string> OnlyNamesNoDirectEdit(string appendToStart, List<string> fullPaths)
     {
         var ds = new List<string>(fullPaths.Count);
-        CA.InitFillWith(ds, fullPaths.Count);
+        //CA.InitFillWith(ds, fullPaths.Count);
         for (var i = 0; i < fullPaths.Count; i++) ds[i] = appendToStart + Path.GetFileName(fullPaths[i]);
         return ds;
     }
@@ -3493,7 +3492,7 @@ string
 
         if (string.IsNullOrEmpty(rp)) ThrowEx.IsNullOrEmpty("rp", rp);
 
-        if (!IsWindowsPathFormat(rp)) ThrowEx.IsNotWindowsPathFormat("rp", rp);
+        if (!IsWindowsPathFormat(rp)) ThrowEx.IsNotWindowsPathFormat("rp", rp, true, FS.IsWindowsPathFormat);
 
         rp = rp.TrimEnd(deli);
         var dex = rp.LastIndexOf(deli);
@@ -3680,10 +3679,10 @@ string
     //        {
     //            // Not working, flags from GeoCachingTool wasnt transfered to standard
     //#if NETFX_CORE
-    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exc.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
     //#endif
     //#if WINDOWS_UWP
-    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exc.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
     //#endif
 
     //            if (item == Consts.UncLongPath || item == string.Empty)
@@ -3881,7 +3880,7 @@ string
     //        public static void CreateFoldersPsysicallyUnlessThere(string nad)
     //        {
     //            ThrowEx.IsNullOrEmpty("nad", nad);
-    //            ThrowEx.IsNotWindowsPathFormat("nad", nad);
+    //            //ThrowEx.IsNotWindowsPathFormat("nad", nad);
     //
     //            FS.MakeUncLongPath(ref nad);
     //            if (Directory.Exists(nad))
@@ -4012,7 +4011,7 @@ string
 
     //                        if (c == string.Empty)
     //                        {
-    //                            // Měl jsem tu chybu že ač exists bylo true, TF.ReadAllText selhalo protože soubor neexistoval.
+    //                            // Měl jsem tu chybu že ač exists bylo true, File.ReadAllText selhalo protože soubor neexistoval.
     //                            // Vyřešil jsem to kontrolou přípony, snad
     //                            return false;
     //                        }
@@ -4440,10 +4439,10 @@ string
     {
         // Not working, flags from GeoCachingTool wasnt transfered to standard
 #if NETFX_CORE
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exc.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
 #endif
 #if WINDOWS_UWP
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exc.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
 #endif
 
         if (item == Consts.UncLongPath || item == string.Empty) return false;

@@ -95,7 +95,7 @@ internal class FSGetFolders
         }
         catch (Exception ex)
         {
-            ThrowEx.DummyNotThrow(ex);
+            ThrowEx.Custom(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
             //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
@@ -121,7 +121,7 @@ internal class FSGetFolders
         }
         catch (Exception ex)
         {
-            ThrowEx.DummyNotThrow(ex);
+            ThrowEx.Custom(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
             //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }

@@ -228,7 +228,7 @@ internal class FSGetFiles
             }
             catch (Exception ex)
             {
-                ThrowEx.DummyNotThrow(ex);
+                ThrowEx.Custom(ex);
                 // Not throw exception, it's probably Access denied on Documents and Settings etc
                 //ThrowEx.FileSystemException( ex);
             }
