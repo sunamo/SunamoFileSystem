@@ -37,3 +37,4 @@ global using SunamoFileSystem._sunamo.SunamoCollections;
 global using SunamoFileSystem._sunamo.SunamoString;
 global using System.Reflection;
 global using System.Net;
+global using System.Diagnostics.CodeAnalysis;
