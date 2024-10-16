@@ -22,7 +22,7 @@ global using SunamoFileSystem._sunamo.SunamoStringParts;
 global using SunamoFileSystem._sunamo.SunamoStringReplace;
 global using SunamoFileSystem._sunamo.SunamoStringSplit;
 global using SunamoFileSystem._sunamo.SunamoTextOutputGenerator;
-global using SunamoFileSystem._sunamo.SunamoValues;
+global using SunamoFileSystem;
 global using SunamoFileSystem._public.SunamoCollectionsGeneric.Collections;
 global using SunamoFileSystem._public.SunamoData.Data;
 global using SunamoFileSystem._public.SunamoEnums.Enums;

@@ -3,6 +3,7 @@ using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 using SunamoFileSystem._sunamo;
 using PathMs = Path;
 
+
 /// <summary>
 ///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
 ///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
@@ -66,8 +67,8 @@ public class FS
         foreach (var item in invalidFileNameChars) invalidFileNameStrings.Add(item.ToString());
 
         s_invalidPathChars = new List<char>(Path.GetInvalidPathChars());
-        if (!s_invalidPathChars.Contains(AllChars.slash)) s_invalidPathChars.Add(AllChars.slash);
-        if (!s_invalidPathChars.Contains(AllChars.bs)) s_invalidPathChars.Add(AllChars.bs);
+        if (!s_invalidPathChars.Contains('/')) s_invalidPathChars.Add('/');
+        if (!s_invalidPathChars.Contains('\\')) s_invalidPathChars.Add('\\');
 
 
         s_invalidFileNameChars = new List<char>(invalidFileNameChars);
@@ -80,12 +81,12 @@ public class FS
             if (!s_invalidCharsForMapPath.Contains(item))
                 s_invalidCharsForMapPath.Add(item);
 
-        s_invalidCharsForMapPath.Remove(AllChars.slash);
+        s_invalidCharsForMapPath.Remove('/');
 
         s_invalidFileNameCharsWithoutDelimiterOfFolders = new List<char>(s_invalidFileNameChars.ToArray());
 
-        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllChars.bs);
-        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove(AllChars.slash);
+        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove('\\');
+        s_invalidFileNameCharsWithoutDelimiterOfFolders.Remove('/');
     }
 
     public static void CreateUpfoldersPsysicallyUnlessThere(string nad)
@@ -169,7 +170,7 @@ public class FS
     /// <returns></returns>
     public static string WithEndSlash(ref string v)
     {
-        if (v != string.Empty) v = v.TrimEnd(AllChars.bs) + AllChars.bs;
+        if (v != string.Empty) v = v.TrimEnd('\\') + '\\';
 
         FirstCharUpper(ref v);
         return v;
@@ -267,7 +268,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         var fn = Path.GetFileNameWithoutExtension(origS);
         var e = GetExtension(origS);
 
-        if (origS.Contains(AllChars.slash) || origS.Contains(AllChars.bs))
+        if (origS.Contains('/') || origS.Contains('\\'))
         {
             var p = Path.GetDirectoryName(origS);
 
@@ -307,7 +308,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     //    string fn = Path.GetFileNameWithoutExtension(origS);
     //    string e = GetExtension(origS);
 
-    //    if (origS.Contains(AllChars.slash) || origS.Contains(AllChars.bs))
+    //    if (origS.Contains('/') || origS.Contains('\\'))
     //    {
     //        string p = Path.GetDirectoryName(origS);
 
@@ -328,10 +329,10 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         if (a == null) a = new GetExtensionArgs();
 
         var result = "";
-        var lastDot = v.LastIndexOf(AllChars.dot);
+        var lastDot = v.LastIndexOf('.');
         if (lastDot == -1) return string.Empty;
-        var lastSlash = v.LastIndexOf(AllChars.slash);
-        var lastBs = v.LastIndexOf(AllChars.bs);
+        var lastSlash = v.LastIndexOf('/');
+        var lastBs = v.LastIndexOf('\\');
         if (lastSlash > lastDot) return string.Empty;
         if (lastBs > lastDot) return string.Empty;
         result = v.Substring(lastDot);
@@ -489,7 +490,7 @@ List<string>
         for (var i = fs.Count - 1; i >= 0; i--)
         {
             var item = fs[i];
-            if (item.Substring(c).Contains(AllStrings.bs))
+            if (item.Substring(c).Contains("\""))
             {
                 subFolder.Add(item);
                 fs.RemoveAt(i);
@@ -513,18 +514,18 @@ List<string>
 
     public static string PathSpecialAndLevel(string basePath, string item, int v)
     {
-        basePath = basePath.Trim(AllChars.bs);
+        basePath = basePath.Trim('\\');
 
-        item = item.Trim(AllChars.bs);
+        item = item.Trim('\\');
 
         item = item.Replace(basePath, string.Empty);
-        var pBasePath = SHSplit.SplitMore(basePath, AllStrings.bs);
+        var pBasePath = SHSplit.SplitMore(basePath, "\"");
         var basePathC = pBasePath.Count;
 
-        var p = SHSplit.SplitMore(item, AllStrings.bs);
+        var p = SHSplit.SplitMore(item, "\"");
         var i = 0;
         for (; i < p.Count; i++)
-            if (p[i].StartsWith(AllStrings.lowbar))
+            if (p[i].StartsWith("_"))
                 pBasePath.Add(p[i]);
             else
                 //i--;
@@ -536,7 +537,7 @@ List<string>
         i = 0;
         for (; i < to; i++) pBasePath.Add(p[i]);
 
-        return string.Join(AllStrings.bs, pBasePath);
+        return string.Join("\"", pBasePath);
     }
 
     public static string GetDirectoryNameIfIsFile(string f)
@@ -549,8 +550,8 @@ List<string>
     {
         for (var i = 0; i < allExtensions.Count; i++) allExtensions[i] = "*" + allExtensions[i];
 
-        //CA.Prepend(AllStrings.asterisk, allExtensions);
-        return string.Join(AllStrings.comma, allExtensions);
+        //CA.Prepend("*", allExtensions);
+        return string.Join(",", allExtensions);
     }
 
 
@@ -740,7 +741,7 @@ List<string>
     //        return ac.GetFilesOfExtensionCaseInsensitiveRecursively.Invoke(sf, ext);
     //    }
     //    List<StorageFile> files = new List<StorageFile>();
-    //    files = GetFilesInterop<StorageFolder, StorageFile>(sf, AllStrings.asterisk, true, ac);
+    //    files = GetFilesInterop<StorageFolder, StorageFile>(sf, "*", true, ac);
     //    for (int i = files.Count - 1; i >= 0; i--)
     //    {
     //        dynamic file = files[i];
@@ -1112,13 +1113,13 @@ void
         // 216 - OK: D:\Recovered data 03-23 12_11_44012345678901234567890123456\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - před odstraněním stejných souborů z duplicitních projektů\vs\Projects\merge-obří temp\temp1\temp\
         // for many API is different limits: https://stackoverflow.com/questions/265769/maximum-filename-length-in-ntfs-windows-xp-and-windows-vista
         // 237+11 - bad
-        return Consts.UncLongPath + actualFilePath;
+        return @"\\?\" + actualFilePath;
     }
 
     public static string CreateNewFolderPathWithEndingNextTo(string folder, string ending)
     {
-        var pathToFolder = Path.GetDirectoryName(folder.TrimEnd(AllChars.bs)) + AllStrings.bs;
-        var folderWithCaretFiles = pathToFolder + Path.GetFileName(folder.TrimEnd(AllChars.bs)) + ending;
+        var pathToFolder = Path.GetDirectoryName(folder.TrimEnd('\\')) + "\"";
+        var folderWithCaretFiles = pathToFolder + Path.GetFileName(folder.TrimEnd('\\')) + ending;
         var result = folderWithCaretFiles;
         SH.FirstCharUpper(ref result);
         return result;
@@ -1145,7 +1146,7 @@ void
     public static void RemoveDiacriticInFileSystemEntryNames(string folder)
     {
         var folders =
-            new List<string>(Directory.GetDirectories(folder, AllStrings.asterisk, SearchOption.AllDirectories));
+            new List<string>(Directory.GetDirectories(folder, "*", SearchOption.AllDirectories));
         folders.Reverse();
         foreach (var item in folders)
         {
@@ -1155,7 +1156,7 @@ void
             {
                 filename = filename.RemoveDiacritics();
                 var newpath = Path.Combine(directory, filename);
-                var realnewpath = newpath.TrimEnd(AllChars.bs);
+                var realnewpath = newpath.TrimEnd('\\');
                 var realnewpathcopy = realnewpath;
                 var i = 0;
                 while (Directory.Exists(realnewpath))
@@ -1168,7 +1169,7 @@ void
             }
         }
 
-        var files = FSGetFiles.GetFiles(folder, AllStrings.asterisk, SearchOption.AllDirectories);
+        var files = FSGetFiles.GetFiles(folder, "*", SearchOption.AllDirectories);
         foreach (var item in files)
         {
             var directory = Path.GetDirectoryName(item);
@@ -1240,7 +1241,7 @@ void
     {
         string p2, fn;
         GetPathAndFileName(oldPath, out p2, out fn);
-        var vr = p2 + AllStrings.bs + fn.Replace(what, forWhat);
+        var vr = p2 + "\"" + fn.Replace(what, forWhat);
         SH.FirstCharUpper(ref vr);
         return vr;
     }
@@ -1311,10 +1312,14 @@ void
 
     public static List<TWithInt<string>> DirectoriesWithToken(string v, AscDesc sb)
     {
-        var dirs = Directory.GetDirectories(v, AllStrings.asterisk, SearchOption.AllDirectories);
+        var dirs = Directory.GetDirectories(v, "*", SearchOption.AllDirectories);
         var vr = new List<TWithInt<string>>();
         foreach (var item in dirs)
-            vr.Add(new TWithInt<string> { t = item, count = SH.OccurencesOfStringIn(item, AllStrings.bs) });
+            vr.Add(new TWithInt<string>
+            {
+                t = item,
+                count = SH.OccurencesOfStringIn(item, "\"")
+            });
 
         vr.Sort(CompareTWithInt);
 
@@ -1349,7 +1354,7 @@ void
                 var serie = 1;
                 while (true)
                 {
-                    var newFn = nova + " (" + serie + AllStrings.rb;
+                    var newFn = nova + " (" + serie + ")";
                     if (!Directory.Exists(newFn))
                     {
                         vr = sess.i18n(XlfKeys.FolderHasBeenRenamedTo) + " " + Path.GetFileName(newFn);
@@ -1370,7 +1375,7 @@ void
             }
         }
 
-        var files = FSGetFiles.GetFiles(item, AllStrings.asterisk, SearchOption.AllDirectories);
+        var files = FSGetFiles.GetFiles(item, "*", SearchOption.AllDirectories);
         CreateFoldersPsysicallyUnlessThere(nova);
         foreach (var item2 in files)
         {
@@ -1394,8 +1399,8 @@ void
     private static bool IsDirectoryEmpty(string item, bool folders, bool files)
     {
         var fse = 0;
-        if (folders) fse += Directory.GetDirectories(item, AllStrings.asterisk, SearchOption.TopDirectoryOnly).Length;
-        if (files) fse += FSGetFiles.GetFiles(item, AllStrings.asterisk, SearchOption.TopDirectoryOnly).Count;
+        if (folders) fse += Directory.GetDirectories(item, "*", SearchOption.TopDirectoryOnly).Length;
+        if (files) fse += FSGetFiles.GetFiles(item, "*", SearchOption.TopDirectoryOnly).Count;
         return fse == 0;
     }
 
@@ -1408,7 +1413,7 @@ void
     public static void MoveAllRecursivelyAndThenDirectory(string p, string to, FileMoveCollisionOption co)
     {
         MoveAllFilesRecursively(p, to, co);
-        var dirs = Directory.GetDirectories(p, AllStrings.asterisk, SearchOption.AllDirectories);
+        var dirs = Directory.GetDirectories(p, "*", SearchOption.AllDirectories);
         for (var i = dirs.Length - 1; i >= 0; i--) TryDeleteDirectory(dirs[i]);
         TryDeleteDirectory(p);
     }
@@ -1481,7 +1486,7 @@ void
         for (var i = l.Count - 1; i >= 0; i--)
         {
             var backup = l[i];
-            var p = SHSplit.SplitToPartsFromEnd(l[i], 2, AllChars.bs);
+            var p = SHSplit.SplitToPartsFromEnd(l[i], 2, '\\');
             if (p.Count == 1)
             {
                 path = string.Empty;
@@ -1532,9 +1537,9 @@ void
     {
         if (Directory.Exists(p))
         {
-            var files = FSGetFiles.GetFiles(p, AllStrings.asterisk, SearchOption.AllDirectories);
+            var files = FSGetFiles.GetFiles(p, "*", SearchOption.AllDirectories);
             foreach (var item in files) TryDeleteFile(item);
-            var dirs = Directory.GetDirectories(p, AllStrings.asterisk, SearchOption.AllDirectories);
+            var dirs = Directory.GetDirectories(p, "*", SearchOption.AllDirectories);
             for (var i = dirs.Length - 1; i >= 0; i--) TryDeleteDirectory(dirs[i]);
             if (rootDirectoryToo) TryDeleteDirectory(p);
             // Commented due to NI
@@ -1659,7 +1664,7 @@ void
         var files = new List<string>(OnlyExtensionsToLower(filesFull, gea));
 
 #if DEBUG
-        //var dxs = CA.IndexesWithValue(files, Consts.se);
+        //var dxs = CA.IndexesWithValue(files, "");
 
         //List<string> c = CA.GetIndexes(filesFull, dxs);
 
@@ -1675,7 +1680,7 @@ void
 
     public static string ExpandEnvironmentVariables(EnvironmentVariables environmentVariable)
     {
-        return Environment.ExpandEnvironmentVariables(SH.WrapWith(environmentVariable.ToString(), AllStrings.percnt));
+        return Environment.ExpandEnvironmentVariables(SH.WrapWith(environmentVariable.ToString(), "%"));
     }
 
     /// <summary>
@@ -1689,7 +1694,7 @@ void
 
     public static string AddUpfoldersToRelativePath(int i2, string file, char delimiter)
     {
-        var jumpUp = AllStrings.dd + delimiter;
+        var jumpUp = ".." + delimiter;
         var sb = new StringBuilder();
         for (var i = 0; i < i2; i++) sb.Append(jumpUp);
         sb.Append(file);
@@ -1704,7 +1709,7 @@ void
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string NormalizeExtension(string item)
     {
-        return AllStrings.dot + item.TrimStart(AllChars.dot);
+        return "." + item.TrimStart('.');
     }
 
 
@@ -1738,7 +1743,7 @@ void
 
         if (files)
         {
-            var files2 = FSGetFiles.GetFiles(folder, AllStrings.asterisk, SearchOption.AllDirectories);
+            var files2 = FSGetFiles.GetFiles(folder, "*", SearchOption.AllDirectories);
             foreach (var item in files2)
             {
                 var filePath = item;
@@ -1839,7 +1844,7 @@ void
 
     public static string Postfix(string aPath, string s)
     {
-        var result = aPath.TrimEnd(AllChars.bs) + s;
+        var result = aPath.TrimEnd('\\') + s;
         WithEndSlash(ref result);
         return result;
     }
@@ -1876,13 +1881,15 @@ string
     public static StorageFile GetFileNameWithoutExtensionNoAc<StorageFile>(StorageFile s)
     {
         var ss = s.ToString();
-        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
-        var ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
+        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd('\\'));
+        var ext = Path.GetExtension(ss).TrimStart('.');
+
+        LetterAndDigitCharService letterAndDigitChar = new LetterAndDigitCharService();
 
         if (!ext.All(d =>
-                AllChars.vsZnakyWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllChars.vsZnakyWithoutSpecial)*/)
+                letterAndDigitChar.allCharsWithoutSpecial.Contains(d)) /*SH.ContainsOnly(ext, AllChars.allCharsWithoutSpecial)*/)
             if (ext != string.Empty)
-                return (dynamic)vr + AllStrings.dot + ext;
+                return (dynamic)vr + "." + ext;
 
         return (dynamic)vr;
     }
@@ -2055,8 +2062,8 @@ string
     {
         FileToDirectory(ref dir);
 
-        var ds = AllStrings.ds;
-        var dds = AllStrings.dds;
+        var ds = "./";
+        var dds = "../";
 
         var dds2 = 0;
         while (true)
@@ -2087,9 +2094,9 @@ string
     public static List<string> GetTokens(string relativePath)
     {
         var deli = "";
-        if (relativePath.Contains(AllStrings.bs))
-            deli = AllStrings.bs;
-        else if (relativePath.Contains(AllStrings.slash)) deli = AllStrings.slash;
+        if (relativePath.Contains("\""))
+            deli = "\"";
+        else if (relativePath.Contains("/")) deli = "/";
 
         return SHSplit.SplitMore(relativePath, deli);
     }
@@ -2343,7 +2350,7 @@ string
                 var serie = 1;
                 while (true)
                 {
-                    var newFn = nameWithoutSerie + " (" + serie + AllStrings.rb;
+                    var newFn = nameWithoutSerie + " (" + serie + ")";
                     if (!Directory.Exists(newFn))
                     {
                         v = newFn;
@@ -2436,7 +2443,7 @@ string
     public static string AddExtensionIfDontHave(string file, string ext)
     {
         // For *.* and git paths {dir}/*
-        if (file[file.Length - 1] == AllChars.asterisk) return file;
+        if (file[file.Length - 1] == '*') return file;
         if (Path.GetExtension(file) == string.Empty) return file + ext;
 
         return file;
@@ -2519,11 +2526,11 @@ string
     {
         string result = null;
         if (slash)
-            result = path.Replace(AllStrings.bs,
-                AllStrings.slash); //SHReplace.ReplaceAll2(path, AllStrings.slash, AllStrings.bs);
+            result = path.Replace("\"",
+                "/"); //SHReplace.ReplaceAll2(path, "/", "\"");
         else
-            result = path.Replace(AllStrings.slash,
-                AllStrings.bs); //SHReplace.ReplaceAll2(path, AllStrings.bs, AllStrings.slash);
+            result = path.Replace("/",
+                "\""); //SHReplace.ReplaceAll2(path, "\"", " / ");
 
         SH.FirstCharUpper(ref result);
         return result;
@@ -2664,10 +2671,10 @@ string
     /// <param name="filter"></param>
     public static string RepairFilter(string filter)
     {
-        if (!filter.Contains(AllStrings.verbar))
+        if (!filter.Contains("|"))
         {
-            filter = filter.TrimStart(AllChars.asterisk);
-            return AllStrings.asterisk + filter + AllStrings.verbar + AllStrings.asterisk + filter;
+            filter = filter.TrimStart('*');
+            return "*" + filter + "|" + "*" + filter;
         }
 
         return filter;
@@ -2688,7 +2695,7 @@ string
                 if (item != item2)
                     sb.Append(item2);
                 else
-                    sb.Append(AllStrings.space);
+                    sb.Append("");
             t = sb.ToString();
         }
 
@@ -2732,7 +2739,7 @@ string
     /// <param name="replaceAllOfThisThen"></param>
     public static string ReplaceIncorrectCharactersFile(string p, string replaceAllOfThisThen)
     {
-        var replaceFor = AllStrings.space;
+        var replaceFor = "";
         var t = p;
         foreach (var item in invalidFileNameChars)
         {
@@ -2749,8 +2756,8 @@ string
         {
             t = t.Replace(replaceAllOfThisThen,
                 replaceFor); // SHReplace.ReplaceAll(t, replaceFor, replaceAllOfThisThen);
-            t = t.Replace(AllStrings.doubleSpace,
-                replaceFor); //SHReplace.ReplaceAll(t, replaceFor, AllStrings.doubleSpace);
+            t = t.Replace("",
+                replaceFor); //SHReplace.ReplaceAll(t, replaceFor, "");
         }
 
         return t;
@@ -2799,17 +2806,17 @@ string
 
     public static string WithoutEndSlash(ref string v)
     {
-        v = v.TrimEnd(AllChars.bs);
+        v = v.TrimEnd('\\');
         return v;
     }
 
-    public static string MascFromExtension(string ext2 = AllStrings.asterisk)
+    public static string MascFromExtension(string ext2 = "*")
     {
         if (char.IsLetterOrDigit(ext2[0]))
             // For wildcard, dot (simply non letters) include .
             ext2 = "." + ext2;
         if (!ext2.StartsWith("*")) ext2 = "*" + ext2;
-        if (!ext2.StartsWith("*.") && ext2.StartsWith(AllStrings.dot)) ext2 = "*." + ext2;
+        if (!ext2.StartsWith("*.") && ext2.StartsWith(".")) ext2 = "*." + ext2;
 
         return ext2;
 
@@ -2844,7 +2851,7 @@ string
         //    //    return ext2;
         //    //}
 
-        //    var vr = AllStrings.asterisk + AllStrings.dot + ext2.TrimStart(AllChars.dot);
+        //    var vr = "*" + "." + ext2.TrimStart('.');
         //    return vr;
         //}
 
@@ -2905,7 +2912,7 @@ string
     public static bool CopyMoveFilePrepare(ref string item, ref string fileTo, FileMoveCollisionOption co)
     {
         //var fileTo = fileTo2.ToString();
-        item = Consts.UncLongPath + item;
+        item = @"\\?\" + item;
         MakeUncLongPath(ref fileTo);
         CreateUpfoldersPsysicallyUnlessThere(fileTo);
 
@@ -2914,7 +2921,7 @@ string
         {
             if (co == FileMoveCollisionOption.AddFileSize)
             {
-                var newFn = InsertBetweenFileNameAndExtension(fileTo, AllStrings.space + new FileInfo(item).Length);
+                var newFn = InsertBetweenFileNameAndExtension(fileTo, "" + new FileInfo(item).Length);
                 if (File.Exists(newFn))
                 {
                     File.Delete(item);
@@ -2928,7 +2935,7 @@ string
                 var serie = 1;
                 while (true)
                 {
-                    var newFn = InsertBetweenFileNameAndExtension(fileTo, " (" + serie + AllStrings.rb);
+                    var newFn = InsertBetweenFileNameAndExtension(fileTo, " (" + serie + ")");
                     if (!File.Exists(newFn))
                     {
                         fileTo = newFn;
@@ -3016,7 +3023,7 @@ string
     private static void CopyMoveAllFilesRecursively(string p, string to, FileMoveCollisionOption co, bool move,
         string mustContains, SearchOption so)
     {
-        var files = FSGetFiles.GetFiles(p, AllStrings.asterisk, so);
+        var files = FSGetFiles.GetFiles(p, "*", so);
         if (!string.IsNullOrEmpty(mustContains))
         {
             foreach (var item in files)
@@ -3207,7 +3214,7 @@ string
                 new Regex(fn).Replace(Path.GetFileName(item), "",
                     1); /*SHReplace.ReplaceOnce(Path.GetFileName(item), fn, "")));*/
             var withoutFnAndExt = SHReplace.ReplaceOnce(withoutFn, ext, "");
-            withoutFnAndExt = withoutFnAndExt.TrimStart(AllChars.lowbar);
+            withoutFnAndExt = withoutFnAndExt.TrimStart('_');
             if (int.TryParse(withoutFnAndExt, out p))
                 if (p > dalsi)
                     dalsi = p;
@@ -3215,7 +3222,7 @@ string
 
         dalsi++;
 
-        return Path.Combine(slozka, fn + AllStrings.lowbar + dalsi + ext);
+        return Path.Combine(slozka, fn + "_" + dalsi + ext);
     }
 
 
@@ -3225,8 +3232,8 @@ string
     ///// <param name="rp"></param>
     //public static string GetFileName(string rp)
     //{
-    //    rp = rp.TrimEnd(AllChars.bs);
-    //    int dex = rp.LastIndexOf(AllChars.bs);
+    //    rp = rp.TrimEnd('\\');
+    //    int dex = rp.LastIndexOf('\\');
     //    return rp.Substring(dex + 1);
     //}
 
@@ -3527,9 +3534,9 @@ string
         var deli = 'a';
 
         if (containsBs)
-            deli = AllChars.bs;
+            deli = '\\';
         else if (containsFs)
-            deli = AllChars.slash;
+            deli = '/';
         else
             throw new Exception("Path contains no delimiter");
 
@@ -3571,13 +3578,13 @@ string
 
     public static string MakeUncLongPath(ref string path)
     {
-        if (!path.StartsWith(Consts.UncLongPath))
+        if (!path.StartsWith(@"\\?\"))
         {
             // V ASP.net mi vrátilo u každé directory.exists false. Byl jsem pod ApplicationPoolIdentity v IIS a bylo nastaveno Full Control pro IIS AppPool\DefaultAppPool
 #if !ASPNET
             //  asp.net / vps nefunguje, ve windows store apps taktéž, NECHAT TO TRVALE ZAKOMENTOVANÉ
             // v asp.net toto způsobí akorát zacyklení, IIS začne vyhazovat 0xc00000fd, pak už nejde načíst jediná stránka
-            //path = Consts.UncLongPath + path;
+            //path = @"\\?\" + path;
 #endif
         }
 
@@ -3620,7 +3627,7 @@ string
     ///// <param name="ext"></param>
     //public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
     //{
-    //    path = Path.GetDirectoryName(fn) + AllChars.bs;
+    //    path = Path.GetDirectoryName(fn) + '\\';
     //    file = GetFileNameWithoutExtension(fn);
     //    ext = Path.GetExtension(fn);
     //}
@@ -3635,14 +3642,14 @@ string
     //    if (ac == null)
     //    {
     //        var ss = s.ToString();
-    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
+    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd('\\'));
+    //        var ext = Path.GetExtension(ss).TrimStart('.');
 
-    //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
+    //        if (!SH.ContainsOnly(ext, RandomHelper.allCharsWithoutSpecial))
     //        {
     //            if (ext != string.Empty)
     //            {
-    //                return (dynamic)vr + AllStrings.dot + ext;
+    //                return (dynamic)vr + "." + ext;
     //            }
     //        }
     //        return (dynamic)vr;
@@ -3685,7 +3692,7 @@ string
     //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
     //#endif
 
-    //            if (item == Consts.UncLongPath || item == string.Empty)
+    //            if (item == @"\\?\" || item == string.Empty)
     //            {
     //                return false;
     //            }
@@ -3756,7 +3763,7 @@ string
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string NormalizeExtension2(string item)
     {
-        return item.ToLower().TrimStart(AllChars.dot);
+        return item.ToLower().TrimStart('.');
     }
 
 
@@ -3840,8 +3847,8 @@ string
     //
     //        public static List<string> GetFilesMoreMasc(string path, string v, SearchOption topDirectoryOnly)
     //        {
-    //            var c = AllStrings.comma;
-    //            var sc = AllStrings.sc;
+    //            var c = ",";
+    //            var sc = ";";
     //            List<string> result = new List<string>();
     //            List<string> masks = new List<string>();
     //
@@ -3969,7 +3976,7 @@ string
 
     //#endif
 
-    //            if (selectedFile == Consts.UncLongPath || selectedFile == string.Empty)
+    //            if (selectedFile == @"\\?\" || selectedFile == string.Empty)
     //            {
     //                return false;
     //            }
@@ -4040,7 +4047,7 @@ string
     ///// <param name="s"></param>
     //private static string CombineWorker(bool FirstCharUpper, params string[] s)
     //{
-    //    s = CA.TrimStart(AllChars.bs, s).ToArray();
+    //    s = CA.TrimStart('\\', s).ToArray();
     //    var result = Path.Combine(s);
     //    if (FirstCharUpper)
     //    {
@@ -4070,14 +4077,14 @@ string
     //    if (ac == null)
     //    {
     //        var ss = s.ToString();
-    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd(AllChars.bs));
-    //        var ext = Path.GetExtension(ss).TrimStart(AllChars.dot);
+    //        var vr = Path.GetFileNameWithoutExtension(ss.TrimEnd('\\'));
+    //        var ext = Path.GetExtension(ss).TrimStart('.');
 
-    //        if (!SH.ContainsOnly(ext, RandomHelper.vsZnakyWithoutSpecial))
+    //        if (!SH.ContainsOnly(ext, RandomHelper.allCharsWithoutSpecial))
     //        {
     //            if (ext != string.Empty)
     //            {
-    //                return (dynamic)vr + AllStrings.dot + ext;
+    //                return (dynamic)vr + "." + ext;
     //            }
     //        }
     //        return (dynamic)vr;
@@ -4116,7 +4123,7 @@ string
     //        /// <param name="ext"></param>
     //        public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
     //        {
-    //            path = Path.GetDirectoryName(fn) + AllChars.bs;
+    //            path = Path.GetDirectoryName(fn) + '\\';
     //            file = Path.GetFileNameWithoutExtension(fn);
     //            ext = Path.GetExtension(fn);
     //        }
@@ -4137,7 +4144,7 @@ string
     //
     //        public static void FileToDirectory(ref string dir)
     //        {
-    //            if (!dir.EndsWith(AllStrings.bs))
+    //            if (!dir.EndsWith("\""))
     //            {
     //                dir = Path.GetDirectoryName(dir);
     //            }
@@ -4257,7 +4264,7 @@ string
 
         var pocetSerii = 0;
 
-        p = SHParts.RemoveAfterLast(p, AllStrings.dot);
+        p = SHParts.RemoveAfterLast(p, ".");
         sbExt.Append(ext);
 
         ext = sbExt.ToString();
@@ -4272,8 +4279,8 @@ string
             while (true)
             {
                 g = g.Trim();
-                var lb = g.LastIndexOf(AllChars.lb);
-                var rb = g.LastIndexOf(AllChars.rb);
+                var lb = g.LastIndexOf('(');
+                var rb = g.LastIndexOf(')');
 
                 if (lb != -1 && rb != -1)
                 {
@@ -4298,14 +4305,14 @@ string
 
         if (serieStyle == SerieStyleFS.Dash || serieStyle == SerieStyleFS.All)
         {
-            var dex = g.IndexOf(AllChars.dash);
+            var dex = g.IndexOf('-');
 
-            if (g[g.Length - 3] == AllChars.dash)
+            if (g[g.Length - 3] == '-')
             {
                 serie = int.Parse(g.Substring(g.Length - 2));
                 g = g.Substring(0, g.Length - 3);
             }
-            else if (g[g.Length - 2] == AllChars.dash)
+            else if (g[g.Length - 2] == '-')
             {
                 serie = int.Parse(g.Substring(g.Length - 1));
                 g = g.Substring(0, g.Length - 2);
@@ -4337,7 +4344,7 @@ string
     {
         while (true)
         {
-            var dex = g.LastIndexOf(AllChars.lowbar);
+            var dex = g.LastIndexOf('_');
             if (dex != -1)
             {
                 var serieS = g.Substring(dex + 1);
@@ -4394,7 +4401,7 @@ string
     /// <param name="ext"></param>
     public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
     {
-        path = Path.GetDirectoryName(fn) + AllChars.bs;
+        path = Path.GetDirectoryName(fn) + '\\';
         file = GetFileNameWithoutExtension(fn);
         ext = Path.GetExtension(fn);
     }
@@ -4415,7 +4422,7 @@ string
 
     public static void FileToDirectory(ref string dir)
     {
-        if (!dir.EndsWith(AllStrings.bs)) dir = GetDirectoryName(dir);
+        if (!dir.EndsWith("\"")) dir = GetDirectoryName(dir);
     }
 
     ///// <summary>
@@ -4445,7 +4452,7 @@ ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-
 ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
 #endif
 
-        if (item == Consts.UncLongPath || item == string.Empty) return false;
+        if (item == @"\\?\" || item == string.Empty) return false;
 
         var item2 = MakeUncLongPath(item);
 
@@ -4487,7 +4494,7 @@ bool
 
         if (filesWhichSurelyExists.Contains(selectedFile)) return true;
 
-        if (selectedFile == Consts.UncLongPath || selectedFile == string.Empty) return false;
+        if (selectedFile == @"\\?\" || selectedFile == string.Empty) return false;
 
         MakeUncLongPath(ref selectedFile);
 
@@ -4554,10 +4561,10 @@ bool
     /// <param name="s"></param>
     private static string CombineWorker(bool FirstCharUpper, bool file, params string[] s)
     {
-        for (var i = 0; i < s.Length; i++) s[i] = s[i].TrimStart(AllChars.bs);
-        //s = CA.TrimStartChar(AllChars.bs, s.ToList()).ToArray();
+        for (var i = 0; i < s.Length; i++) s[i] = s[i].TrimStart('\\');
+        //s = CA.TrimStartChar('\\', s.ToList()).ToArray();
         var result = Path.Combine(s);
-        if (result[2] != AllChars.bs) result = result.Insert(2, AllStrings.bs);
+        if (result[2] != '\\') result = result.Insert(2, "\"");
         if (FirstCharUpper)
             result = SH.FirstCharUpper(ref result);
         else

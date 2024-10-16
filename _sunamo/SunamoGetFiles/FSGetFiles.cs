@@ -38,7 +38,7 @@ internal class FSGetFiles
         foreach (var item in extensions)
         {
             var ext = FS.NormalizeExtension(item);
-            var files = GetFiles(folderFrom, AllStrings.asterisk + ext, SearchOption.AllDirectories);
+            var files = GetFiles(folderFrom, "*" + ext, SearchOption.AllDirectories);
             if (files.Count != 0) dict.Add(ext, files);
         }
 
@@ -66,9 +66,9 @@ internal class FSGetFiles
             //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         if (getFilesArgs == null) getFilesArgs = new GetFilesArgsFS();
-        var folders = SHSplit.SplitMore(folder2, AllStrings.sc);
-        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd(AllChars.bs) + AllStrings.bs;
-        //CA.PostfixIfNotEnding(AllStrings.bs, folders);
+        var folders = SHSplit.SplitMore(folder2, ";");
+        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\') + "\"";
+        //CA.PostfixIfNotEnding("\"", folders);
         var list = new List<string>();
         foreach (var folder in folders)
             if (!Directory.Exists(folder))
@@ -89,8 +89,8 @@ internal class FSGetFiles
         if (getFilesArgs._trimA1AndLeadingBs)
             foreach (var folder in folders)
             {
-                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, AllChars.dot));
-                for (var i = 0; i < list.Count; i++) list[i] = SHParts.RemoveAfterLast(list[i], AllChars.dot);
+                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, '.'));
+                for (var i = 0; i < list.Count; i++) list[i] = SHParts.RemoveAfterLast(list[i], '.');
             }
 
         if (getFilesArgs.excludeFromLocationsCOntains != null)
@@ -150,7 +150,7 @@ internal class FSGetFiles
         //{
         if (e.usePbTime)
         {
-            var m = sess.i18n(XlfKeys.Loading) + AllStrings.space + sess.i18n(XlfKeys.FoldersTree) + Consts.dots3;
+            var m = sess.i18n(XlfKeys.Loading) + "" + sess.i18n(XlfKeys.FoldersTree) + "...";
             e.InsertPbTime(60);
             e.UpdateTbPb(m);
         }
@@ -196,7 +196,7 @@ internal class FSGetFiles
         //}
         if (e.usePb)
         {
-            var m = sess.i18n(XlfKeys.Loading) + AllStrings.space + sess.i18n(XlfKeys.FilesTree) + Consts.dots3;
+            var m = sess.i18n(XlfKeys.Loading) + "" + sess.i18n(XlfKeys.FilesTree) + "...";
             e.InsertPb(dirs.Count);
             e.UpdateTbPb(m);
         }
@@ -260,9 +260,9 @@ internal class FSGetFiles
         //CAChangeContent.ChangeContent0(null, list, d2 => SH.FirstCharUpper(d2));
         for (var i = 0; i < list.Count; i++) list[i] = SH.FirstCharUpper(list[i]);
         if (e._trimA1AndLeadingBs)
-            //list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart(AllChars.bs));
+            //list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
-                list[i] = list[i].Replace(folder, "").TrimStart(AllChars.bs);
+                list[i] = list[i].Replace(folder, "").TrimStart('\\');
         return list;
     }
 
@@ -312,7 +312,7 @@ Dictionary<string, string>
     internal static List<string> GetFilesOfExtensions(string item2, SearchOption so, params string[] exts)
     {
         var vr = new List<string>();
-        foreach (var item in exts) vr.AddRange(GetFiles(item2, AllStrings.asterisk + item, so));
+        foreach (var item in exts) vr.AddRange(GetFiles(item2, "*" + item, so));
         return vr;
     }
 
@@ -329,7 +329,7 @@ Dictionary<string, string>
         GetFilesArgsFS a = null)
     {
 #if DEBUG
-        if (folder2.TrimEnd(AllChars.bs) == @"\monoConsoleSqlClient")
+        if (folder2.TrimEnd('\\') == @"\monoConsoleSqlClient")
         {
         }
 #endif
@@ -337,10 +337,10 @@ Dictionary<string, string>
             //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         if (a == null) a = new GetFilesArgsFS();
-        var folders = SHSplit.SplitMore(folder2, AllStrings.sc);
+        var folders = SHSplit.SplitMore(folder2, ";");
         //if (CA.PostfixIfNotEnding != null)
         //{
-        //    CA.PostfixIfNotEnding(AllStrings.bs, folders);
+        //    CA.PostfixIfNotEnding("\"", folders);
         //}
         for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\') + "\\";
         var list = new List<string>();
@@ -359,10 +359,10 @@ Dictionary<string, string>
 
                 #region Commented
 
-                //if (mask.Contains(AllStrings.sc))
+                //if (mask.Contains(";"))
                 //{
                 //    //list = new List<string>();
-                //    var masces = SHSplit.SplitMore(mask, AllStrings.sc);
+                //    var masces = SHSplit.SplitMore(mask, ";");
                 //    foreach (var item in masces)
                 //    {
                 //        var masc = item;
@@ -430,8 +430,8 @@ Dictionary<string, string>
             //}
         }
 #endif
-        var c = AllStrings.comma;
-        var sc = AllStrings.sc;
+        var c = ",";
+        var sc = ";";
         var result = new List<string>();
         var masks = new List<string>();
         if (masc.Contains(c))
@@ -497,10 +497,10 @@ Dictionary<string, string>
         CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
         if (a._trimA1AndLeadingBs)
             foreach (var folder in folders)
-                list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimEnd(AllChars.bs));
+                list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimEnd('\\'));
         if (a._trimExt)
             foreach (var folder in folders)
-                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, AllChars.dot));
+                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, '.'));
         if (a.excludeFromLocationsCOntains != null)
             // I want to find files recursively
             foreach (var item in a.excludeFromLocationsCOntains)
@@ -532,7 +532,7 @@ Dictionary<string, string>
     /// <param name="path"></param>
     internal static List<string> GetFiles(string path)
     {
-        return GetFiles(path, AllStrings.asterisk, SearchOption.TopDirectoryOnly);
+        return GetFiles(path, "*", SearchOption.TopDirectoryOnly);
     }
 
     internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so,
@@ -587,7 +587,7 @@ List<string>
     {
         var vr = new List<FileInfo>();
         var di = new DirectoryInfo(item2);
-        foreach (var item in exts) vr.AddRange(di.GetFiles(AllStrings.asterisk + item, so));
+        foreach (var item in exts) vr.AddRange(di.GetFiles("*" + item, so));
         return vr.ToArray();
     }
 }

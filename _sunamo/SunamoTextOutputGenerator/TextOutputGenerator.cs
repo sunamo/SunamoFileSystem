@@ -5,7 +5,7 @@ namespace SunamoFileSystem._sunamo.SunamoTextOutputGenerator;
 /// </summary>
 internal class TextOutputGenerator //: ITextOutputGenerator
 {
-    private static readonly string s_znakNadpisu = AllStrings.asterisk;
+    private static readonly string s_znakNadpisu = "*";
 
     // při převádění na nugety jsem to změnil na ITextBuilder sb = TextBuilder.Create();
     // ale asi to byla blbost, teď mám v _sunamo Create() která je ale null místo abych použil ctor
@@ -71,7 +71,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
     internal void CountEvery<T>(IList<KeyValuePair<T, int>> eq)
     {
-        foreach (var item in eq) AppendLine(item.Key + AllStrings.cs + item.Value + "x");
+        foreach (var item in eq) AppendLine(item.Key + "," + item.Value + "x");
     }
 
     #endregion
@@ -153,7 +153,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         List<string>(files1);
     }
 
-    internal void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = Consts.stringEmpty)
+    internal void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = "")
     {
         if (files1.Count() == 0)
             sb.AppendLine(whenNoEntries);
@@ -201,11 +201,11 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         if (a.insertCount)
         {
             //throw new Exception("later");
-            //header = (Header)((IList<char>)CA.JoinIList<char>(header, " (" + files1.Count() + AllStrings.rb));
+            //header = (Header)((IList<char>)CA.JoinIList<char>(header, " (" + files1.Count() + ")"));
         }
 
         if (a.headerWrappedEmptyLines) sb.AppendLine();
-        sb.AppendLine(header + AllStrings.colon);
+        sb.AppendLine(header + ":");
         if (a.headerWrappedEmptyLines) sb.AppendLine();
         List(files1, a.delimiter, a.whenNoEntries);
     }
@@ -229,7 +229,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     {
         if (text != string.Empty)
         {
-            sb.AppendLine(header + AllStrings.colon);
+            sb.AppendLine(header + ":");
             sb.AppendLine(text);
             sb.AppendLine();
         }
@@ -247,7 +247,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     internal void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered)
     {
         Header(header);
-        foreach (var item in ordered) sb.AppendLine(item.Key + AllStrings.space + item.Value);
+        foreach (var item in ordered) sb.AppendLine(item.Key + "" + item.Value);
     }
 
     internal void IGrouping(IEnumerable<IGrouping<string, string>> g)
@@ -274,7 +274,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         if (onlyCountInValue)
         {
             var d = new List<string>(ls.Count);
-            foreach (var item in ls) d.Add(item.Key + AllStrings.space + item.Value.Count());
+            foreach (var item in ls) d.Add(item.Key + "" + item.Value.Count());
             List(d);
         }
         else
@@ -299,11 +299,11 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     /// <typeparam name="T2"></typeparam>
     /// <param name="d"></param>
     /// <param name="deli"></param>
-    internal void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = AllStrings.verbar)
+    internal void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = "|")
     {
         //StringBuilder sb = new StringBuilder();
         foreach (var item in d)
-            if (deli != AllStrings.verbar)
+            if (deli != "|")
             {
                 Header(item.Key.ToString());
                 // vrací mi to na jednom řádku jak key tak všechny value oddělené |.
@@ -324,7 +324,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     }
 
     internal string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst,
-        string delimiter = AllStrings.space)
+        string delimiter = "")
     {
         foreach (var item in sorted)
         {
