@@ -1,36 +1,36 @@
 namespace SunamoFileSystem._sunamo.SunamoExceptions;
-public partial class ThrowEx
+internal partial class ThrowEx
 {
 
-    public static bool Custom(Exception ex, bool reallyThrow = true)
+    internal static bool Custom(Exception ex, bool reallyThrow = true)
     { return Custom(Exceptions.TextOfExceptions(ex), reallyThrow); }
 
-    public static bool Custom(string message, bool reallyThrow = true, string secondMessage = "")
+    internal static bool Custom(string message, bool reallyThrow = true, string secondMessage = "")
     {
         string joined = string.Join(" ", message, secondMessage);
         string? str = Exceptions.Custom(FullNameOfExecutedCode(), joined);
         return ThrowIsNotNull(str, reallyThrow);
     }
 
-    public static bool CustomWithStackTrace(Exception ex) { return Custom(Exceptions.TextOfExceptions(ex)); }
-    public static bool DifferentCountInLists<T>(string namefc, IList<T> countfc, string namesc, IList<T> countsc)
+    internal static bool CustomWithStackTrace(Exception ex) { return Custom(Exceptions.TextOfExceptions(ex)); }
+    internal static bool DifferentCountInLists<T>(string namefc, IList<T> countfc, string namesc, IList<T> countsc)
     {
         return ThrowIsNotNull(
             Exceptions.DifferentCountInLists(FullNameOfExecutedCode(), namefc, countfc.Count, namesc, countsc.Count));
     }
-    public static bool DifferentCountInLists(string namefc, int countfc, string namesc, int countsc)
+    internal static bool DifferentCountInLists(string namefc, int countfc, string namesc, int countsc)
     {
         return ThrowIsNotNull(
             Exceptions.DifferentCountInLists(FullNameOfExecutedCode(), namefc, countfc, namesc, countsc));
     }
 
 
-    public static bool FileDoesntExists(string fulLPath)
+    internal static bool FileDoesntExists(string fulLPath)
     { return ThrowIsNotNull(Exceptions.FileExists(FullNameOfExecutedCode(), fulLPath)); }
-    public static bool FolderCannotBeDeleted(string folder, Exception ex)
+    internal static bool FolderCannotBeDeleted(string folder, Exception ex)
     { return ThrowIsNotNull(Exceptions.FolderCannotBeDeleted(FullNameOfExecutedCode(), folder, ex)); }
 
-    public static bool IsNotWindowsPathFormat(
+    internal static bool IsNotWindowsPathFormat(
         string argName,
         string argValue,
         bool raiseIsNotWindowsPathFormat,
@@ -45,19 +45,19 @@ public partial class ThrowEx
                 SunamoFileSystem_IsWindowsPathFormat));
     }
 
-    public static bool IsNullOrEmpty(string argName, string argValue)
+    internal static bool IsNullOrEmpty(string argName, string argValue)
     { return ThrowIsNotNull(Exceptions.IsNullOrWhitespace(FullNameOfExecutedCode(), argName, argValue, true)); }
-    public static bool NoPassedFolders(ICollection folders)
+    internal static bool NoPassedFolders(ICollection folders)
     { return ThrowIsNotNull(Exceptions.NoPassedFolders(FullNameOfExecutedCode(), folders)); }
-    public static bool NotContains(string text, params string[] shouldContains)
+    internal static bool NotContains(string text, params string[] shouldContains)
     { return ThrowIsNotNull(Exceptions.NotContains(FullNameOfExecutedCode(), text, shouldContains)); }
 
-    public static bool NotImplementedCase(object notImplementedName)
+    internal static bool NotImplementedCase(object notImplementedName)
     { return ThrowIsNotNull(Exceptions.NotImplementedCase, notImplementedName); }
-    public static bool NotImplementedMethod() { return ThrowIsNotNull(Exceptions.NotImplementedMethod); }
+    internal static bool NotImplementedMethod() { return ThrowIsNotNull(Exceptions.NotImplementedMethod); }
 
     #region Other
-    public static string FullNameOfExecutedCode()
+    internal static string FullNameOfExecutedCode()
     {
         Tuple<string, string, string> placeOfExc = Exceptions.PlaceOfException();
         string f = FullNameOfExecutedCode(placeOfExc.Item1, placeOfExc.Item2, true);
@@ -98,7 +98,7 @@ public partial class ThrowEx
         return string.Concat(typeFullName, ".", methodName);
     }
 
-    public static bool ThrowIsNotNull(string? exception, bool reallyThrow = true)
+    internal static bool ThrowIsNotNull(string? exception, bool reallyThrow = true)
     {
         if (exception == null)
         {
@@ -113,7 +113,7 @@ public partial class ThrowEx
     }
 
     #region For avoid FullNameOfExecutedCode
-    public static bool ThrowIsNotNull(Exception exception, bool reallyThrow = true)
+    internal static bool ThrowIsNotNull(Exception exception, bool reallyThrow = true)
     {
         if (exception != null)
         {
@@ -123,19 +123,19 @@ public partial class ThrowEx
         return true;
     }
 
-    public static bool ThrowIsNotNull<A, B>(Func<string, A, B, string?> f, A ex, B message)
+    internal static bool ThrowIsNotNull<A, B>(Func<string, A, B, string?> f, A ex, B message)
     {
         string? exc = f(FullNameOfExecutedCode(), ex, message);
         return ThrowIsNotNull(exc);
     }
 
-    public static bool ThrowIsNotNull<A>(Func<string, A, string?> f, A ex)
+    internal static bool ThrowIsNotNull<A>(Func<string, A, string?> f, A ex)
     {
         string? exc = f(FullNameOfExecutedCode(), ex);
         return ThrowIsNotNull(exc);
     }
 
-    public static bool ThrowIsNotNull(Func<string, string?> f)
+    internal static bool ThrowIsNotNull(Func<string, string?> f)
     {
         string? exc = f(FullNameOfExecutedCode());
         return ThrowIsNotNull(exc);

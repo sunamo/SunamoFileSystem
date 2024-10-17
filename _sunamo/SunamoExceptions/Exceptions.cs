@@ -1,14 +1,14 @@
 namespace SunamoFileSystem._sunamo.SunamoExceptions;
 // © www.sunamo.cz. All Rights Reserved.
-public sealed partial class Exceptions
+internal sealed partial class Exceptions
 {
     #region Other
-    public static string CheckBefore(string before)
+    internal static string CheckBefore(string before)
     {
         return string.IsNullOrWhiteSpace(before) ? string.Empty : before + ": ";
     }
 
-    public static string TextOfExceptions(Exception ex, bool alsoInner = true)
+    internal static string TextOfExceptions(Exception ex, bool alsoInner = true)
     {
         if (ex == null) return string.Empty;
         StringBuilder sb = new();
@@ -24,7 +24,7 @@ public sealed partial class Exceptions
         return r;
     }
 
-    public static Tuple<string, string, string> PlaceOfException(
+    internal static Tuple<string, string, string> PlaceOfException(
 bool fillAlsoFirstTwo = true)
     {
         StackTrace st = new();
@@ -52,7 +52,7 @@ bool fillAlsoFirstTwo = true)
         }
         return new Tuple<string, string, string>(type, methodName, string.Join(Environment.NewLine, l));
     }
-    public static void TypeAndMethodName(string l, out string type, out string methodName)
+    internal static void TypeAndMethodName(string l, out string type, out string methodName)
     {
         var s2 = l.Split("at ")[1].Trim();
         var s = s2.Split("(")[0];
@@ -61,7 +61,7 @@ bool fillAlsoFirstTwo = true)
         p.RemoveAt(p.Count - 1);
         type = string.Join(".", p);
     }
-    public static string CallingMethod(int v = 1)
+    internal static string CallingMethod(int v = 1)
     {
         StackTrace stackTrace = new();
         var methodBase = stackTrace.GetFrame(v)?.GetMethod();
@@ -75,7 +75,7 @@ bool fillAlsoFirstTwo = true)
     #endregion
 
     #region IsNullOrWhitespace
-    public static string? IsNullOrWhitespace(string before, string argName, string argValue, bool notAllowOnlyWhitespace)
+    internal static string? IsNullOrWhitespace(string before, string argName, string argValue, bool notAllowOnlyWhitespace)
     {
         string addParams;
         if (argValue == null)
@@ -97,7 +97,7 @@ bool fillAlsoFirstTwo = true)
     }
     readonly static StringBuilder sbAdditionalInfoInner = new();
     readonly static StringBuilder sbAdditionalInfo = new();
-    public static string AddParams()
+    internal static string AddParams()
     {
         sbAdditionalInfo.Insert(0, Environment.NewLine);
         sbAdditionalInfo.Insert(0, "Outer:");
@@ -112,28 +112,28 @@ bool fillAlsoFirstTwo = true)
     #endregion
 
     #region OnlyReturnString 
-    public static string? FileExists(string before, string fulLPath)
+    internal static string? FileExists(string before, string fulLPath)
     {
         return CheckBefore(before) + " " + "does not exists" + ": " + fulLPath;
     }
-    public static string? Custom(string before, string message)
+    internal static string? Custom(string before, string message)
     {
         return CheckBefore(before) + message;
     }
-    public static string? FolderCannotBeDeleted(string before, string folder, Exception ex)
+    internal static string? FolderCannotBeDeleted(string before, string folder, Exception ex)
     {
         return CheckBefore(before) + $"{folder} cannot be deleted, another info: " + TextOfExceptions(ex);
     }
-    public static string? NotImplementedMethod(string before)
+    internal static string? NotImplementedMethod(string before)
     {
         return CheckBefore(before) + "Not implemented method.";
     }
     #endregion
-    public static string? NoPassedFolders(string before, ICollection folders)
+    internal static string? NoPassedFolders(string before, ICollection folders)
     {
         return folders.Count == 0 ? CheckBefore(before) + "No passed folder into" : null;
     }
-    public static string? NotImplementedCase(string before, object notImplementedName)
+    internal static string? NotImplementedCase(string before, object notImplementedName)
     {
         var fr = string.Empty;
         if (notImplementedName != null)
@@ -144,10 +144,10 @@ bool fillAlsoFirstTwo = true)
             else
                 fr += notImplementedName.ToString();
         }
-        return CheckBefore(before) + "Not implemented case" + fr + " . public program error. Please contact developer" +
+        return CheckBefore(before) + "Not implemented case" + fr + " . internal program error. Please contact developer" +
         ".";
     }
-    public static string? NotContains(string before, string originalText, params string[] shouldContains)
+    internal static string? NotContains(string before, string originalText, params string[] shouldContains)
     {
         List<string> notContained = [];
         foreach (var item in shouldContains)
@@ -157,7 +157,7 @@ bool fillAlsoFirstTwo = true)
         ? null
         : CheckBefore(before) + originalText + " dont contains: " + string.Join(",", notContained);
     }
-    public static string? IsNotWindowsPathFormat(string before, string argName, string argValue, bool raiseIsNotWindowsPathFormat, Func<string, bool> SunamoFileSystem_IsWindowsPathFormat)
+    internal static string? IsNotWindowsPathFormat(string before, string argName, string argValue, bool raiseIsNotWindowsPathFormat, Func<string, bool> SunamoFileSystem_IsWindowsPathFormat)
     {
         if (raiseIsNotWindowsPathFormat)
         {
@@ -168,7 +168,7 @@ bool fillAlsoFirstTwo = true)
         return null;
     }
 
-    public static string? DifferentCountInLists(string before, string namefc, int countfc, string namesc, int countsc)
+    internal static string? DifferentCountInLists(string before, string namefc, int countfc, string namesc, int countsc)
     {
         if (countfc != countsc)
             return CheckBefore(before) + " different count elements in collection" + " " +
