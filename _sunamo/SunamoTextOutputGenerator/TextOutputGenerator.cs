@@ -247,7 +247,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     internal void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered)
     {
         Header(header);
-        foreach (var item in ordered) sb.AppendLine(item.Key + "" + item.Value);
+        foreach (var item in ordered) sb.AppendLine(item.Key + " " + item.Value);
     }
 
     internal void IGrouping(IEnumerable<IGrouping<string, string>> g)
@@ -324,7 +324,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     }
 
     internal string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst,
-        string delimiter = "")
+        string delimiter = " ")
     {
         foreach (var item in sorted)
         {

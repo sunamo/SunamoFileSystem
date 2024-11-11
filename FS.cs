@@ -2097,6 +2097,10 @@ string
         if (relativePath.Contains("\""))
             deli = "\"";
         else if (relativePath.Contains("/")) deli = "/";
+        else
+        {
+            ThrowEx.NotImplementedCase(relativePath);
+        }
 
         return SHSplit.SplitMore(relativePath, deli);
     }
@@ -2756,7 +2760,7 @@ string
         {
             t = t.Replace(replaceAllOfThisThen,
                 replaceFor); // SHReplace.ReplaceAll(t, replaceFor, replaceAllOfThisThen);
-            t = t.Replace("",
+            t = t.Replace(" ",
                 replaceFor); //SHReplace.ReplaceAll(t, replaceFor, "");
         }
 
@@ -2921,7 +2925,7 @@ string
         {
             if (co == FileMoveCollisionOption.AddFileSize)
             {
-                var newFn = InsertBetweenFileNameAndExtension(fileTo, "" + new FileInfo(item).Length);
+                var newFn = InsertBetweenFileNameAndExtension(fileTo, " " + new FileInfo(item).Length);
                 if (File.Exists(newFn))
                 {
                     File.Delete(item);

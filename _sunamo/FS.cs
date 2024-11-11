@@ -1,5 +1,4 @@
-//namespace SunamoFileSystem._sunamo;
-
+namespace SunamoFileSystem._sunamo;
 ////namespace SunamoFileSystem._sunamo.SunamoExceptions._AddedToAllCsproj;
 //internal class FS
 //{
