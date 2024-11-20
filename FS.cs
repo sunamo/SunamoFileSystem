@@ -3,7 +3,6 @@ using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 using SunamoFileSystem._sunamo;
 using PathMs = Path;
 
-
 /// <summary>
 ///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
 ///     zkopírovat zpět. to nese riziko že jsem přidal novou metodu kterou bych překopírováním ztratil. Krom toho to nedrží
@@ -4289,7 +4288,7 @@ string
                 if (lb != -1 && rb != -1)
                 {
                     var between = g.Substring(lb, rb - lb); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
-                    if (double.TryParse(between, out var _) /*SH.IsNumber(between, EmptyArrays.Chars)*/)
+                    if (double.TryParse(between, out var _) /*SH.IsNumber(between, [])*/)
                     {
                         serie = int.Parse(between);
                         pocetSerii++;
