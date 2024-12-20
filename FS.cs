@@ -2767,18 +2767,20 @@ string
     }
 
     /// <summary>
+    /// Toto vkládá jako novou složku.
+    /// 
     ///     either A1 or A2 can be null
     ///     When A2 is null, will get from file path A1
     /// </summary>
-    /// <param name="item"></param>
     /// <param name="folder"></param>
+    /// <param name="parentFolder"></param>
     /// <param name="insert"></param>
-    public static string InsertBetweenFileNameAndPath(string item, string folder, string insert)
+    public static string InsertBetweenFileNameAndPath(string folder, string parentFolder, string insert)
     {
-        if (folder == null) folder = Path.GetDirectoryName(item);
-        var outputFolder = Path.Combine(folder, insert);
+        if (parentFolder == null) parentFolder = Path.GetDirectoryName(folder);
+        var outputFolder = Path.Combine(parentFolder, insert);
         CreateFoldersPsysicallyUnlessThere(outputFolder);
-        return Path.Combine(outputFolder, Path.GetFileName(item));
+        return Path.Combine(outputFolder, Path.GetFileName(folder));
     }
 
     /// <summary>
