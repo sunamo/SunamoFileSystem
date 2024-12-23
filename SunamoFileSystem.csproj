@@ -23,9 +23,9 @@
     <Folder Include="_sunamo\SunamoStringGetLines\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem;SunamoFileSystem.csproj</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);ASYNC;SunamoFileSystem;SunamoFileSystem.csproj</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
   </PropertyGroup>
 </Project>
