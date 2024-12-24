@@ -219,7 +219,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         }
         catch
         {
-            //ThisApp.Error(sess.i18n(XlfKeys.FileCanTBeDeleted) + ": " + item);
+            //ThisApp.Error(Translate.FromKey(XlfKeys.FileCanTBeDeleted) + ": " + item);
             return false;
         }
     }
@@ -998,7 +998,7 @@ void
                     }
                 }
             }
-            //ThisApp.Warning(sess.i18n(XlfKeys.ContentOf) + " " + item + " couldn't be replaced - contains control chars.");
+            //ThisApp.Warning(Translate.FromKey(XlfKeys.ContentOf) + " " + item + " couldn't be replaced - contains control chars.");
         }
     }
 
@@ -1356,7 +1356,7 @@ void
                     var newFn = to + " (" + serie + ")";
                     if (!Directory.Exists(newFn))
                     {
-                        vr = sess.i18n(XlfKeys.FolderHasBeenRenamedTo) + " " + Path.GetFileName(newFn);
+                        vr = Translate.FromKey(XlfKeys.FolderHasBeenRenamedTo) + " " + Path.GetFileName(newFn);
                         to = newFn;
                         break;
                     }
@@ -1442,7 +1442,7 @@ void
     /// <param name="files"></param>
     public static void DeleteDuplicatedImages(List<string> files)
     {
-        throw new Exception(sess.i18n(XlfKeys.OnlyForTestFilesForAnotherApps) + ". ");
+        throw new Exception(Translate.FromKey(XlfKeys.OnlyForTestFilesForAnotherApps) + ". ");
     }
 
     /// <summary>
@@ -3702,10 +3702,10 @@ string
     //        {
     //            // Not working, flags from GeoCachingTool wasnt transfered to standard
     //#if NETFX_CORE
-    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
     //#endif
     //#if WINDOWS_UWP
-    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+    //        ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
     //#endif
 
     //            if (item == @"\\?\" || item == string.Empty)
@@ -4462,10 +4462,10 @@ string
     {
         // Not working, flags from GeoCachingTool wasnt transfered to standard
 #if NETFX_CORE
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
 #endif
 #if WINDOWS_UWP
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-sess.i18n(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
 #endif
 
         if (item == @"\\?\" || item == string.Empty) return false;
