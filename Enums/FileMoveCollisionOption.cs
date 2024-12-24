@@ -6,5 +6,6 @@ public enum FileMoveCollisionOption
     Overwrite,
     DiscardFrom,
     LeaveLarger,
-    DontManipulate
+    DontManipulate,
+    ThrowEx
 }

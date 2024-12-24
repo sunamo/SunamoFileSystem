@@ -1341,57 +1341,61 @@ void
     /// </summary>
     /// <param name="p"></param>
     /// <param name="to"></param>
-    /// <param name="co"></param>
-    public static string MoveDirectoryNoRecursive(string item, string nova, DirectoryMoveCollisionOption co,
-        FileMoveCollisionOption co2)
+    /// <param name="directoryMoveCollisionOption"></param>
+    public static string MoveDirectoryNoRecursive(string from, string to, DirectoryMoveCollisionOption directoryMoveCollisionOption,
+        FileMoveCollisionOption fileMoveCollisionOption)
     {
         string vr = null;
-        if (Directory.Exists(nova))
+        if (Directory.Exists(to))
         {
-            if (co == DirectoryMoveCollisionOption.AddSerie)
+            if (directoryMoveCollisionOption == DirectoryMoveCollisionOption.AddSerie)
             {
                 var serie = 1;
                 while (true)
                 {
-                    var newFn = nova + " (" + serie + ")";
+                    var newFn = to + " (" + serie + ")";
                     if (!Directory.Exists(newFn))
                     {
                         vr = sess.i18n(XlfKeys.FolderHasBeenRenamedTo) + " " + Path.GetFileName(newFn);
-                        nova = newFn;
+                        to = newFn;
                         break;
                     }
 
                     serie++;
                 }
             }
-            else if (co == DirectoryMoveCollisionOption.DiscardFrom)
+            else if (directoryMoveCollisionOption == DirectoryMoveCollisionOption.DiscardFrom)
             {
-                Directory.Delete(item, true);
+                Directory.Delete(from, true);
                 return vr;
             }
-            else if (co == DirectoryMoveCollisionOption.Overwrite)
+            else if (directoryMoveCollisionOption == DirectoryMoveCollisionOption.Overwrite)
             {
+            }
+            else if (directoryMoveCollisionOption == DirectoryMoveCollisionOption.ThrowEx)
+            {
+                ThrowEx.Custom($"Directory {to} already exists");
             }
         }
 
-        var files = FSGetFiles.GetFiles(item, "*", SearchOption.AllDirectories);
-        CreateFoldersPsysicallyUnlessThere(nova);
+        var files = FSGetFiles.GetFiles(from, "*", SearchOption.AllDirectories);
+        CreateFoldersPsysicallyUnlessThere(to);
         foreach (var item2 in files)
         {
-            var fileTo = nova + item2.Substring(item.Length);
-            MoveFile(item2, fileTo, co2);
+            var fileTo = to + item2.Substring(from.Length);
+            MoveFile(item2, fileTo, fileMoveCollisionOption);
         }
 
         try
         {
-            Directory.Move(item, nova);
+            Directory.Move(from, to);
         }
         catch (Exception ex)
         {
             //ThrowEx.CannotMoveFolder(item, nova, ex);
         }
 
-        DeleteAllEmptyDirectories(item, true);
+        DeleteAllEmptyDirectories(from, true);
         return vr;
     }
 
@@ -1417,6 +1421,7 @@ void
         TryDeleteDirectory(p);
     }
 
+    [Obsolete("Use MoveDirectoryNoRecursive instead")]
     public static void MoveAllFilesRecursively(string p, string to, FileMoveCollisionOption co, string contains = null)
     {
         CopyMoveAllFilesRecursively(p, to, co, true, contains, SearchOption.AllDirectories);
@@ -2777,6 +2782,8 @@ string
     /// <param name="insert"></param>
     public static string InsertBetweenFileNameAndPath(string folder, string parentFolder, string insert)
     {
+        ThrowEx.IsNotWindowsPathFormat(nameof(folder), folder, true, FS.IsWindowsPathFormat);
+
         if (parentFolder == null) parentFolder = Path.GetDirectoryName(folder);
         var outputFolder = Path.Combine(parentFolder, insert);
         CreateFoldersPsysicallyUnlessThere(outputFolder);
@@ -2977,6 +2984,10 @@ string
             else if (co == FileMoveCollisionOption.DontManipulate)
             {
                 if (File.Exists(fileTo)) return false;
+            }
+            else if (co == FileMoveCollisionOption.ThrowEx)
+            {
+                ThrowEx.Custom($"Directory {fileTo} already exists");
             }
         }
 
@@ -4642,6 +4653,11 @@ bool
     {
         return Directory.GetFiles(folderWhereToCreate).Length > 0 ||
                Directory.GetDirectories(folderWhereToCreate).Length > 0;
+    }
+
+    public static void MoveDirectoryNoRecursive(string v1, string v2, DirectoryMoveCollisionOption throwEx1, object throwEx2)
+    {
+        throw new NotImplementedException();
     }
 
 

@@ -3,5 +3,6 @@ public enum DirectoryMoveCollisionOption
 {
     AddSerie,
     Overwrite,
-    DiscardFrom
+    DiscardFrom,
+    ThrowEx
 }
