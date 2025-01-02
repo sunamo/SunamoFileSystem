@@ -4557,7 +4557,7 @@ bool
     public static string Combine(params string[] s)
     {
         //return Path.Combine(s);
-        return CombineWorker(true, true, s);
+        return CombineWorker(true, false, s);
     }
 
     public static string CombineFile(params string[] s)
