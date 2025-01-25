@@ -130,11 +130,7 @@ internal class FSGetFiles
     internal static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
         GetFilesEveryFolderArgsFS e = null)
     {
-#if DEBUG
-        if (folder == @"D:\_Test\EveryLine\EveryLine\SearchCodeElementsUC\")
-        {
-        }
-#endif
+
         if (e == null) e = new GetFilesEveryFolderArgsFS();
         // TODO: některé soubory vrací vícekrát. toto je workaround než zjistím proč
         // TODO: je důležité se toho zbavit co nejdříve protože při načítání to zbytečně zpomaluje

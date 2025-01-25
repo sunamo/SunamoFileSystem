@@ -77,11 +77,7 @@ internal class FSGetFolders
     private static void GetFoldersEveryFolder(string folder, List<string> list, GetFilesArgsFS e = null)
     {
         List<string> folders = null;
-#if DEBUG
-        if (folder == @"E:\vs\Projects\AllProjectsSearch\Aps.Projs\")
-        {
-        }
-#endif
+
         try
         {
             folders = Directory.GetDirectories(folder).ToList();
