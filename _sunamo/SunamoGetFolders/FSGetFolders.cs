@@ -7,16 +7,6 @@ internal class FSGetFolders
         return GetFolders(folder, "*", so);
     }
 
-    internal static List<string> GetFolders(string v, string contains)
-    {
-        var folders = GetFolders(v);
-        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
-        //CA.TrimEnd(folders, new char[] { '\\' });
-        for (var i = folders.Count - 1; i >= 0; i--)
-            if (!Regex.IsMatch(Path.GetFileName(folders[i]), contains))
-                folders.RemoveAt(i);
-        return folders;
-    }
 
     internal static List<string> GetFolders(string folder)
     {
@@ -150,16 +140,4 @@ internal class FSGetFolders
         return list;
     }
 
-    internal static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
-    {
-        var f = GetFolders(d);
-        var result = new List<string>();
-        foreach (var item in f)
-        {
-            var files = FSGetFiles.GetFiles(item, masc, topDirectoryOnly);
-            if (files.Count != 0) result.Add(item);
-        }
-
-        return result;
-    }
 }

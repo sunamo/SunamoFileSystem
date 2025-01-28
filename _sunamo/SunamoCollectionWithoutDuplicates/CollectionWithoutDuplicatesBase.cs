@@ -71,8 +71,7 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
 
     protected abstract bool IsComparingByString();
     internal abstract bool? Contains(T t2);
-    internal abstract int AddWithIndex(T t2);
-    internal abstract int IndexOf(T path);
+
 
     /// <summary>
     ///     If I want without checkink, use c.AddRange
@@ -88,9 +87,4 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
         return wasNotAdded;
     }
 
-    internal string DumpAsString(string operation, /*DumpAsStringHeaderArgs*/ object dumpAsStringHeaderArgs)
-    {
-        throw new Exception("Nemůže tu být protože DumpListAsStringOneLine jsem přesouval do sunamo a tam už zůstane");
-        //return c.DumpAsString(operation, a);
-    }
 }

@@ -7,10 +7,6 @@ internal class SHSplit
         return item.Split(space, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
 
-    internal static List<string> SplitCharMore(string v1, params char[] v2)
-    {
-        return v1.Split(v2).ToList();
-    }
 
     #region SplitToPartsFromEnd
 

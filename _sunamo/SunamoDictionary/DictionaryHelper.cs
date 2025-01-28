@@ -11,13 +11,6 @@ internal class DictionaryHelper
             qs.Add(k, v);
     }
 
-    internal static void AddOrSet(Dictionary<string, string> qs, string k, string v)
-    {
-        if (qs.ContainsKey(k))
-            qs[k] = v;
-        else
-            qs.Add(k, v);
-    }
 
     internal static Dictionary<T, List<U>> GroupByValues<U, T, ColType>(Dictionary<U, T> dictionary)
     {

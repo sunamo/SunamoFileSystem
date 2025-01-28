@@ -18,10 +18,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     //    get => sb.prependEveryNoWhite;
     //    set => sb.prependEveryNoWhite = value;
     //}
-    internal static TextOutputGenerator Create()
-    {
-        return new TextOutputGenerator();
-    }
 
     public override string ToString()
     {
@@ -37,51 +33,18 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
     #region Static texts
 
-    internal void EndRunTime()
-    {
-        sb.AppendLine("AppWillBeTerminated");
-    }
 
-    /// <summary>
-    ///     Pouze vypíše "Az budete mit vstupní data, spusťte program znovu."
-    /// </summary>
-    internal void NoData()
-    {
-        sb.AppendLine("NoData");
-    }
 
     #endregion
 
     #region Templates
 
-    /// <summary>
-    ///     Napíše nadpis A1 do konzole
-    /// </summary>
-    /// <param name="text"></param>
-    internal void StartRunTime(string text)
-    {
-        var delkaTextu = text.Length;
-        var hvezdicky = "";
-        hvezdicky = new string(s_znakNadpisu[0], delkaTextu);
-        //hvezdicky.PadLeft(delkaTextu, znakNadpisu[0]);
-        sb.AppendLine(hvezdicky);
-        sb.AppendLine(text);
-        sb.AppendLine(hvezdicky);
-    }
 
-    internal void CountEvery<T>(IList<KeyValuePair<T, int>> eq)
-    {
-        foreach (var item in eq) AppendLine(item.Key + "," + item.Value + "x");
-    }
 
     #endregion
 
     #region AppendLine
 
-    internal void AppendLine()
-    {
-        AppendLine(string.Empty);
-    }
 
     internal void AppendLine(StringBuilder text)
     {
@@ -100,16 +63,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         sb.AppendLine(text);
     }
 
-    internal void AppendLineFormat(string text, params string[] p)
-    {
-        sb.AppendLine();
-        AppendLine(string.Format(text, p));
-    }
 
-    internal void AppendFormat(string text, params string[] p)
-    {
-        AppendLine(string.Format(text, p));
-    }
 
     #endregion
 
@@ -122,27 +76,12 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         sb.AppendLine();
     }
 
-    internal void SingleCharLine(char paddingChar, int v)
-    {
-        sb.AppendLine(string.Empty.PadLeft(v, paddingChar));
-    }
 
     #endregion
 
     #region List
 
-    internal void ListObject(IList files1)
-    {
-        var l = new List<string>();
-        foreach (var item in files1) l.Add(item.ToString());
-        List(l);
-    }
 
-    internal void ListSB(StringBuilder onlyStart, string v)
-    {
-        Header(v);
-        AppendLine(onlyStart);
-    }
 
     /// <summary>
     ///     If you have StringBuilder, use Paragraph()
@@ -180,12 +119,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         List(files1, header, new TextOutputGeneratorArgs { headerWrappedEmptyLines = true, insertCount = false });
     }
 
-    internal void ListString(string list, string header)
-    {
-        Header(header);
-        AppendLine(list);
-        sb.AppendLine();
-    }
 
     /// <summary>
     ///     Use DictionaryHelper.CategoryParser
@@ -214,11 +147,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
     #region Paragraph
 
-    internal void Paragraph(StringBuilder wrongNumberOfParts, string header)
-    {
-        var text = wrongNumberOfParts.ToString().Trim();
-        Paragraph(text, header);
-    }
 
     /// <summary>
     ///     For ordinary text use Append*
@@ -239,22 +167,8 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
     #region Dictionary
 
-    internal void Dictionary(Dictionary<string, int> charEntity, string delimiter)
-    {
-        foreach (var item in charEntity) sb.AppendLine(item.Key + delimiter + item.Value);
-    }
 
-    internal void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered)
-    {
-        Header(header);
-        foreach (var item in ordered) sb.AppendLine(item.Key + " " + item.Value);
-    }
 
-    internal void IGrouping(IEnumerable<IGrouping<string, string>> g)
-    {
-        var d = IGroupingToDictionary(g);
-        Dictionary(d);
-    }
 
     private Dictionary<string, List<string>> IGroupingToDictionary(IEnumerable<IGrouping<string, string>> g)
     {
@@ -268,83 +182,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         foreach (var item in ls) List(item.Value, item.Key);
     }
 
-    internal void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false)
-        where Header : IEnumerable<char>
-    {
-        if (onlyCountInValue)
-        {
-            var d = new List<string>(ls.Count);
-            foreach (var item in ls) d.Add(item.Key + "" + item.Value.Count());
-            List(d);
-        }
-        else
-        {
-            foreach (var item in ls) List(item.Value, item.Key);
-        }
-    }
-
-    /// <summary>
-    ///     vše na 1 řádku, oddělí |
-    /// </summary>
-    /// <param name="v"></param>
-    internal void Dictionary(Dictionary<string, string> v)
-    {
-        foreach (var item in v) sb.AppendLine(string.Join("|", item.Key, item.Value));
-    }
-
-    /// <summary>
-    ///     vše na 1 řádku, oddělí |
-    /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <param name="d"></param>
-    /// <param name="deli"></param>
-    internal void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = "|")
-    {
-        //StringBuilder sb = new StringBuilder();
-        foreach (var item in d)
-            if (deli != "|")
-            {
-                Header(item.Key.ToString());
-                // vrací mi to na jednom řádku jak key tak všechny value oddělené |.
-                sb.AppendLine(string.Join(deli, item.Value.ToString()));
-                sb.AppendLine();
-            }
-            else
-            {
-                // vrací mi to na jednom řádku jak key tak všechny value oddělené |.
-                sb.AppendLine(string.Join(deli, item.Key.ToString(),
-                    item.Value.ToString())); // SF.PrepareToSerializationExplicitString(new List<string>(), deli));
-            }
-    }
-
-    internal void PairBullet(string key, string v)
-    {
-        sb.AppendLine(key + ": " + v);
-    }
-
-    internal string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst,
-        string delimiter = " ")
-    {
-        foreach (var item in sorted)
-        {
-            string first, second = null;
-            if (putValueAsFirst)
-            {
-                first = item.Value.ToString();
-                second = item.Key.ToString();
-            }
-            else
-            {
-                first = item.Key.ToString();
-                second = item.Value.ToString();
-            }
-
-            sb.AppendLine(first + delimiter + second);
-        }
-
-        return sb.ToString();
-    }
 
     #endregion
 }

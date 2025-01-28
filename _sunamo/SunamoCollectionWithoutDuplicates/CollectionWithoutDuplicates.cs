@@ -14,30 +14,6 @@ internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<
     {
     }
 
-    internal override int AddWithIndex(T t2)
-    {
-        if (IsComparingByString())
-        {
-            if (Contains(t2).GetValueOrDefault())
-            {
-                // Will checkout below
-            }
-            else
-            {
-                Add(t2);
-                return c.Count - 1;
-            }
-        }
-
-        var vr = c.IndexOf(t2);
-        if (vr == -1)
-        {
-            Add(t2);
-            return c.Count - 1;
-        }
-
-        return vr;
-    }
 
     internal override bool? Contains(T t2)
     {
@@ -56,18 +32,6 @@ internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<
         return true;
     }
 
-    internal override int IndexOf(T path)
-    {
-        if (IsComparingByString()) return sr.IndexOf(path.ToString());
-        var vr = c.IndexOf(path);
-        if (vr == -1)
-        {
-            c.Add(path);
-            return c.Count - 1;
-        }
-
-        return vr;
-    }
 
     protected override bool IsComparingByString()
     {

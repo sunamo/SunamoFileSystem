@@ -11,16 +11,5 @@ internal class WhitespaceCharService
 8232, 8233, 8239, 8287, 12288
 });
 
-    internal void ConvertWhiteSpaceCodesToChars()
-    {
-
-        whiteSpaceChars = new List<char>(whiteSpacesCodes.Count);
-        foreach (var item in whiteSpacesCodes)
-        {
-            var s = char.ConvertFromUtf32(item);
-            var ch = Convert.ToChar(s);
-            whiteSpaceChars.Add(ch);
-        }
-    }
 
 }
