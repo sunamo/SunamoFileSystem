@@ -12,8 +12,7 @@ internal partial class ThrowEx
         return ThrowIsNotNull(str, reallyThrow);
     }
 
-    internal static bool CustomWithStackTrace(Exception ex) { return Custom(Exceptions.TextOfExceptions(ex)); }
-    internal static bool DifferentCountInLists<T>(string namefc, IList<T> countfc, string namesc, IList<T> countsc)
+    internal static bool CustomWithStackTrace(Exception ex) {}internal static bool DifferentCountInLists<T>(string namefc, IList<T> countfc, string namesc, IList<T> countsc)
     {
         return ThrowIsNotNull(
             Exceptions.DifferentCountInLists(FullNameOfExecutedCode(), namefc, countfc.Count, namesc, countsc.Count));

@@ -31,28 +31,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         //sb.Undo();
     }
 
-    #region Static texts
-
-
-
-    #endregion
-
-    #region Templates
-
-
-
-    #endregion
-
-    #region AppendLine
-
-
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal void Append(string text)
-    {
-        sb.Append(text);
-    }
-
 
 
     #endregion
@@ -68,47 +46,13 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
 
     
-    internal void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = "")
-    {
-        if (files1.Count() == 0)
-            sb.AppendLine(whenNoEntries);
-        else
-            foreach (var item in files1)
-                Append(item + deli);
-        //sb.AppendLine();
-    }
 
     
 
 
-    /// <summary>
-    ///     Use DictionaryHelper.CategoryParser
-    /// </summary>
-    /// <typeparam name="Header"></typeparam>
-    /// <typeparam name="Value"></typeparam>
-    /// <param name="files1"></param>
-    /// <param name="header"></param>
-    /// <param name="a"></param>
-    internal void List<Header, Value>(IList<Value> files1, Header header, TextOutputGeneratorArgs a)
+        internal void List<Header, Value>(IList<Value> files1, Header header, TextOutputGeneratorArgs a)
         where Header : IEnumerable<char>
-    {
-        if (a.insertCount)
-        {
-            //throw new Exception("later");
-            //header = (Header)((IList<char>)CA.JoinIList<char>(header, " (" + files1.Count() + ")"));
-        }
-
-        if (a.headerWrappedEmptyLines) sb.AppendLine();
-        sb.AppendLine(header + ":");
-        if (a.headerWrappedEmptyLines) sb.AppendLine();
-        List(files1, a.delimiter, a.whenNoEntries);
-    }
-
-    #endregion
-
-    #region Paragraph
-
-
+{}
     
     #endregion
 
