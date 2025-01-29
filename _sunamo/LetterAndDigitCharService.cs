@@ -18,11 +18,4 @@ internal class LetterAndDigitCharService
         'W', 'X', 'Y', 'Z'
     });
 
-    void Add()
-    {
-        allCharsWithoutSpecial = new List<char>(lowerChars.Count + numericChars.Count + upperChars.Count);
-        allCharsWithoutSpecial.AddRange(lowerChars);
-        allCharsWithoutSpecial.AddRange(numericChars);
-        allCharsWithoutSpecial.AddRange(upperChars);
-    }
 }

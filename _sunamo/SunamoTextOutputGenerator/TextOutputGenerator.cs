@@ -46,10 +46,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     #region AppendLine
 
 
-    internal void AppendLine(StringBuilder text)
-    {
-        sb.AppendLine(text.ToString());
-    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal void Append(string text)
@@ -69,12 +65,6 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
     #region Other adding methods
 
-    internal void Header(string v)
-    {
-        sb.AppendLine();
-        AppendLine(v);
-        sb.AppendLine();
-    }
 
 
     #endregion
@@ -83,15 +73,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
 
 
-    /// <summary>
-    ///     If you have StringBuilder, use Paragraph()
-    /// </summary>
-    /// <param name="files1"></param>
-    internal void List(IList<string> files1)
-    {
-        List<string>(files1);
-    }
-
+    
     internal void List<Value>(IList<Value> files1, string deli = "\r\n", string whenNoEntries = "")
     {
         if (files1.Count() == 0)
@@ -102,18 +84,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
         //sb.AppendLine();
     }
 
-    /// <summary>
-    ///     must be where Header : IEnumerable<char> (like is string)
-    /// </summary>
-    /// <typeparam name="Header"></typeparam>
-    /// <typeparam name="Value"></typeparam>
-    /// <param name="files1"></param>
-    /// <param name="header"></param>
-    internal void List<Header, Value>(IList<Value> files1, Header header) where Header : IEnumerable<char>
-    {
-        List(files1, header, new TextOutputGeneratorArgs { headerWrappedEmptyLines = true, insertCount = false });
-    }
-
+    
     internal void List(IList<string> files1, string header)
     {
         List(files1, header, new TextOutputGeneratorArgs { headerWrappedEmptyLines = true, insertCount = false });
@@ -148,21 +119,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
     #region Paragraph
 
 
-    /// <summary>
-    ///     For ordinary text use Append*
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="header"></param>
-    internal void Paragraph(string text, string header)
-    {
-        if (text != string.Empty)
-        {
-            sb.AppendLine(header + ":");
-            sb.AppendLine(text);
-            sb.AppendLine();
-        }
-    }
-
+    
     #endregion
 
     #region Dictionary
@@ -170,17 +127,7 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
 
 
-    private Dictionary<string, List<string>> IGroupingToDictionary(IEnumerable<IGrouping<string, string>> g)
-    {
-        var l = new Dictionary<string, List<string>>();
-        foreach (var item in g) l.Add(item.Key, item.ToList());
-        return l;
-    }
 
-    internal void Dictionary(Dictionary<string, List<string>> ls)
-    {
-        foreach (var item in ls) List(item.Value, item.Key);
-    }
 
 
     #endregion

@@ -8,10 +8,6 @@ internal class FSGetFolders
     }
 
 
-    internal static List<string> GetFolders(string folder)
-    {
-        return GetFolders(folder, SearchOption.TopDirectoryOnly);
-    }
 
     /// <summary>
     ///     Return only subfolder if A3, a1 not include

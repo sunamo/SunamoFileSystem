@@ -181,14 +181,6 @@ internal class FSGetFiles
     }
 
 
-    internal static List<string> GetFiles(string folderPath, string masc, bool? rec, GetFilesArgsFS a = null)
-    {
-        var so = SearchOption.TopDirectoryOnly;
-        var b = rec.Value;
-        if (b) so = SearchOption.AllDirectories;
-        return
-            GetFiles(folderPath, masc, so, a);
-    }
 
 
 
