@@ -2,10 +2,6 @@ namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
 internal class FSGetFolders
 {
-    internal static List<string> GetFolders(string folder, SearchOption so)
-    {
-        return GetFolders(folder, "*", so);
-    }
 
 
 

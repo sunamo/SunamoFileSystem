@@ -14,9 +14,6 @@ internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<
     {
     }
 
-
-
-
     protected override bool IsComparingByString()
     {
         return allowNull.HasValue && allowNull.Value;
