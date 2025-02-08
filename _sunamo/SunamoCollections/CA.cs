@@ -2,7 +2,26 @@ namespace SunamoFileSystem._sunamo.SunamoCollections;
 
 internal class CA
 {
+    public enum SearchStrategyCA
+    {
+        FixedSpace,
+        AnySpaces,
+        ExactlyName
+    }
 
+    public static List<int> ReturnWhichContainsIndexes(string item, IList<string> terms,
+        SearchStrategyCA searchStrategy = SearchStrategyCA.FixedSpace)
+    {
+        var result = new List<int>();
+        var i = 0;
+        foreach (var term in terms)
+        {
+            if (item.Contains(term) /*.Contains(item, term, searchStrategy)*/) result.Add(i);
+            i++;
+        }
+
+        return result;
+    }
 
 
 

@@ -1,7 +1,7 @@
 namespace SunamoFileSystem;
-using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 using SunamoFileSystem._sunamo;
 using PathMs = Path;
+using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
 /// <summary>
 ///     FSXlf - postfixy jsou píčovina. volám v tom metody stejné třídy. Můžu nahradit FS. v SunExc ale musel bych to
@@ -1547,25 +1547,24 @@ void
             for (var i = dirs.Length - 1; i >= 0; i--) TryDeleteDirectory(dirs[i]);
             if (rootDirectoryToo) TryDeleteDirectory(p);
             // Commented due to NI
-            //FS.DeleteFoldersWhichNotContains(BasePathsHelper.vs + @"", "bin", new List<string>( "node_modules"));
+            FS.DeleteFoldersWhichNotContains(@"E:\", "bin", new List<string>(["node_modules"]));
         }
     }
 
     public static void DeleteFoldersWhichNotContains(string v, string folder, IList<string> v2)
     {
-        //var f = Directory.GetDirectories(v, folder, SearchOption.AllDirectories);
-        //for (int i = f.Count - 1; i >= 0; i--)
-        //{
-        //    if (CA.ReturnWhichContainsIndexes( f[i], v2).Count != 0)
-        //    {
-        //        f.RemoveAt(i);
-        //    }
-        //}
-        //ClipboardHelper.SetLines(f);
-        //foreach (var item in f)
-        //{
-        //    //FS.DeleteF
-        //}
+        var f = Directory.GetDirectories(v, folder, SearchOption.AllDirectories).ToList();
+        for (int i = f.Count - 1; i >= 0; i--)
+        {
+            if (CA.ReturnWhichContainsIndexes(f[i], v2).Count != 0)
+            {
+                f.RemoveAt(i);
+            }
+        }
+        foreach (var item in f)
+        {
+            //FS.DeleteF
+        }
     }
 
     /// <summary>
@@ -3045,10 +3044,6 @@ string
             foreach (var item in files)
                 if (SH.IsContained(item, mustContains))
                 {
-                    if (item.Contains("node_modules"))
-                    {
-                    }
-
                     MoveOrCopy(p, to, co, move, item);
                 }
         }
