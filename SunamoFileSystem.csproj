@@ -18,6 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.29" />
     <None Include="readme.md" Pack="True" PackagePath="." />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="*" Pack="True" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="_sunamo\SunamoStringGetLines\" />
