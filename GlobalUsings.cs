@@ -45,7 +45,6 @@ global using SunamoFileSystem._sunamo.SunamoFileIO;
 global using SunamoFileSystem._sunamo.SunamoRegex;
 global using SunamoFileSystem._sunamo.SunamoInterfaces.Interfaces;
 global using SunamoFileSystem._sunamo.SunamoShared.Args;
-
 global using ILogger = Microsoft.Extensions.Logging.ILogger;
 global using Microsoft.Extensions.Logging;
 global using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;

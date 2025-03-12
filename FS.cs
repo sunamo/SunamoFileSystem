@@ -293,14 +293,14 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     {
         return File.Exists(p);
     }
-    public static void MoveSubfoldersToFolder(List<string> subfolderNames, string from, string to,
+    public static void MoveSubfoldersToFolder(ILogger logger, List<string> subfolderNames, string from, string to,
         FileMoveCollisionOption fo)
     {
         foreach (var item in subfolderNames)
         {
             var f = Path.Combine(from, item);
             var t = Path.Combine(to, item);
-            MoveAllRecursivelyAndThenDirectory(f, t, fo);
+            MoveAllRecursivelyAndThenDirectory(logger, f, t, fo);
         }
     }
     public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
@@ -457,11 +457,11 @@ List<string>
     /// <param name="p"></param>
     /// <param name="startFrom"></param>
     /// <param name="ext"></param>
-    public static void RenameNumberedSerieFiles(List<string> d, string p, int startFrom, string ext)
+    public static void RenameNumberedSerieFiles(ILogger logger, List<string> d, string p, int startFrom, string ext)
     {
         var masc = MascFromExtension(ext);
         var f = FSGetFiles.GetFiles(p, masc, SearchOption.TopDirectoryOnly);
-        RenameNumberedSerieFiles(d, f, startFrom, ext);
+        RenameNumberedSerieFiles(logger, d, f, startFrom, ext);
     }
     /// <summary>
     ///     A1 is new names of files without extension. Can use LinearHelper
@@ -470,7 +470,7 @@ List<string>
     /// <param name="p"></param>
     /// <param name="startFrom"></param>
     /// <param name="ext"></param>
-    public static void RenameNumberedSerieFiles(List<string> d, List<string> f, int startFrom, string ext)
+    public static void RenameNumberedSerieFiles(ILogger logger, List<string> d, List<string> f, int startFrom, string ext)
     {
         var p = Path.GetDirectoryName(f[0]);
         if (f.Count >= d.Count)
@@ -487,7 +487,7 @@ List<string>
                     continue;
                 // AddSerie is useless coz file never will be exists
                 //FS.RenameFile(t, d[i - startFrom] + ext, FileMoveCollisionOption.AddSerie);
-                RenameFile(r, t, FileMoveCollisionOption.AddSerie);
+                RenameFile(logger, r, t, FileMoveCollisionOption.AddSerie);
             }
         }
     }
@@ -517,7 +517,7 @@ List<string>
     /// <param name="wasntExistsInFrom"></param>
     /// <param name="mustExistsInTarget"></param>
     /// <param name="copy"></param>
-    public static void CopyMoveFilesInList(List<string> filesFrom, string folderFrom, string folderTo,
+    public static void CopyMoveFilesInList(ILogger logger, List<string> filesFrom, string folderFrom, string folderTo,
         List<string> wasntExistsInFrom, bool mustExistsInTarget, bool copy, Dictionary<string, List<string>> files,
         bool overwrite = true)
     {
@@ -549,19 +549,19 @@ List<string>
             if ((existsFileTo && overwrite) || !existsFileTo)
             {
                 if (copy)
-                    CopyFile(oldPath, newPath, FileMoveCollisionOption.Overwrite);
+                    CopyFile(logger, oldPath, newPath, FileMoveCollisionOption.Overwrite);
                 else
-                    MoveFile(oldPath, newPath, FileMoveCollisionOption.Overwrite);
+                    MoveFile(logger, oldPath, newPath, FileMoveCollisionOption.Overwrite);
             }
             filesFrom.RemoveAt(i);
         }
     }
-    public static void CopyMoveFilesInListSimple(List<string> f, string basePathCjHtml1, string basePathCjHtml2,
+    public static void CopyMoveFilesInListSimple(ILogger logger, List<string> f, string basePathCjHtml1, string basePathCjHtml2,
         bool copy, bool overwrite = true)
     {
         List<string> wasntExistsInFrom = null;
         var mustExistsInTarget = false;
-        CopyMoveFilesInList(f, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
+        CopyMoveFilesInList(logger, f, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
             false);
     }
     public static void CreateInOtherLocationSameFolderStructure(string from, string to)
@@ -581,14 +581,14 @@ List<string>
     /// <param name="files"></param>
     /// <param name="folderFrom"></param>
     /// <param name="folderTo"></param>
-    public static void CopyMoveFromMultiLocationIntoOne(List<string> files, string folderFrom, string folderTo)
+    public static void CopyMoveFromMultiLocationIntoOne(ILogger logger, List<string> files, string folderFrom, string folderTo)
     {
         var wasntExists = new List<string>();
         var files2 = new Dictionary<string, List<string>>();
         var getFiles = FSGetFiles.GetFiles(folderFrom, "*.cs", SearchOption.AllDirectories,
             new GetFilesArgsFS { excludeFromLocationsCOntains = new List<string>(["TestFiles"]) });
         foreach (var item in files) files2.Add(item, getFiles.Where(d => Path.GetFileName(d) == item).ToList());
-        CopyMoveFilesInList(files, folderFrom, folderTo, wasntExists, false, true, files2);
+        CopyMoveFilesInList(logger, files, folderFrom, folderTo, wasntExists, false, true, files2);
         ////DebugLogger.Instance.WriteList(wasntExists);
     }
     //public static string StorageFilePath<StorageFolder, StorageFile>(StorageFile item, AbstractCatalog<StorageFolder, StorageFile> ac)
@@ -1139,7 +1139,7 @@ void
     /// <param name="p"></param>
     /// <param name="to"></param>
     /// <param name="directoryMoveCollisionOption"></param>
-    public static string MoveDirectoryNoRecursive(string from, string to, DirectoryMoveCollisionOption directoryMoveCollisionOption,
+    public static string MoveDirectoryNoRecursive(ILogger logger, string from, string to, DirectoryMoveCollisionOption directoryMoveCollisionOption,
         FileMoveCollisionOption fileMoveCollisionOption)
     {
         string vr = null;
@@ -1178,7 +1178,7 @@ void
         foreach (var item2 in files)
         {
             var fileTo = to + item2.Substring(from.Length);
-            MoveFile(item2, fileTo, fileMoveCollisionOption);
+            MoveFile(logger, item2, fileTo, fileMoveCollisionOption);
         }
         try
         {
@@ -1204,17 +1204,17 @@ void
     /// </summary>
     /// <param name="p"></param>
     /// <param name="to"></param>
-    public static void MoveAllRecursivelyAndThenDirectory(string p, string to, FileMoveCollisionOption co)
+    public static void MoveAllRecursivelyAndThenDirectory(ILogger logger, string p, string to, FileMoveCollisionOption co)
     {
-        MoveAllFilesRecursively(p, to, co);
+        MoveAllFilesRecursively(logger, p, to, co);
         var dirs = Directory.GetDirectories(p, "*", SearchOption.AllDirectories);
         for (var i = dirs.Length - 1; i >= 0; i--) TryDeleteDirectory(dirs[i]);
         TryDeleteDirectory(p);
     }
     [Obsolete("Use MoveDirectoryNoRecursive instead")]
-    public static void MoveAllFilesRecursively(string p, string to, FileMoveCollisionOption co, string contains = null)
+    public static void MoveAllFilesRecursively(ILogger logger, string p, string to, FileMoveCollisionOption co, string contains = null)
     {
-        CopyMoveAllFilesRecursively(p, to, co, true, contains, SearchOption.AllDirectories);
+        CopyMoveAllFilesRecursively(logger, p, to, co, true, contains, SearchOption.AllDirectories);
     }
     /// <summary>
     ///     Unit tests = OK
@@ -1473,7 +1473,7 @@ void
     {
         return (long)File.GetLastWriteTimeUtc(dsi).Subtract(DTConstants.UnixFsStart).TotalSeconds;
     }
-    public static void ReplaceDiacriticRecursive(string folder, bool dirs, bool files, DirectoryMoveCollisionOption fo,
+    public static void ReplaceDiacriticRecursive(ILogger logger, string folder, bool dirs, bool files, DirectoryMoveCollisionOption fo,
         FileMoveCollisionOption co)
     {
         if (dirs)
@@ -1486,7 +1486,7 @@ void
                 if (dirName.HasDiacritics())
                 {
                     var dirNameWithoutDiac = dirName.RemoveDiacritics(); //SH.TextWithoutDiacritic(dirName);
-                    RenameDirectory(item.t, dirNameWithoutDiac, fo, co);
+                    RenameDirectory(logger, item.t, dirNameWithoutDiac, fo, co);
                 }
             }
         }
@@ -1500,7 +1500,7 @@ void
                 if (fileName.HasDiacritics())
                 {
                     var dirNameWithoutDiac = fileName.RemoveDiacritics();
-                    RenameFile(item, dirNameWithoutDiac, co);
+                    RenameFile(logger, item, dirNameWithoutDiac, co);
                 }
             }
         }
@@ -1513,10 +1513,10 @@ void
     /// <param name="oldFn"></param>
     /// <param name="newFnWithoutPath"></param>
     /// <param name="co"></param>
-    public static void RenameFile(string oldFn, string newFnWithoutPath, FileMoveCollisionOption co)
+    public static void RenameFile(ILogger logger, string oldFn, string newFnWithoutPath, FileMoveCollisionOption co)
     {
         var to = ChangeFilename(oldFn, newFnWithoutPath, false);
-        MoveFile(oldFn, to, co);
+        MoveFile(logger, oldFn, to, co);
     }
     /// <summary>
     ///     Může výhodit výjimku, proto je nutné používat v try-catch bloku
@@ -1524,14 +1524,14 @@ void
     /// </summary>
     /// <param name="path"></param>
     /// <param name="newname"></param>
-    public static string RenameDirectory(string path, string newname, DirectoryMoveCollisionOption co,
+    public static string RenameDirectory(ILogger logger, string path, string newname, DirectoryMoveCollisionOption co,
         FileMoveCollisionOption fo)
     {
         string vr = null;
         path = WithoutEndSlash(path);
         var cesta = Path.GetDirectoryName(path);
         var nova = Path.Combine(cesta, newname);
-        vr = MoveDirectoryNoRecursive(path, nova, co, fo);
+        vr = MoveDirectoryNoRecursive(logger, path, nova, co, fo);
         return vr;
     }
     /// <summary>
@@ -2477,7 +2477,7 @@ string
     /// <param name="item"></param>
     /// <param name="fileTo"></param>
     /// <param name="co"></param>
-    public static void MoveFile(string item, string fileTo, FileMoveCollisionOption co)
+    public static void MoveFile(ILogger logger, string item, string fileTo, FileMoveCollisionOption co)
     {
         if (CopyMoveFilePrepare(ref item, ref fileTo, co))
             try
@@ -2485,13 +2485,14 @@ string
                 item = MakeUncLongPath(item);
                 fileTo = MakeUncLongPath(fileTo);
                 if (co == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo)) return;
-                File.Move(item, fileTo);
+                File.Move(item, fileTo, co == FileMoveCollisionOption.Overwrite);
             }
             catch (Exception ex)
             {
-                //ThisApp.Error(item + " : " + ex.Message);
+                logger.LogError(item + " : " + ex.Message);
             }
     }
+
     public static bool CopyMoveFilePrepare(ref string item, ref string fileTo, FileMoveCollisionOption co)
     {
         //var fileTo = fileTo2.ToString();
@@ -2575,9 +2576,9 @@ string
         if (fi.Exists) return fi.Length;
         return 0;
     }
-    public static void CopyAllFilesRecursively(string p, string to, FileMoveCollisionOption co, string contains = null)
+    public static void CopyAllFilesRecursively(ILogger logger, string p, string to, FileMoveCollisionOption co, string contains = null)
     {
-        CopyMoveAllFilesRecursively(p, to, co, false, contains, SearchOption.AllDirectories);
+        CopyMoveAllFilesRecursively(logger, p, to, co, false, contains, SearchOption.AllDirectories);
     }
     /// <summary>
     ///     A4 contains can use ! for negation
@@ -2586,9 +2587,9 @@ string
     /// <param name="to"></param>
     /// <param name="co"></param>
     /// <param name="contains"></param>
-    public static void CopyAllFiles(string p, string to, FileMoveCollisionOption co, string contains = null)
+    public static void CopyAllFiles(ILogger logger, string p, string to, FileMoveCollisionOption co, string contains = null)
     {
-        CopyMoveAllFilesRecursively(p, to, co, false, contains, SearchOption.TopDirectoryOnly);
+        CopyMoveAllFilesRecursively(logger, p, to, co, false, contains, SearchOption.TopDirectoryOnly);
     }
     /// <summary>
     ///     If want use which not contains, prefix A4 with !
@@ -2597,7 +2598,7 @@ string
     /// <param name="to"></param>
     /// <param name="co"></param>
     /// <param name="mustContains"></param>
-    private static void CopyMoveAllFilesRecursively(string p, string to, FileMoveCollisionOption co, bool move,
+    private static void CopyMoveAllFilesRecursively(ILogger logger, string p, string to, FileMoveCollisionOption co, bool move,
         string mustContains, SearchOption so)
     {
         var files = FSGetFiles.GetFiles(p, "*", so);
@@ -2606,25 +2607,25 @@ string
             foreach (var item in files)
                 if (SH.IsContained(item, mustContains))
                 {
-                    MoveOrCopy(p, to, co, move, item);
+                    MoveOrCopy(logger, p, to, co, move, item);
                 }
         }
         else
         {
-            foreach (var item in files) MoveOrCopy(p, to, co, move, item);
+            foreach (var item in files) MoveOrCopy(logger, p, to, co, move, item);
         }
     }
-    private static void MoveOrCopy(string p, string to, FileMoveCollisionOption co, bool move, string item)
+    private static void MoveOrCopy(ILogger logger, string p, string to, FileMoveCollisionOption co, bool move, string item)
     {
         var fileTo = to + item.Substring(p.Length);
         if (move)
-            MoveFile(item, fileTo, co);
+            MoveFile(logger, item, fileTo, co);
         else
-            CopyFile(item, fileTo, co);
+            CopyFile(logger, item, fileTo, co);
     }
     public static
         void
-        CopyFile(string item2, string fileTo2, FileMoveCollisionOption co, bool terminateProcessIfIsInUsed = false)
+        CopyFile(ILogger logger, string item2, string fileTo2, FileMoveCollisionOption co, bool terminateProcessIfIsInUsed = false)
     {
         var fileTo = fileTo2;
         var item = item2;
@@ -2635,7 +2636,7 @@ string
             if (co == FileMoveCollisionOption.DontManipulate &&
                 File.Exists(fileTo))
                 return;
-            CopyFile(item, fileTo, terminateProcessIfIsInUsed);
+            CopyFile(logger, item, fileTo, terminateProcessIfIsInUsed);
         }
     }
     /// <summary>
@@ -2646,7 +2647,7 @@ string
     /// </summary>
     /// <param name="jsFiles"></param>
     /// <param name="v"></param>
-    public static void CopyFile(string jsFiles, string v, bool terminateProcessIfIsInUsed = false)
+    public static void CopyFile(ILogger logger, string jsFiles, string v, bool terminateProcessIfIsInUsed = false)
     {
         try
         {
@@ -2667,14 +2668,14 @@ string
                 {
                     File.Copy(jsFiles, v, true);
                 }
-                catch (Exception)
+                catch (Exception ex2)
                 {
-                    // Pokud se to ani na druhý pokus nepodaří, tak už to jebu
+                    logger.LogError($"{jsFiles}: {Exceptions.TextOfExceptions(ex2)}");
                 }
             }
             else
             {
-                throw;
+                logger.LogError($"{jsFiles}: {Exceptions.TextOfExceptions(ex)}");
             }
         }
     }
@@ -2979,13 +2980,13 @@ string
                 return true;
         return false;
     }
-    public static void NumberByDateModified(string folder, string masc, SearchOption so)
+    public static void NumberByDateModified(ILogger logger, string folder, string masc, SearchOption so)
     {
         var files = FSGetFiles.GetFiles(folder, masc, so, new GetFilesArgsFS { byDateOfLastModifiedAsc = true });
         var i = 1;
         foreach (var item in files)
         {
-            RenameFile(item, i + Path.GetExtension(item), FileMoveCollisionOption.DontManipulate);
+            RenameFile(logger, item, i + Path.GetExtension(item), FileMoveCollisionOption.DontManipulate);
             i++;
         }
     }
