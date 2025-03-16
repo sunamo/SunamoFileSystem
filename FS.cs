@@ -1,5 +1,6 @@
 namespace SunamoFileSystem;
 
+using SunamoWpf._public;
 using PathMs = Path;
 using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
