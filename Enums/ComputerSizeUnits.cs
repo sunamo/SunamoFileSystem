@@ -1,4 +1,4 @@
-﻿namespace SunamoWpf._public;
+namespace SunamoFileSystem.Enums;
 
 public enum ComputerSizeUnits : byte
 {

@@ -1,6 +1,7 @@
 namespace SunamoFileSystem;
 
-using SunamoWpf._public;
+using Microsoft.Extensions.Logging.Abstractions;
+using SunamoFileSystem.Services;
 using PathMs = Path;
 using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
@@ -3035,6 +3036,7 @@ string
             throw new Exception("Path contains no delimiter");
         return deli;
     }
+
     /// <summary>
     ///     Usage: Exceptions.IsNotWindowsPathFormat
     /// </summary>
@@ -3042,16 +3044,10 @@ string
     /// <returns></returns>
     public static bool IsWindowsPathFormat(string argValue)
     {
-        if (string.IsNullOrWhiteSpace(argValue)) return false;
-        var badFormat = false;
-        if (argValue.Length < 3) return badFormat;
-        if (!char.IsLetter(argValue[0])) badFormat = true;
-        if (char.IsLetter(argValue[1])) badFormat = true;
-        if (argValue.Length > 2)
-            if (argValue[1] != '\\' && argValue[2] != '\\')
-                badFormat = true;
-        return !badFormat;
+        PathFormatDetectorService pathFormatDetector = new(NullLogger.Instance);
+        return pathFormatDetector.IsWindowsPathFormat(argValue);
     }
+
     #endregion
     #region MakeUncLongPath
     public static string MakeUncLongPath(string path)
