@@ -1,6 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoStringReplace;
 
-
 internal class SHReplace
 {
     internal static string ReplaceOnce(string input, string what, string zaco)
@@ -20,7 +19,7 @@ internal class SHReplace
         WhitespaceCharService whitespaceChar = new WhitespaceCharService();
 
         var p = text.Split(whitespaceChar.whiteSpaceChars
-            .ToArray()); //SHSplit.SplitMore(text, AllChars.whiteSpaceChars.ConvertAll(d => d.ToString()).ToArray());
+            .ToArray()); //SHSplit.Split(text, AllChars.whiteSpaceChars.ConvertAll(d => d.ToString()).ToArray());
         return string.Join(" ", p);
     }
 }

@@ -416,9 +416,9 @@ List<string>
         basePath = basePath.Trim('\\');
         item = item.Trim('\\');
         item = item.Replace(basePath, string.Empty);
-        var pBasePath = SHSplit.SplitMore(basePath, "\"");
+        var pBasePath = SHSplit.Split(basePath, "\"");
         var basePathC = pBasePath.Count;
-        var p = SHSplit.SplitMore(item, "\"");
+        var p = SHSplit.Split(item, "\"");
         var i = 0;
         for (; i < p.Count; i++)
             if (p[i].StartsWith("_"))
@@ -724,8 +724,8 @@ void
         }
         if (pairLinesInFromAndTo)
         {
-            var from2 = SHSplit.SplitMore(from, Environment.NewLine);
-            var to2 = SHSplit.SplitMore(to, Environment.NewLine);
+            var from2 = SHSplit.Split(from, Environment.NewLine);
+            var to2 = SHSplit.Split(to, Environment.NewLine);
             if (replaceWithEmpty)
             {
                 to2.Clear();
@@ -1802,7 +1802,7 @@ string
         {
             ThrowEx.NotImplementedCase(relativePath);
         }
-        return SHSplit.SplitMore(relativePath, deli);
+        return SHSplit.Split(relativePath, deli);
     }
     public static void CopyStream(Stream input, Stream output)
     {
@@ -3290,11 +3290,11 @@ string
     //
     //            if (v.Contains(c))
     //            {
-    //                masks.AddRange(SHSplit.SplitMore(v, c));
+    //                masks.AddRange(SHSplit.Split(v, c));
     //            }
     //            else if (v.Contains(sc))
     //            {
-    //                masks.AddRange(SHSplit.SplitMore(v, sc));
+    //                masks.AddRange(SHSplit.Split(v, sc));
     //            }
     //            else
     //            {

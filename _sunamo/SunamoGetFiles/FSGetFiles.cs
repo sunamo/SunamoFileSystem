@@ -206,7 +206,7 @@ internal class FSGetFiles
             //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         if (a == null) a = new GetFilesArgsFS();
-        var folders = SHSplit.SplitMore(folder2, ";");
+        var folders = SHSplit.Split(folder2, ";");
         //if (CA.PostfixIfNotEnding != null)
         //{
         //    CA.PostfixIfNotEnding("\"", folders);
@@ -231,7 +231,7 @@ internal class FSGetFiles
                 //if (mask.Contains(";"))
                 //{
                 //    //list = new List<string>();
-                //    var masces = SHSplit.SplitMore(mask, ";");
+                //    var masces = SHSplit.Split(mask, ";");
                 //    foreach (var item in masces)
                 //    {
                 //        var masc = item;
@@ -298,9 +298,9 @@ internal class FSGetFiles
         var result = new List<string>();
         var masks = new List<string>();
         if (masc.Contains(c))
-            masks.AddRange(SHSplit.SplitMore(masc, c));
+            masks.AddRange(SHSplit.Split(masc, c));
         else if (masc.Contains(sc))
-            masks.AddRange(SHSplit.SplitMore(masc, sc));
+            masks.AddRange(SHSplit.Split(masc, sc));
         else
             masks.Add(masc);
 
