@@ -14,15 +14,15 @@ internal class SHParts
         return nameSolution;
     }
 
-    internal static string GetTextBetweenTwoChars(string p, char begin, char end)
+    internal static string? GetTextBetweenTwoChars(string p, char begin, char end)
     {
         return GetTextBetweenTwoCharsInts(p, p.IndexOf(begin), p.IndexOf(end));
     }
 
-    internal static string GetTextBetweenTwoCharsInts(string p, int begin, int end)
+    internal static string? GetTextBetweenTwoCharsInts(string p, int begin, int end)
     {
         if (end > begin)
             return p.Substring(begin + 1, end - begin - 1);
-        return p;
+        return null;
     }
 }

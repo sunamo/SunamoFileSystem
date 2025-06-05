@@ -2751,7 +2751,13 @@ string
         return item;
     }
 
-    public static string GetFileSerie(string fnwoe, SerieStyleFS ss)
+    /// <summary>
+    /// Retun null if serie is not defined
+    /// </summary>
+    /// <param name="fnwoe"></param>
+    /// <param name="ss"></param>
+    /// <returns></returns>
+    public static string? GetFileSerie(string fnwoe, SerieStyleFS ss)
     {
         if (ss == SerieStyleFS.Brackets)
         {
@@ -2759,7 +2765,7 @@ string
         }
 
         ThrowEx.NotImplementedMethod();
-        return "";
+        return null;
     }
 
 
