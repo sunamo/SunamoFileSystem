@@ -3680,7 +3680,10 @@ string
         sbExt.Append(ext);
         ext = sbExt.ToString();
         var g = p;
-        if (dd.Length != 0) g = g.Substring(dd.Length);
+        if (dd.Length != 0)
+        {
+            g = g.Substring(dd.Length);
+        }
         // Nejdříve ořežu všechny přípony a to i tehdy, má li soubor více přípon
         if (serieStyle == SerieStyleFS.Brackets || serieStyle == SerieStyleFS.All)
             while (true)
@@ -3690,7 +3693,7 @@ string
                 var rb = g.LastIndexOf(')');
                 if (lb != -1 && rb != -1)
                 {
-                    var between = g.Substring(lb, rb - lb); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
+                    var between = g.Substring(lb + 1, rb - lb - 1); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
                     if (double.TryParse(between, out var _) /*SH.IsNumber(between, [])*/)
                     {
                         serie = int.Parse(between);
