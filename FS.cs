@@ -3674,7 +3674,10 @@ string
         if (a1IsWithPath) dd = WithEndSlash(Path.GetDirectoryName(p));
         var sbExt = new StringBuilder();
         var ext = Path.GetExtension(p);
-        if (ext == string.Empty) return p;
+        //if (ext == string.Empty)
+        //{
+        //    return p;
+        //}
         var pocetSerii = 0;
         p = SHParts.RemoveAfterLast(p, ".");
         sbExt.Append(ext);
