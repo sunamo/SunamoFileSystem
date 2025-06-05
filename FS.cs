@@ -22,6 +22,7 @@ public class FS
             && Path.IsPathRooted(path)
             && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
     }
+
     /// <summary>
     /// Use CopyAllFilesRecursively instead
     /// </summary>
@@ -2749,6 +2750,19 @@ string
         //}
         return item;
     }
+
+    public static string GetFileSerie(string fnwoe, SerieStyleFS ss)
+    {
+        if (ss == SerieStyleFS.Brackets)
+        {
+            return SHParts.GetTextBetweenTwoChars(fnwoe, '(', ')');
+        }
+
+        ThrowEx.NotImplementedMethod();
+        return "";
+    }
+
+
     /// <summary>
     ///     Get number higher by one from the number filenames with highest value (as 3.txt)
     /// </summary>
@@ -3621,6 +3635,15 @@ string
     //    int serie;
     //    return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
     //}
+
+    /// <summary>
+    /// 1 = filename without serie
+    /// 2 = has serie
+    /// </summary>
+    /// <param name="p"></param>
+    /// <param name="path"></param>
+    /// <param name="serieStyle"></param>
+    /// <returns></returns>
     public static (string, bool) GetNameWithoutSeriesNoOut(string p, bool path, SerieStyleFS serieStyle)
     {
         int serie;
