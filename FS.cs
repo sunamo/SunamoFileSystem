@@ -565,7 +565,7 @@ List<string>
         List<string> wasntExistsInFrom = null;
         var mustExistsInTarget = false;
         CopyMoveFilesInList(logger, f, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
-            false);
+            overwrite);
     }
     public static void CreateInOtherLocationSameFolderStructure(string from, string to)
     {
@@ -1083,7 +1083,7 @@ void
     ///     Zjistí všechny složky rekurzivně z A1 a prvně maže samozřejmě ty, které mají více tokenů
     /// </summary>
     /// <param name="v"></param>
-    public static void DeleteAllEmptyDirectories(string v, bool deleteAlsoA1, params string[] doNotDeleteWhichContains)
+    public static void DeleteAllEmptyDirectories(string v/*, bool deleteAlsoA1*/, params string[] doNotDeleteWhichContains)
     {
         var dirs = DirectoriesWithToken(v, AscDesc.Desc);
         foreach (var item in dirs)
@@ -1191,7 +1191,7 @@ void
         {
             //ThrowEx.CannotMoveFolder(item, nova, ex);
         }
-        DeleteAllEmptyDirectories(from, true);
+        DeleteAllEmptyDirectories(from);
         return vr;
     }
     private static bool IsDirectoryEmpty(string item, bool folders, bool files)
@@ -2898,6 +2898,14 @@ string
     }
     public static bool ExistsDirectory(string item, bool _falseIfContainsNoFile = false)
     {
+        if (_falseIfContainsNoFile)
+        {
+            if (Directory.Exists(item) && Directory.GetFiles(item, "*", SearchOption.AllDirectories).Length == 0)
+            {
+                return false;
+            }
+        }
+
         return Directory.Exists(item);
         //return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
     }
@@ -2907,14 +2915,14 @@ string
     //{
     //    return se.FS.NormalizeExtension2(item);
     //}
-    public static string NonSpacesFilename(string nameOfPage)
-    {
-        ThrowEx.NotImplementedMethod();
-        return null;
-        //var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
-        //v = FS.ReplaceInvalidFileNameChars(v);
-        //return v;
-    }
+    //public static string NonSpacesFilename(string nameOfPage)
+    //{
+    //    ThrowEx.NotImplementedMethod();
+    //    return null;
+    //    //var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
+    //    //v = FS.ReplaceInvalidFileNameChars(v);
+    //    //return v;
+    //}
     #endregion
     #region Making problem in translate
     /// <summary>

@@ -9,8 +9,8 @@ internal class CA
         ExactlyName
     }
 
-    public static List<int> ReturnWhichContainsIndexes(string item, IList<string> terms,
-        SearchStrategyCA searchStrategy = SearchStrategyCA.FixedSpace)
+    public static List<int> ReturnWhichContainsIndexes(string item, IList<string> terms/*,
+        SearchStrategyCA searchStrategy = SearchStrategyCA.FixedSpace*/)
     {
         var result = new List<int>();
         var i = 0;

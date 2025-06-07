@@ -44,14 +44,12 @@ internal class TextOutputGenerator //: ITextOutputGenerator
 
 
 
-    
-
-    
 
 
-        internal void List<Header, Value>(IList<Value> files1, Header header, TextOutputGeneratorArgs a)
-        where Header : IEnumerable<char>
-{}    
+
+
+
+
     #endregion
 
     #region Dictionary
