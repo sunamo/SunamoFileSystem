@@ -69,7 +69,7 @@ internal class FSGetFiles
             e.UpdateTbPb(m);
         }
 
-        dirs = FSGetFolders.GetFoldersEveryFolder(folder, "*", new GetFoldersEveryFolderArgs(e)).ToList();
+        dirs = FSGetFolders.GetFoldersEveryFolder(folder, new GetFoldersEveryFolderArgs(e)).ToList();
 #if DEBUG
         //int before = dirs.Count;
 #endif

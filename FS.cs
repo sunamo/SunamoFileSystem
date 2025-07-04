@@ -22,6 +22,7 @@ public class FS
             && Path.IsPathRooted(path)
             && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
     }
+
     /// <summary>
     /// Use CopyAllFilesRecursively instead
     /// </summary>
@@ -564,7 +565,7 @@ List<string>
         List<string> wasntExistsInFrom = null;
         var mustExistsInTarget = false;
         CopyMoveFilesInList(logger, f, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
-            false);
+            overwrite);
     }
     public static void CreateInOtherLocationSameFolderStructure(string from, string to)
     {
@@ -1082,7 +1083,7 @@ void
     ///     Zjistí všechny složky rekurzivně z A1 a prvně maže samozřejmě ty, které mají více tokenů
     /// </summary>
     /// <param name="v"></param>
-    public static void DeleteAllEmptyDirectories(string v, bool deleteAlsoA1, params string[] doNotDeleteWhichContains)
+    public static void DeleteAllEmptyDirectories(string v/*, bool deleteAlsoA1*/, params string[] doNotDeleteWhichContains)
     {
         var dirs = DirectoriesWithToken(v, AscDesc.Desc);
         foreach (var item in dirs)
@@ -1190,7 +1191,7 @@ void
         {
             //ThrowEx.CannotMoveFolder(item, nova, ex);
         }
-        DeleteAllEmptyDirectories(from, true);
+        DeleteAllEmptyDirectories(from);
         return vr;
     }
     private static bool IsDirectoryEmpty(string item, bool folders, bool files)
@@ -2749,6 +2750,25 @@ string
         //}
         return item;
     }
+
+    /// <summary>
+    /// Retun null if serie is not defined
+    /// </summary>
+    /// <param name="fnwoe"></param>
+    /// <param name="ss"></param>
+    /// <returns></returns>
+    public static string? GetFileSerie(string fnwoe, SerieStyleFS ss)
+    {
+        if (ss == SerieStyleFS.Brackets)
+        {
+            return SHParts.GetTextBetweenTwoChars(fnwoe, '(', ')');
+        }
+
+        ThrowEx.NotImplementedMethod();
+        return null;
+    }
+
+
     /// <summary>
     ///     Get number higher by one from the number filenames with highest value (as 3.txt)
     /// </summary>
@@ -2878,6 +2898,14 @@ string
     }
     public static bool ExistsDirectory(string item, bool _falseIfContainsNoFile = false)
     {
+        if (_falseIfContainsNoFile)
+        {
+            if (Directory.Exists(item) && Directory.GetFiles(item, "*", SearchOption.AllDirectories).Length == 0)
+            {
+                return false;
+            }
+        }
+
         return Directory.Exists(item);
         //return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
     }
@@ -2887,14 +2915,14 @@ string
     //{
     //    return se.FS.NormalizeExtension2(item);
     //}
-    public static string NonSpacesFilename(string nameOfPage)
-    {
-        ThrowEx.NotImplementedMethod();
-        return null;
-        //var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
-        //v = FS.ReplaceInvalidFileNameChars(v);
-        //return v;
-    }
+    //public static string NonSpacesFilename(string nameOfPage)
+    //{
+    //    ThrowEx.NotImplementedMethod();
+    //    return null;
+    //    //var v = ConvertCamelConventionWithNumbers.ToConvention(nameOfPage);
+    //    //v = FS.ReplaceInvalidFileNameChars(v);
+    //    //return v;
+    //}
     #endregion
     #region Making problem in translate
     /// <summary>
@@ -3621,6 +3649,15 @@ string
     //    int serie;
     //    return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
     //}
+
+    /// <summary>
+    /// 1 = filename without serie
+    /// 2 = has serie
+    /// </summary>
+    /// <param name="p"></param>
+    /// <param name="path"></param>
+    /// <param name="serieStyle"></param>
+    /// <returns></returns>
     public static (string, bool) GetNameWithoutSeriesNoOut(string p, bool path, SerieStyleFS serieStyle)
     {
         int serie;
@@ -3651,13 +3688,19 @@ string
         if (a1IsWithPath) dd = WithEndSlash(Path.GetDirectoryName(p));
         var sbExt = new StringBuilder();
         var ext = Path.GetExtension(p);
-        if (ext == string.Empty) return p;
+        //if (ext == string.Empty)
+        //{
+        //    return p;
+        //}
         var pocetSerii = 0;
         p = SHParts.RemoveAfterLast(p, ".");
         sbExt.Append(ext);
         ext = sbExt.ToString();
         var g = p;
-        if (dd.Length != 0) g = g.Substring(dd.Length);
+        if (dd.Length != 0)
+        {
+            g = g.Substring(dd.Length);
+        }
         // Nejdříve ořežu všechny přípony a to i tehdy, má li soubor více přípon
         if (serieStyle == SerieStyleFS.Brackets || serieStyle == SerieStyleFS.All)
             while (true)
@@ -3667,7 +3710,7 @@ string
                 var rb = g.LastIndexOf(')');
                 if (lb != -1 && rb != -1)
                 {
-                    var between = g.Substring(lb, rb - lb); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
+                    var between = g.Substring(lb + 1, rb - lb - 1); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
                     if (double.TryParse(between, out var _) /*SH.IsNumber(between, [])*/)
                     {
                         serie = int.Parse(between);

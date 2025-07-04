@@ -66,7 +66,7 @@ internal class FSGetFolders
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
-    internal static List<string> GetFoldersEveryFolder(string folder, string mask, GetFilesArgsFS e = null)
+    internal static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS e = null)
     {
         if (e == null) e = new GetFilesArgsFS();
         var list = new List<string>();
