@@ -2,14 +2,14 @@ namespace SunamoFileSystem._sunamo.SunamoCollections;
 
 internal class CA
 {
-    public enum SearchStrategyCA
+    internal enum SearchStrategyCA
     {
         FixedSpace,
         AnySpaces,
         ExactlyName
     }
 
-    public static List<int> ReturnWhichContainsIndexes(string item, IList<string> terms/*,
+    internal static List<int> ReturnWhichContainsIndexes(string item, IList<string> terms/*,
         SearchStrategyCA searchStrategy = SearchStrategyCA.FixedSpace*/)
     {
         var result = new List<int>();
