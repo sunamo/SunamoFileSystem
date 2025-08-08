@@ -1,4 +1,4 @@
-﻿using SunamoFileSystem.Tests;
+using SunamoFileSystem.Tests;
 
 namespace RunnerFileSystem;
 
