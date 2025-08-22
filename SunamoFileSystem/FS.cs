@@ -2706,6 +2706,94 @@ string
         return true;
     }
     //public static Func<string, List<string>> InvokePs;
+    
+    private static void KillProcessesHoldingDirectory(string directoryPath)
+    {
+        if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            return;
+            
+        try
+        {
+            var processes = System.Diagnostics.Process.GetProcesses();
+            foreach (var process in processes)
+            {
+                try
+                {
+                    if (process.HasExited)
+                        continue;
+                        
+                    foreach (System.Diagnostics.ProcessModule module in process.Modules)
+                    {
+                        if (module.FileName.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            try
+                            {
+                                process.Kill();
+                                process.WaitForExit(1000);
+                            }
+                            catch { }
+                            break;
+                        }
+                    }
+                }
+                catch { }
+            }
+            
+            try
+            {
+                var handleExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "handle.exe");
+                if (!File.Exists(handleExePath))
+                {
+                    handleExePath = "handle.exe";
+                }
+                
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = handleExePath,
+                    Arguments = $"-accepteula -nobanner \"{directoryPath}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+                };
+                
+                using (var process = System.Diagnostics.Process.Start(psi))
+                {
+                    var output = process.StandardOutput.ReadToEnd();
+                    process.WaitForExit(3000);
+                    
+                    var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var line in lines)
+                    {
+                        if (line.Contains(" pid: "))
+                        {
+                            var pidStart = line.IndexOf(" pid: ") + 6;
+                            var pidEnd = line.IndexOf(' ', pidStart);
+                            if (pidEnd == -1) pidEnd = line.Length;
+                            
+                            if (int.TryParse(line.Substring(pidStart, pidEnd - pidStart), out int pid))
+                            {
+                                try
+                                {
+                                    var proc = System.Diagnostics.Process.GetProcessById(pid);
+                                    proc.Kill();
+                                    proc.WaitForExit(1000);
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+            
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+            System.GC.Collect();
+        }
+        catch { }
+    }
+    
     /// <summary>
     ///     Before start you can create instance of PowershellRunner to try do it with PS
     /// </summary>
@@ -2738,6 +2826,62 @@ string
         }
         catch (Exception ex)
         {
+            try
+            {
+                KillProcessesHoldingDirectory(v);
+                System.Threading.Thread.Sleep(500);
+                
+                var dirs = Directory.GetDirectories(v, "*", SearchOption.AllDirectories);
+                foreach (var dir in dirs)
+                {
+                    try
+                    {
+                        Directory.SetCurrentDirectory(Path.GetTempPath());
+                        var di = new DirectoryInfo(dir);
+                        di.Attributes = FileAttributes.Normal;
+                        foreach (var file in di.GetFiles())
+                        {
+                            file.Attributes = FileAttributes.Normal;
+                            file.Delete();
+                        }
+                        di.Delete(true);
+                    }
+                    catch { }
+                }
+                
+                Directory.SetCurrentDirectory(Path.GetTempPath());
+                var rootDi = new DirectoryInfo(v);
+                rootDi.Attributes = FileAttributes.Normal;
+                foreach (var file in rootDi.GetFiles())
+                {
+                    file.Attributes = FileAttributes.Normal;
+                    file.Delete();
+                }
+                rootDi.Delete(true);
+                return true;
+            }
+            catch
+            {
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                {
+                    try
+                    {
+                        var psi = new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = "cmd.exe",
+                            Arguments = $"/c rmdir /s /q \"{v}\"",
+                            WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                            CreateNoWindow = true,
+                            UseShellExecute = false
+                        };
+                        var process = System.Diagnostics.Process.Start(psi);
+                        process.WaitForExit(5000);
+                        if (!Directory.Exists(v))
+                            return true;
+                    }
+                    catch { }
+                }
+            }
         }
         return false;
     }
