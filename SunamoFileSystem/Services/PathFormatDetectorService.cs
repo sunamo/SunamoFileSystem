@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem.Services;
 
 public class PathFormatDetectorService(ILogger logger)

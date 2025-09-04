@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem;
 
 using Microsoft.Extensions.Logging.Abstractions;
@@ -72,9 +73,9 @@ public class FS
     {
         CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
     }
-    public static bool ExistsDirectory(string p)
+    public static bool ExistsDirectory(string directoryPath)
     {
-        return Directory.Exists(p);
+        return Directory.Exists(directoryPath);
     }
     /// <summary>
     ///     Create all upfolders of A1 with, if they dont exist
@@ -108,35 +109,35 @@ public class FS
     ///     All occurences Path's method in sunamo replaced
     /// </summary>
     /// <param name="v"></param>
-    public static void CreateDirectory(string v)
+    public static void CreateDirectory(string directoryPath)
     {
         try
         {
-            Directory.CreateDirectory(v);
+            Directory.CreateDirectory(directoryPath);
         }
         catch (NotSupportedException)
         {
         }
     }
-    public static void CreateDirectoryIfNotExists(string p)
+    public static void CreateDirectoryIfNotExists(string directoryPath)
     {
-        MakeUncLongPath(ref p);
-        if (!ExistsDirectory(p)) Directory.CreateDirectory(p);
+        MakeUncLongPath(ref directoryPath);
+        if (!ExistsDirectory(directoryPath)) Directory.CreateDirectory(directoryPath);
     }
-    public static string WithEndSlash(string v)
+    public static string WithEndSlash(string directoryPath)
     {
-        return WithEndSlash(ref v);
+        return WithEndSlash(ref directoryPath);
     }
     /// <summary>
     ///     Usage: Exceptions.FileWasntFoundInDirectory
     /// </summary>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static string WithEndSlash(ref string v)
+    public static string WithEndSlash(ref string directoryPath)
     {
-        if (v != string.Empty) v = v.TrimEnd('\\') + '\\';
-        FirstCharUpper(ref v);
-        return v;
+        if (directoryPath != string.Empty) directoryPath = directoryPath.TrimEnd('\\') + '\\';
+        FirstCharUpper(ref directoryPath);
+        return directoryPath;
     }
     public static List<string> FoldersWithSubfolder(string solutionFolder, string folderName)
     {
@@ -213,8 +214,8 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         var e = GetExtension(origS);
         if (origS.Contains('/') || origS.Contains('\\'))
         {
-            var p = Path.GetDirectoryName(origS);
-            return Path.Combine(p, fn + whatInsert + e);
+            var parentDirectory = Path.GetDirectoryName(origS);
+            return Path.Combine(parentDirectory, fn + whatInsert + e);
         }
         return fn + whatInsert + e;
     }
@@ -258,23 +259,23 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     ///     Return in lowercase
     /// </summary>
     /// <param name="v"></param>
-    public static string GetExtension(string v, GetExtensionArgs a = null)
+    public static string GetExtension(string filePath, GetExtensionArgs arguments = null)
     {
-        if (a == null) a = new GetExtensionArgs();
+        if (arguments == null) arguments = new GetExtensionArgs();
         var result = "";
-        var lastDot = v.LastIndexOf('.');
+        var lastDot = filePath.LastIndexOf('.');
         if (lastDot == -1) return string.Empty;
-        var lastSlash = v.LastIndexOf('/');
-        var lastBs = v.LastIndexOf('\\');
+        var lastSlash = filePath.LastIndexOf('/');
+        var lastBackslash = filePath.LastIndexOf('\\');
         if (lastSlash > lastDot) return string.Empty;
-        if (lastBs > lastDot) return string.Empty;
-        result = v.Substring(lastDot);
+        if (lastBackslash > lastDot) return string.Empty;
+        result = filePath.Substring(lastDot);
         if (!IsExtension(result))
         {
-            if (a.filesWoExtReturnAsIs) return result;
+            if (arguments.filesWoExtReturnAsIs) return result;
             return string.Empty;
         }
-        if (!a.returnOriginalCase) result = result.ToLower();
+        if (!arguments.returnOriginalCase) result = result.ToLower();
         return result;
     }
     public static bool IsExtension(string result)
@@ -292,26 +293,26 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     //    }
     //    return ac.fs.ciStorageFile.Invoke(path);
     //}
-    public static bool ExistsFile(string p)
+    public static bool ExistsFile(string filePath)
     {
-        return File.Exists(p);
+        return File.Exists(filePath);
     }
     public static void MoveSubfoldersToFolder(ILogger logger, List<string> subfolderNames, string from, string to,
         FileMoveCollisionOption fo)
     {
         foreach (var item in subfolderNames)
         {
-            var f = Path.Combine(from, item);
-            var t = Path.Combine(to, item);
-            MoveAllRecursivelyAndThenDirectory(logger, f, t, fo);
+            var fromPath = Path.Combine(from, item);
+            var toPath = Path.Combine(to, item);
+            MoveAllRecursivelyAndThenDirectory(logger, fromPath, toPath, fo);
         }
     }
-    public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
+    public static void TrimBasePathAndTrailingBs(List<string> pathList, string basePath)
     {
-        for (var i = 0; i < s.Count; i++)
+        for (var i = 0; i < pathList.Count; i++)
         {
-            s[i] = s[i].Substring(basePath.Length);
-            s[i] = s[i].TrimEnd('\\');
+            pathList[i] = pathList[i].Substring(basePath.Length);
+            pathList[i] = pathList[i].TrimEnd('\\');
         }
     }
     public static string GetFileNameWithoutOneExtension(string path)
@@ -378,24 +379,24 @@ List<string>
     ///         <string, string, string>)' and 'CAChangeContent.ChangeContent0(null,List<string>, Func<string, string>)'
     /// </summary>
     /// <param name="a"></param>
-    public static string AbsoluteFromCombinePath(string a)
+    public static string AbsoluteFromCombinePath(string combinedPath)
     {
-        var r = Path.GetFullPath(new Uri(a).LocalPath);
-        return r;
+        var result = Path.GetFullPath(new Uri(combinedPath).LocalPath);
+        return result;
     }
     public static string WrapWithQm(string item, bool? forceNotIncludeQm)
     {
         if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return SH.WrapWithQm(item);
         return item;
     }
-    public static List<string> FilterInRootAndInSubFolder(string rf, List<string> fs)
+    public static List<string> FilterInRootAndInSubFolder(string rootFolder, List<string> fileList)
     {
-        WithEndSlash(ref rf);
-        var c = rf.Length;
-        var subFolder = new List<string>(fs.Count);
-        for (var i = fs.Count - 1; i >= 0; i--)
+        WithEndSlash(ref rootFolder);
+        var rootFolderLength = rootFolder.Length;
+        var subFolder = new List<string>(fileList.Count);
+        for (var i = fileList.Count - 1; i >= 0; i--)
         {
-            var item = fs[i];
+            var item = fileList[i];
             if (item.Substring(c).Contains("\""))
             {
                 subFolder.Add(item);

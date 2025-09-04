@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
 internal class FSGetFolders

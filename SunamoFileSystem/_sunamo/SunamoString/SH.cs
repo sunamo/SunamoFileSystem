@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoString;
 
 internal class SH
@@ -20,14 +21,14 @@ internal class SH
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static string WrapWith(string value, string h)
+    internal static string WrapWith(string value, string wrapper)
     {
-        return h + value + h;
+        return wrapper + value + wrapper;
     }
 
-    internal static int OccurencesOfStringIn(string source, string p_2)
+    internal static int OccurencesOfStringIn(string source, string searchString)
     {
-        return source.Split(new[] { p_2 }, StringSplitOptions.None).Length - 1;
+        return source.Split(new[] { searchString }, StringSplitOptions.None).Length - 1;
     }
 
     internal static bool IsContained(string item, string contains)
@@ -97,7 +98,7 @@ internal class SH
     {
         if (nazevPP.Length == 1) return nazevPP.ToUpper();
 
-        var sb = nazevPP.Substring(1);
+        var substring = nazevPP.Substring(1);
         return nazevPP[0].ToString().ToUpper() + sb;
     }
 

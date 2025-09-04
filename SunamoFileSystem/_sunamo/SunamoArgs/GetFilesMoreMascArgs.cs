@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
 internal class GetFilesMoreMascArgs : GetFilesBaseArgsFS

@@ -1,3 +1,4 @@
+// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoCollectionsGeneric;
 
 internal class CAG
@@ -8,35 +9,35 @@ internal class CAG
     /// </summary>
     /// <param name="c1"></param>
     /// <param name="c2"></param>
-    internal static List<T> CompareList<T>(List<T> c1, List<T> c2) where T : IEquatable<T>
+    internal static List<T> CompareList<T>(List<T> collection1, List<T> collection2) where T : IEquatable<T>
     {
         var existsInBoth = new List<T>();
 
-        var dex = -1;
+        var index = -1;
 
-        for (var i = c2.Count - 1; i >= 0; i--)
+        for (var i = collection2.Count - 1; i >= 0; i--)
         {
-            var item = c2[i];
-            dex = c1.IndexOf(item);
+            var item = collection2[i];
+            index = collection1.IndexOf(item);
 
-            if (dex != -1)
+            if (index != -1)
             {
                 existsInBoth.Add(item);
-                c2.RemoveAt(i);
-                c1.RemoveAt(dex);
+                collection2.RemoveAt(i);
+                collection1.RemoveAt(index);
             }
         }
 
-        for (var i = c1.Count - 1; i >= 0; i--)
+        for (var i = collection1.Count - 1; i >= 0; i--)
         {
-            var item = c1[i];
-            dex = c2.IndexOf(item);
+            var item = collection1[i];
+            index = collection2.IndexOf(item);
 
-            if (dex != -1)
+            if (index != -1)
             {
                 existsInBoth.Add(item);
-                c1.RemoveAt(i);
-                c2.RemoveAt(dex);
+                collection1.RemoveAt(i);
+                collection2.RemoveAt(index);
             }
         }
 
