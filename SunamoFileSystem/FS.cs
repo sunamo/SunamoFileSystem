@@ -1,5 +1,4 @@
-// Instance variables refactored according to C# conventions
-namespace SunamoFileSystem;
+﻿namespace SunamoFileSystem;
 
 using Microsoft.Extensions.Logging.Abstractions;
 using SunamoFileSystem.Services;
@@ -73,9 +72,9 @@ public class FS
     {
         CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
     }
-    public static bool ExistsDirectory(string directoryPath)
+    public static bool ExistsDirectory(string p)
     {
-        return Directory.Exists(directoryPath);
+        return Directory.Exists(p);
     }
     /// <summary>
     ///     Create all upfolders of A1 with, if they dont exist
@@ -109,35 +108,35 @@ public class FS
     ///     All occurences Path's method in sunamo replaced
     /// </summary>
     /// <param name="v"></param>
-    public static void CreateDirectory(string directoryPath)
+    public static void CreateDirectory(string v)
     {
         try
         {
-            Directory.CreateDirectory(directoryPath);
+            Directory.CreateDirectory(v);
         }
         catch (NotSupportedException)
         {
         }
     }
-    public static void CreateDirectoryIfNotExists(string directoryPath)
+    public static void CreateDirectoryIfNotExists(string p)
     {
-        MakeUncLongPath(ref directoryPath);
-        if (!ExistsDirectory(directoryPath)) Directory.CreateDirectory(directoryPath);
+        MakeUncLongPath(ref p);
+        if (!ExistsDirectory(p)) Directory.CreateDirectory(p);
     }
-    public static string WithEndSlash(string directoryPath)
+    public static string WithEndSlash(string v)
     {
-        return WithEndSlash(ref directoryPath);
+        return WithEndSlash(ref v);
     }
     /// <summary>
     ///     Usage: Exceptions.FileWasntFoundInDirectory
     /// </summary>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static string WithEndSlash(ref string directoryPath)
+    public static string WithEndSlash(ref string v)
     {
-        if (directoryPath != string.Empty) directoryPath = directoryPath.TrimEnd('\\') + '\\';
-        FirstCharUpper(ref directoryPath);
-        return directoryPath;
+        if (v != string.Empty) v = v.TrimEnd('\\') + '\\';
+        FirstCharUpper(ref v);
+        return v;
     }
     public static List<string> FoldersWithSubfolder(string solutionFolder, string folderName)
     {
@@ -214,8 +213,8 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         var e = GetExtension(origS);
         if (origS.Contains('/') || origS.Contains('\\'))
         {
-            var parentDirectory = Path.GetDirectoryName(origS);
-            return Path.Combine(parentDirectory, fn + whatInsert + e);
+            var p = Path.GetDirectoryName(origS);
+            return Path.Combine(p, fn + whatInsert + e);
         }
         return fn + whatInsert + e;
     }
@@ -259,23 +258,23 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     ///     Return in lowercase
     /// </summary>
     /// <param name="v"></param>
-    public static string GetExtension(string filePath, GetExtensionArgs arguments = null)
+    public static string GetExtension(string v, GetExtensionArgs a = null)
     {
-        if (arguments == null) arguments = new GetExtensionArgs();
+        if (a == null) a = new GetExtensionArgs();
         var result = "";
-        var lastDot = filePath.LastIndexOf('.');
+        var lastDot = v.LastIndexOf('.');
         if (lastDot == -1) return string.Empty;
-        var lastSlash = filePath.LastIndexOf('/');
-        var lastBackslash = filePath.LastIndexOf('\\');
+        var lastSlash = v.LastIndexOf('/');
+        var lastBs = v.LastIndexOf('\\');
         if (lastSlash > lastDot) return string.Empty;
-        if (lastBackslash > lastDot) return string.Empty;
-        result = filePath.Substring(lastDot);
+        if (lastBs > lastDot) return string.Empty;
+        result = v.Substring(lastDot);
         if (!IsExtension(result))
         {
-            if (arguments.filesWoExtReturnAsIs) return result;
+            if (a.filesWoExtReturnAsIs) return result;
             return string.Empty;
         }
-        if (!arguments.returnOriginalCase) result = result.ToLower();
+        if (!a.returnOriginalCase) result = result.ToLower();
         return result;
     }
     public static bool IsExtension(string result)
@@ -293,26 +292,26 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     //    }
     //    return ac.fs.ciStorageFile.Invoke(path);
     //}
-    public static bool ExistsFile(string filePath)
+    public static bool ExistsFile(string p)
     {
-        return File.Exists(filePath);
+        return File.Exists(p);
     }
     public static void MoveSubfoldersToFolder(ILogger logger, List<string> subfolderNames, string from, string to,
         FileMoveCollisionOption fo)
     {
         foreach (var item in subfolderNames)
         {
-            var fromPath = Path.Combine(from, item);
-            var toPath = Path.Combine(to, item);
-            MoveAllRecursivelyAndThenDirectory(logger, fromPath, toPath, fo);
+            var f = Path.Combine(from, item);
+            var t = Path.Combine(to, item);
+            MoveAllRecursivelyAndThenDirectory(logger, f, t, fo);
         }
     }
-    public static void TrimBasePathAndTrailingBs(List<string> pathList, string basePath)
+    public static void TrimBasePathAndTrailingBs(List<string> s, string basePath)
     {
-        for (var i = 0; i < pathList.Count; i++)
+        for (var i = 0; i < s.Count; i++)
         {
-            pathList[i] = pathList[i].Substring(basePath.Length);
-            pathList[i] = pathList[i].TrimEnd('\\');
+            s[i] = s[i].Substring(basePath.Length);
+            s[i] = s[i].TrimEnd('\\');
         }
     }
     public static string GetFileNameWithoutOneExtension(string path)
@@ -379,24 +378,24 @@ List<string>
     ///         <string, string, string>)' and 'CAChangeContent.ChangeContent0(null,List<string>, Func<string, string>)'
     /// </summary>
     /// <param name="a"></param>
-    public static string AbsoluteFromCombinePath(string combinedPath)
+    public static string AbsoluteFromCombinePath(string a)
     {
-        var result = Path.GetFullPath(new Uri(combinedPath).LocalPath);
-        return result;
+        var r = Path.GetFullPath(new Uri(a).LocalPath);
+        return r;
     }
     public static string WrapWithQm(string item, bool? forceNotIncludeQm)
     {
         if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return SH.WrapWithQm(item);
         return item;
     }
-    public static List<string> FilterInRootAndInSubFolder(string rootFolder, List<string> fileList)
+    public static List<string> FilterInRootAndInSubFolder(string rf, List<string> fs)
     {
-        WithEndSlash(ref rootFolder);
-        var rootFolderLength = rootFolder.Length;
-        var subFolder = new List<string>(fileList.Count);
-        for (var i = fileList.Count - 1; i >= 0; i--)
+        WithEndSlash(ref rf);
+        var c = rf.Length;
+        var subFolder = new List<string>(fs.Count);
+        for (var i = fs.Count - 1; i >= 0; i--)
         {
-            var item = fileList[i];
+            var item = fs[i];
             if (item.Substring(c).Contains("\""))
             {
                 subFolder.Add(item);
@@ -2707,12 +2706,12 @@ string
         return true;
     }
     //public static Func<string, List<string>> InvokePs;
-    
+
     private static void KillProcessesHoldingDirectory(string directoryPath)
     {
         if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             return;
-            
+
         try
         {
             var processes = System.Diagnostics.Process.GetProcesses();
@@ -2722,7 +2721,7 @@ string
                 {
                     if (process.HasExited)
                         continue;
-                        
+
                     foreach (System.Diagnostics.ProcessModule module in process.Modules)
                     {
                         if (module.FileName.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
@@ -2739,7 +2738,7 @@ string
                 }
                 catch { }
             }
-            
+
             try
             {
                 var handleExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "handle.exe");
@@ -2747,7 +2746,7 @@ string
                 {
                     handleExePath = "handle.exe";
                 }
-                
+
                 var psi = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = handleExePath,
@@ -2757,12 +2756,12 @@ string
                     CreateNoWindow = true,
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
                 };
-                
+
                 using (var process = System.Diagnostics.Process.Start(psi))
                 {
                     var output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit(3000);
-                    
+
                     var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var line in lines)
                     {
@@ -2771,7 +2770,7 @@ string
                             var pidStart = line.IndexOf(" pid: ") + 6;
                             var pidEnd = line.IndexOf(' ', pidStart);
                             if (pidEnd == -1) pidEnd = line.Length;
-                            
+
                             if (int.TryParse(line.Substring(pidStart, pidEnd - pidStart), out int pid))
                             {
                                 try
@@ -2787,14 +2786,14 @@ string
                 }
             }
             catch { }
-            
+
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             System.GC.Collect();
         }
         catch { }
     }
-    
+
     /// <summary>
     ///     Before start you can create instance of PowershellRunner to try do it with PS
     /// </summary>
@@ -2831,7 +2830,7 @@ string
             {
                 KillProcessesHoldingDirectory(v);
                 System.Threading.Thread.Sleep(500);
-                
+
                 var dirs = Directory.GetDirectories(v, "*", SearchOption.AllDirectories);
                 foreach (var dir in dirs)
                 {
@@ -2849,7 +2848,7 @@ string
                     }
                     catch { }
                 }
-                
+
                 Directory.SetCurrentDirectory(Path.GetTempPath());
                 var rootDi = new DirectoryInfo(v);
                 rootDi.Attributes = FileAttributes.Normal;

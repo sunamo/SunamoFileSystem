@@ -1,4 +1,4 @@
-// Instance variables refactored according to C# conventions
+﻿// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoString;
 
 internal class SH
@@ -99,7 +99,7 @@ internal class SH
         if (nazevPP.Length == 1) return nazevPP.ToUpper();
 
         var substring = nazevPP.Substring(1);
-        return nazevPP[0].ToString().ToUpper() + sb;
+        return nazevPP[0].ToString().ToUpper() + substring;
     }
 
 
