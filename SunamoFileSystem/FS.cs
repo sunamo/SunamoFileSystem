@@ -1,7 +1,5 @@
 ﻿namespace SunamoFileSystem;
 
-using Microsoft.Extensions.Logging.Abstractions;
-using SunamoFileSystem.Services;
 using PathMs = Path;
 using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
@@ -22,7 +20,6 @@ public class FS
             && Path.IsPathRooted(path)
             && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
     }
-
     /// <summary>
     /// Use CopyAllFilesRecursively instead
     /// </summary>
@@ -1391,8 +1388,9 @@ void
         if (a == null) a = new GetExtensionArgs();
         a.returnOriginalCase = false;
         var vr = new List<string>(cesta.Count);
-        //CA.InitFillWith(vr, cesta.Count);
-        for (var i = 0; i < vr.Count; i++) vr[i] = Path.GetExtension(cesta[i]).ToLower();
+        CA.InitFillWith(vr, cesta.Count);
+        for (var i = 0; i < vr.Count; i++)
+            vr[i] = Path.GetExtension(cesta[i]).ToLower();
         return vr;
     }
     public static List<string> OnlyExtensionsToLowerWithPath(List<string> cesta)
@@ -2495,7 +2493,6 @@ string
                 logger.LogError(item + " : " + ex.Message);
             }
     }
-
     public static bool CopyMoveFilePrepare(ref string item, ref string fileTo, FileMoveCollisionOption co)
     {
         //var fileTo = fileTo2.ToString();
@@ -2706,12 +2703,10 @@ string
         return true;
     }
     //public static Func<string, List<string>> InvokePs;
-
     private static void KillProcessesHoldingDirectory(string directoryPath)
     {
         if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             return;
-
         try
         {
             var processes = System.Diagnostics.Process.GetProcesses();
@@ -2721,7 +2716,6 @@ string
                 {
                     if (process.HasExited)
                         continue;
-
                     foreach (System.Diagnostics.ProcessModule module in process.Modules)
                     {
                         if (module.FileName.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
@@ -2738,7 +2732,6 @@ string
                 }
                 catch { }
             }
-
             try
             {
                 var handleExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "handle.exe");
@@ -2746,7 +2739,6 @@ string
                 {
                     handleExePath = "handle.exe";
                 }
-
                 var psi = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = handleExePath,
@@ -2756,12 +2748,10 @@ string
                     CreateNoWindow = true,
                     WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
                 };
-
                 using (var process = System.Diagnostics.Process.Start(psi))
                 {
                     var output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit(3000);
-
                     var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var line in lines)
                     {
@@ -2770,7 +2760,6 @@ string
                             var pidStart = line.IndexOf(" pid: ") + 6;
                             var pidEnd = line.IndexOf(' ', pidStart);
                             if (pidEnd == -1) pidEnd = line.Length;
-
                             if (int.TryParse(line.Substring(pidStart, pidEnd - pidStart), out int pid))
                             {
                                 try
@@ -2786,16 +2775,16 @@ string
                 }
             }
             catch { }
-
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
             System.GC.Collect();
         }
         catch { }
     }
-
     /// <summary>
     ///     Before start you can create instance of PowershellRunner to try do it with PS
+    ///     
+    /// Vrátí true v případě chyby, jinak false
     /// </summary>
     /// <param name="v"></param>
     /// <returns></returns>
@@ -2830,7 +2819,6 @@ string
             {
                 KillProcessesHoldingDirectory(v);
                 System.Threading.Thread.Sleep(500);
-
                 var dirs = Directory.GetDirectories(v, "*", SearchOption.AllDirectories);
                 foreach (var dir in dirs)
                 {
@@ -2848,7 +2836,6 @@ string
                     }
                     catch { }
                 }
-
                 Directory.SetCurrentDirectory(Path.GetTempPath());
                 var rootDi = new DirectoryInfo(v);
                 rootDi.Attributes = FileAttributes.Normal;
@@ -2888,13 +2875,18 @@ string
     public static string AllIncludeIfOnlyLetters(string item)
     {
         item = item.ToLower().TrimStart('*').TrimStart('.');
+
+        if (item == "")
+        {
+            item = "*";
+        }
+
         //if ( SH.ContainsOnlyCase(item.ToLower(), false, false))
         //{
         item = "*." + item;
         //}
         return item;
     }
-
     /// <summary>
     /// Retun null if serie is not defined
     /// </summary>
@@ -2907,12 +2899,9 @@ string
         {
             return SHParts.GetTextBetweenTwoChars(fnwoe, '(', ')');
         }
-
         ThrowEx.NotImplementedMethod();
         return null;
     }
-
-
     /// <summary>
     ///     Get number higher by one from the number filenames with highest value (as 3.txt)
     /// </summary>
@@ -3049,7 +3038,6 @@ string
                 return false;
             }
         }
-
         return Directory.Exists(item);
         //return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
     }
@@ -3122,9 +3110,9 @@ string
     {
         return recursive.GetValueOrDefault() ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
     }
-    public static void WriteAllText(string path, string content)
+    public static async Task WriteAllText(string path, string content)
     {
-        File.WriteAllText(path, content);
+        await File.WriteAllTextAsync(path, content);
     }
     public static bool IsAllInSameFolder(List<string> c)
     {
@@ -3208,7 +3196,6 @@ string
             throw new Exception("Path contains no delimiter");
         return deli;
     }
-
     /// <summary>
     ///     Usage: Exceptions.IsNotWindowsPathFormat
     /// </summary>
@@ -3219,7 +3206,6 @@ string
         PathFormatDetectorService pathFormatDetector = new(NullLogger.Instance);
         return pathFormatDetector.IsWindowsPathFormat(argValue);
     }
-
     #endregion
     #region MakeUncLongPath
     public static string MakeUncLongPath(string path)
@@ -3793,7 +3779,6 @@ string
     //    int serie;
     //    return GetNameWithoutSeries(p, path, out hasSerie, serieStyle, out serie);
     //}
-
     /// <summary>
     /// 1 = filename without serie
     /// 2 = has serie

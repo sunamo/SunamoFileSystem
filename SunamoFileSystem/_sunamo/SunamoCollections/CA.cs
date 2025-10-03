@@ -1,8 +1,12 @@
-// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoCollections;
 
 internal class CA
 {
+    public static void InitFillWith<T>(List<T> arr, int columns)
+    {
+        for (var i = 0; i < columns; i++) arr.Add(default);
+    }
+
     internal enum SearchStrategyCA
     {
         FixedSpace,

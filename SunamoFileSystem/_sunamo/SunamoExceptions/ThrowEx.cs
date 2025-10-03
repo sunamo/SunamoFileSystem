@@ -1,5 +1,6 @@
-// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoExceptions;
+
+// Instance variables refactored according to C# conventions
 internal partial class ThrowEx
 {
 

@@ -1,4 +1,3 @@
-// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoCollectionsGeneric;
 
 internal class CAG

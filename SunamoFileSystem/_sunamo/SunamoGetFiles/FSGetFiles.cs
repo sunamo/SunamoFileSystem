@@ -1,4 +1,3 @@
-// Instance variables refactored according to C# conventions
 namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
 internal class FSGetFiles
@@ -405,7 +404,10 @@ internal class FSGetFiles
         var files = new List<string>();
         foreach (var item in folders)
             foreach (var ext in exts)
-                files.AddRange(GetFiles(item, FS.MascFromExtension(ext), so, a));
+            {
+                var d = FS.MascFromExtension(ext);
+                files.AddRange(GetFiles(item, d, so, a));
+            }
         return files;
     }
 
