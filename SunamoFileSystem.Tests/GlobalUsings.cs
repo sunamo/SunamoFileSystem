@@ -1,1 +1,14 @@
 global using Xunit;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using Microsoft.Extensions.Logging;
+global using SunamoCollections;
+global using SunamoFileSystem.Enums;
+global using SunamoFileSystem;
+global using SunamoGetFiles;
+global using SunamoGetFolders;
+global using SunamoTest;
+global using System.IO.Compression;
+global using ILogger = Microsoft.Extensions.Logging.ILogger;
+global using Microsoft.Extensions.Logging;
+global using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;
+global using SunamoFileSystem.Tests;

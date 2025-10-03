@@ -1,5 +1,4 @@
-// Instance variables refactored according to C# conventions
-namespace sunamo.Tests.Helpers.FileSystem;
+namespace SunamoFileSystem.Tests;
 
 public partial class FSTests
 {
@@ -96,7 +95,7 @@ public partial class FSTests
 
         var expected = @".\dataNull\IIdName.ts";
 
-        var result = Path.GetRelativePath(a1, a2, true);
+        var result = Path.GetRelativePath(a1, a2);
         Assert.Equal(expected, result);
     }
 
@@ -108,7 +107,7 @@ public partial class FSTests
 
         var expected = @".\src\dataNull\IIdName.ts";
 
-        var result = Path.GetRelativePath(a1, a2, true);
+        var result = Path.GetRelativePath(a1, a2);
         Assert.Equal(expected, result);
     }
     #endregion

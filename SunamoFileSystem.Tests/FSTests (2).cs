@@ -1,5 +1,8 @@
+namespace SunamoFileSystem.Tests;
 
-namespace sunamo.Tests.Helpers.FileSystem;
+using SunamoFileExtensions;
+using SunamoPaths;
+
 public partial class FSTests
 {
     [Fact]
@@ -104,7 +107,7 @@ public partial class FSTests
         var exclued = "bd";
         var expected = "a c e";
 
-        var actual = FS.ReplaceIncorrectCharactersFile(input, exclued, AllStrings.space);
+        var actual = FS.ReplaceIncorrectCharactersFile(input, exclued, " ");
         Assert.Equal(expected, actual);
     }
 
