@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoFileSystem.Tests;
 
 public class FSTests
@@ -12,7 +15,7 @@ public class FSTests
     public void GetNameWithoutSeriesTest()
     {
         var r4 = FS.GetNameWithoutSeries("Faktura_25001(3)", false, out var hasSerie4, SerieStyleFS.Brackets);
-        var r = FS.GetNameWithoutSeries("Faktura_25004(2).pdf", false, out var hasSerie, SerieStyleFS.Brackets);
+        var result = FS.GetNameWithoutSeries("Faktura_25004(2).pdf", false, out var hasSerie, SerieStyleFS.Brackets);
         var r2 = FS.GetNameWithoutSeries("Faktura_25004.pdf", false, out var hasSerie2, SerieStyleFS.Brackets);
         var r3 = FS.GetNameWithoutSeries(@"D:\Documents\_a\_c\Faktura_25004(2).pdf", false, out var hasSerie3, SerieStyleFS.Brackets);
     }
@@ -31,12 +34,12 @@ public class FSTests
     [Fact]
     public void GetFilesTest()
     {
-        //var d = FSGetFiles.GetFilesEveryFolder(logger, @"E:\vs\Projects\PlatformIndependentNuGetPackages2\_\", "*.cs", SearchOption.AllDirectories, new GetFilesEveryFolderArgs { excludeFromLocationsCOntains = new List<string>([@"\obj\", "de_mo"]) });
+        //var data = FSGetFiles.GetFilesEveryFolder(logger, @"E:\vs\Projects\PlatformIndependentNuGetPackages2\_\", "*.cs", SearchOption.AllDirectories, new GetFilesEveryFolderArgs { excludeFromLocationsCOntains = new List<string>([@"\obj\", "de_mo"]) });
     }
     [Fact]
     public void InsertBetweenFileNameAndPathTest()
     {
-        var r = FS.InsertBetweenFileNameAndPath("a", null, "_");
+        var result = FS.InsertBetweenFileNameAndPath("a", null, "_");
     }
     [Fact]
     public void MoveDirectoryNoRecursiveTest()

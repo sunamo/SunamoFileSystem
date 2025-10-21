@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
 internal class FSGetFiles
@@ -64,9 +67,9 @@ internal class FSGetFiles
         //{
         if (e.usePbTime)
         {
-            var m = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
+            var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
             e.InsertPbTime(60);
-            e.UpdateTbPb(m);
+            e.UpdateTbPb(message);
         }
 
         dirs = FSGetFolders.GetFoldersEveryFolder(folder, new GetFoldersEveryFolderArgs(e)).ToList();
@@ -110,12 +113,12 @@ internal class FSGetFiles
         //}
         if (e.usePb)
         {
-            var m = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
+            var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
             e.InsertPb(dirs.Count);
-            e.UpdateTbPb(m);
+            e.UpdateTbPb(message);
         }
 
-        var d = new List<string>();
+        var data = new List<string>();
         //Není třeba, již volám dole e.Done(); / e.DonePartially();
         //IProgressBarHelper pbh = null;
         //if (e.progressBarHelper != null)
@@ -130,11 +133,11 @@ internal class FSGetFiles
 #if ASYNC
                 //TF.WaitD();
 #endif
-                //d.Clear();
+                //data.Clear();
                 var f = GetFiles(item, mask, SearchOption.TopDirectoryOnly);
-                d.AddRange(f);
+                data.AddRange(f);
                 if (e.getNullIfThereIsMoreThanXFiles != -1)
-                    if (d.Count > e.getNullIfThereIsMoreThanXFiles)
+                    if (data.Count > e.getNullIfThereIsMoreThanXFiles)
                     {
                         if (e.usePb) e.Done();
                         return null;
@@ -149,20 +152,20 @@ internal class FSGetFiles
 
             if (e.usePb) e.DoneOnePercent();
 #if DEBUG
-            //before = d.Count;
+            //before = data.Count;
 #endif
             if (e.FilterFoundedFiles != null)
-                for (var i = d.Count - 1; i >= 0; i--)
-                    if (!e.FilterFoundedFiles(d[i]))
-                        d.RemoveAt(i);
+                for (var i = data.Count - 1; i >= 0; i--)
+                    if (!e.FilterFoundedFiles(data[i]))
+                        data.RemoveAt(i);
 #if DEBUG
-            //after = d.Count;
+            //after = data.Count;
             //if (before != 0 && after == 0)
             //{
             //}
 #endif
-            list.AddRange(d);
-            d.Clear();
+            list.AddRange(data);
+            data.Clear();
         }
 
         list = list.Distinct().ToList();
@@ -220,8 +223,8 @@ internal class FSGetFiles
             else
             {
                 //Task.Run<>(async () => await FunctionAsync());
-                //var r = Task.Run<List<string>>(async () => await GetFilesMoreMascAsync(folder, mask, searchOption));
-                //return r.Result;
+                //var result = Task.Run<List<string>>(async () => await GetFilesMoreMascAsync(folder, mask, searchOption));
+                //return result.Result;
                 var l2 = GetFilesMoreMasc(folder, mask, searchOption,
                     new GetFilesMoreMascArgs { followJunctions = a.followJunctions });
                 list.AddRange(l2);
@@ -260,7 +263,7 @@ internal class FSGetFiles
                 //            masc = FS.MascFromExtension(mask);
                 //        }
                 //        var files = di.GetFiles(masc, searchOption);
-                //        var files2 = files.Select(d => d.FullName);
+                //        var files2 = files.Select(data => data.FullName);
                 //        //list.AddRange(GetFiles(folder3, masc, searchOption));
                 //        list.AddRange(files2);
                 //    }
@@ -282,23 +285,23 @@ internal class FSGetFiles
     {
         if (e == null) e = new GetFilesMoreMascArgs();
 #if DEBUG
-        string d = null;
+        string data = null;
         if (e.LoadFromFileWhenDebug)
         {
-            var s = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
-            //d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + s + ".txt");
-            //if (File.Exists(d))
+            var text = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
+            //d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + text + ".txt");
+            //if (File.Exists(data))
             //{
             //    return File.ReadAllText(path).ToList();
             //}
         }
 #endif
-        var c = ",";
+        var count = ",";
         var sc = ";";
         var result = new List<string>();
         var masks = new List<string>();
-        if (masc.Contains(c))
-            masks.AddRange(SHSplit.Split(masc, c));
+        if (masc.Contains(count))
+            masks.AddRange(SHSplit.Split(masc, count));
         else if (masc.Contains(sc))
             masks.AddRange(SHSplit.Split(masc, sc));
         else
@@ -330,7 +333,7 @@ internal class FSGetFiles
                     if (ex.Message.StartsWith(NetFxExceptionsNotTranslateAble
                             .TheNameOfTheFileCannotBeResolvedByTheSystem))
                     {
-                        // Nesmysl, celou dobu musím vědět s čím pracuji
+                        // Nesmysl, celou dobu musím vědět text čím pracuji
                         //FS.TryDeleteDirectoryOrFile(path);
                     }
 
@@ -348,8 +351,8 @@ internal class FSGetFiles
         CAChangeContent.ChangeContent0(null, result, SH.FirstCharUpper);
 #if DEBUG
         if (e.LoadFromFileWhenDebug)
-            if (File.Exists(d))
-                File.WriteAllLinesAsync(d, result);
+            if (File.Exists(data))
+                File.WriteAllLinesAsync(data, result);
 #endif
         return result;
     }
@@ -357,17 +360,17 @@ internal class FSGetFiles
     internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgsFS a)
     {
         if (a == null) a = new GetFilesArgsFS();
-        CAChangeContent.ChangeContent0(null, list, d => SH.FirstCharUpper(d));
+        CAChangeContent.ChangeContent0(null, list, data => SH.FirstCharUpper(data));
         if (a._trimA1AndLeadingBs)
             foreach (var folder in folders)
-                list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimEnd('\\'));
+                list = CAChangeContent.ChangeContent0(null, list, data => data = data.Replace(folder, "").TrimEnd('\\'));
         if (a._trimExt)
             foreach (var folder in folders)
-                list = CAChangeContent.ChangeContent0(null, list, d => d = SHParts.RemoveAfterLast(d, '.'));
+                list = CAChangeContent.ChangeContent0(null, list, data => data = SHParts.RemoveAfterLast(data, '.'));
         if (a.excludeFromLocationsCOntains != null)
             // I want to find files recursively
             foreach (var item in a.excludeFromLocationsCOntains)
-                list = list.Where(d => !d.Contains(item)).ToList();
+                list = list.Where(data => !data.Contains(item)).ToList();
         //CA.RemoveWhichContains(list, item, false);
         Dictionary<string, DateTime> dictLastModified = null;
         var isLastModifiedFromFn = a.LastModifiedFromFn != null;
@@ -382,7 +385,7 @@ internal class FSGetFiles
                 dictLastModified.Add(item, dt.Value);
             }
 
-            list = dictLastModified.OrderBy(t => t.Value).Select(r => r.Key).ToList();
+            list = dictLastModified.OrderBy(t => t.Value).Select(result => result.Key).ToList();
         }
 
         if (a.dontIncludeNewest) list.RemoveAt(list.Count - 1);
@@ -405,8 +408,8 @@ internal class FSGetFiles
         foreach (var item in folders)
             foreach (var ext in exts)
             {
-                var d = FS.MascFromExtension(ext);
-                files.AddRange(GetFiles(item, d, so, a));
+                var data = FS.MascFromExtension(ext);
+                files.AddRange(GetFiles(item, data, so, a));
             }
         return files;
     }

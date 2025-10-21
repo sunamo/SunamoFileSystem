@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoFileSystem.Tests;
 
 using SunamoFileExtensions;
@@ -9,7 +12,7 @@ public partial class FSTests
     public void GetAbsolutePathTest()
     {
         var line = @"..\_ut2\sunamo.Tests2\TestValues\TestValues.csproj";
-        var p = FS.GetAbsolutePath(DefaultPaths.eVs, line);
+        var parameter = FS.GetAbsolutePath(DefaultPaths.eVs, line);
         //E:\vs\Projects\..\_ut2\sunamo.Tests2\TestValues\TestValues.csproj
     }
 
@@ -17,7 +20,7 @@ public partial class FSTests
     public void GetAbsolutePath2Test()
     {
         var line = @"..\_ut2\sunamo.Tests2\TestValues\TestValues.csproj";
-        var p = FS.GetAbsolutePath2(DefaultPaths.eVs, line);
+        var parameter = FS.GetAbsolutePath2(DefaultPaths.eVs, line);
         //E:\vs\Projects
     }
 
@@ -45,9 +48,9 @@ public partial class FSTests
     [Fact]
     public void GetExtensionTest()
     {
-        //var b = FS.GetExtension(".babelrc");
+        //var builder = FS.GetExtension(".babelrc");
 
-        var c = FS.GetExtension(".eslintrc_fromVbto");
+        var count = FS.GetExtension(".eslintrc_fromVbto");
 
     }
 
@@ -55,11 +58,11 @@ public partial class FSTests
     public void MascFromExtensionTest()
     {
         Func<string, string> m = FS.MascFromExtension;
-        var a = m.Invoke("cs");
+        var argument = m.Invoke("cs");
         var a1 = m(".cs");
 
         var expected = "*.cs";
-        Assert.Equal(expected, a);
+        Assert.Equal(expected, argument);
         Assert.Equal(expected, a1);
     }
 
@@ -69,9 +72,9 @@ public partial class FSTests
     {
         var input = @"D:\pa\_toolsSystem\cmder\vendor\clink-completions\modules\";
         var basePath = @"D:\pa\";
-        var d = FS.PathSpecialAndLevel(basePath, input, 1);
+        var data = FS.PathSpecialAndLevel(basePath, input, 1);
         var expected = @"D:\pa\_toolsSystem\cmder";
-        Assert.Equal(expected, d);
+        Assert.Equal(expected, data);
     }
 
     [Fact]
@@ -83,12 +86,12 @@ public partial class FSTests
         long mb = kb * o;
         long gb = mb * o;
 
-        var b = ComputerSizeUnits.B;
+        var builder = ComputerSizeUnits.builder;
 
-        var kbs = FS.GetSizeInAutoString(kb, b);
-        var mbs = FS.GetSizeInAutoString(mb, b);
-        var gbs = FS.GetSizeInAutoString(gb, b);
-        var gbsMinusOne = FS.GetSizeInAutoString(gb - 1, b);
+        var kbs = FS.GetSizeInAutoString(kb, builder);
+        var mbs = FS.GetSizeInAutoString(mb, builder);
+        var gbs = FS.GetSizeInAutoString(gb, builder);
+        var gbsMinusOne = FS.GetSizeInAutoString(gb - 1, builder);
 
         int i = 0;
     }
@@ -105,7 +108,7 @@ public partial class FSTests
     {
         var input = "abcde";
         var exclued = "bd";
-        var expected = "a c e";
+        var expected = "a count e";
 
         var actual = FS.ReplaceIncorrectCharactersFile(input, exclued, " ");
         Assert.Equal(expected, actual);

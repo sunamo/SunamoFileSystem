@@ -1,3 +1,5 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
 // todo nemělo by to dědit z GetFoldersEveryFolderArgs? ve vs2 to tak mám

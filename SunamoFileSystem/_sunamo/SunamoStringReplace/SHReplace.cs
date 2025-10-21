@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoFileSystem._sunamo.SunamoStringReplace;
 
 internal class SHReplace
@@ -18,8 +21,8 @@ internal class SHReplace
 
         WhitespaceCharService whitespaceChar = new WhitespaceCharService();
 
-        var p = text.Split(whitespaceChar.whiteSpaceChars
+        var parameter = text.Split(whitespaceChar.whiteSpaceChars
             .ToArray()); //SHSplit.Split(text, AllChars.whiteSpaceChars.ConvertAll(d => d.ToString()).ToArray());
-        return string.Join(" ", p);
+        return string.Join(" ", parameter);
     }
 }
