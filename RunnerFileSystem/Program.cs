@@ -1,7 +1,7 @@
 namespace RunnerFileSystem;
 
 using Microsoft.Extensions.DependencyInjection;
-using sunamo.Tests.Helpers.FileSystem;
+using SunamoFileSystem.Tests;
 using SunamoCl.SunamoCmd;
 using SunamoDependencyInjection;
 

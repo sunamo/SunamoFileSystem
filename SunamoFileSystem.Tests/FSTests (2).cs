@@ -86,12 +86,12 @@ public partial class FSTests
         long mb = kb * o;
         long gb = mb * o;
 
-        var builder = ComputerSizeUnits.builder;
+        var unit = ComputerSizeUnits.B;
 
-        var kbs = FS.GetSizeInAutoString(kb, builder);
-        var mbs = FS.GetSizeInAutoString(mb, builder);
-        var gbs = FS.GetSizeInAutoString(gb, builder);
-        var gbsMinusOne = FS.GetSizeInAutoString(gb - 1, builder);
+        var kbs = FS.GetSizeInAutoString(kb, unit);
+        var mbs = FS.GetSizeInAutoString(mb, unit);
+        var gbs = FS.GetSizeInAutoString(gb, unit);
+        var gbsMinusOne = FS.GetSizeInAutoString(gb - 1, unit);
 
         int i = 0;
     }

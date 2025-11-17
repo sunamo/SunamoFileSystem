@@ -338,7 +338,7 @@ List<string>
                 await
 #endif
                     File.ReadAllTextAsync(item)).ToList());
-        CAG.CompareList(opts, count.count);
+        CAG.CompareList(opts, count.c);
         return opts;
     }
     /// <summary>
@@ -1087,17 +1087,17 @@ void
     {
         var dirs = DirectoriesWithToken(value, AscDesc.Desc);
         foreach (var item in dirs)
-            if (IsDirectoryEmpty(item.temp, true, true))
+            if (IsDirectoryEmpty(item.t, true, true))
             {
                 if (doNotDeleteWhichContains.Length > 0)
                 {
                     if (!doNotDeleteWhichContains.Any(data =>
-                            item.temp.Contains(data))) //CANewSH.ContainsAnyFromArray(item.temp, doNotDeleteWhichContains))
-                        TryDeleteDirectory(item.temp);
+                            item.t.Contains(data))) //CANewSH.ContainsAnyFromArray(item.t, doNotDeleteWhichContains))
+                        TryDeleteDirectory(item.t);
                 }
                 else
                 {
-                    TryDeleteDirectory(item.temp);
+                    TryDeleteDirectory(item.t);
                 }
             }
         if (IsDirectoryEmpty(value, false, true) && !doNotDeleteWhichContains.Any()) TryDeleteDirectory(value);
@@ -1120,11 +1120,11 @@ void
         foreach (var item in dirs)
             vr.Add(new TWithInt<string>
             {
-                temp = item,
+                t = item,
                 count = SH.OccurencesOfStringIn(item, "\"")
             });
         vr.Sort(CompareTWithInt);
-        if (sb == AscDesc.Desc) vr.Reverse();
+        if (stringBuilder == AscDesc.Desc) vr.Reverse();
         //vr.Sort(new SunamoComparerICompare.TWithIntComparer.Asc<string>(new SunamoComparer.TWithIntSunamoComparer<string>()));
         //else if (sb == AscDesc.Desc)
         //{
@@ -1274,19 +1274,19 @@ void
     {
         var filenames = new List<Tuple<string, int, string>>();
         var dontHaveNumbersOnBeginning = new List<string>();
-        string path = null;
         for (var i = list.Count - 1; i >= 0; i--)
         {
             var backup = list[i];
-            var path = SHSplit.SplitToPartsFromEnd(list[i], 2, '\\');
-            if (path.Count == 1)
+            var pathParts = SHSplit.SplitToPartsFromEnd(list[i], 2, '\\');
+            string path;
+            if (pathParts.Count == 1)
             {
                 path = string.Empty;
             }
             else
             {
-                path = path[0];
-                list[i] = path[1];
+                path = pathParts[0];
+                list[i] = pathParts[1];
             }
             var fn = list[i];
             //var (sh, fnNew) = NH.NumberIntUntilWontReachOtherChar(fn);
@@ -1485,12 +1485,12 @@ void
             var dires = DirectoriesWithToken(folder, AscDesc.Desc);
             foreach (var item in dires)
             {
-                var dirPath = WithoutEndSlash(item.temp);
+                var dirPath = WithoutEndSlash(item.t);
                 var dirName = Path.GetFileName(dirPath);
                 if (dirName.HasDiacritics())
                 {
                     var dirNameWithoutDiac = dirName.RemoveDiacritics(); //SH.TextWithoutDiacritic(dirName);
-                    RenameDirectory(logger, item.temp, dirNameWithoutDiac, fo, co);
+                    RenameDirectory(logger, item.t, dirNameWithoutDiac, fo, co);
                 }
             }
         }
@@ -2400,8 +2400,8 @@ string
     }
     public static List<string> DirectoryListing(string path, string mask, SearchOption so)
     {
-        var path = FSGetFiles.GetFiles(path, mask, so, new GetFilesArgsFS { _trimA1AndLeadingBs = true });
-        return path;
+        var files = FSGetFiles.GetFiles(path, mask, so, new GetFilesArgsFS { _trimA1AndLeadingBs = true });
+        return files;
     }
     public static string WithoutEndSlash(string value)
     {
@@ -2859,7 +2859,7 @@ string
                         var psi = new System.Diagnostics.ProcessStartInfo
                         {
                             FileName = "cmd.exe",
-                            Arguments = $"/c rmdir /s /q \"{v}\"",
+                            Arguments = $"/c rmdir /s /q \"{value}\"",
                             WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
                             CreateNoWindow = true,
                             UseShellExecute = false
@@ -3771,11 +3771,11 @@ string
     ///     A2 říká, zda se má vrátit plná cesta ke souboru A1, upraví se pouze samotný název souboru
     ///     Works for brackets, not dash
     /// </summary>
-    public static string GetNameWithoutSeries(string path, bool path)
+    public static string GetNameWithoutSeries(string path, bool a1IsWithPath)
     {
         int serie;
         var hasSerie = false;
-        return GetNameWithoutSeries(path, path, out hasSerie, SerieStyleFS.Brackets, out serie);
+        return GetNameWithoutSeries(path, a1IsWithPath, out hasSerie, SerieStyleFS.Brackets, out serie);
     }
     //public static string GetNameWithoutSeries(string path, bool path, out bool hasSerie, SerieStyle serieStyle)
     //{
@@ -3790,16 +3790,16 @@ string
     /// <param name="path"></param>
     /// <param name="serieStyle"></param>
     /// <returns></returns>
-    public static (string, bool) GetNameWithoutSeriesNoOut(string path, bool path, SerieStyleFS serieStyle)
+    public static (string, bool) GetNameWithoutSeriesNoOut(string path, bool a1IsWithPath, SerieStyleFS serieStyle)
     {
         int serie;
-        var result = GetNameWithoutSeries(path, path, out var hasSerie, serieStyle, out serie);
+        var result = GetNameWithoutSeries(path, a1IsWithPath, out var hasSerie, serieStyle, out serie);
         return (result, hasSerie);
     }
-    public static string GetNameWithoutSeries(string path, bool path, out bool hasSerie, SerieStyleFS serieStyle)
+    public static string GetNameWithoutSeries(string path, bool a1IsWithPath, out bool hasSerie, SerieStyleFS serieStyle)
     {
         int serie;
-        return GetNameWithoutSeries(path, path, out hasSerie, serieStyle, out serie);
+        return GetNameWithoutSeries(path, a1IsWithPath, out hasSerie, serieStyle, out serie);
     }
     /// <summary>
     ///     Vrací vždy text příponou

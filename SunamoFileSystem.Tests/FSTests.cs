@@ -3,7 +3,7 @@
 
 namespace SunamoFileSystem.Tests;
 
-public class FSTests
+public partial class FSTests
 {
     ILogger logger = TestLogger.Instance;
     [Fact]
