@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Version>25.10.3.4</Version>
@@ -18,7 +18,8 @@
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.29" />
     <None Include="readme.md" Pack="True" PackagePath="." />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" Pack="True" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3"
+      Pack="True" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="_sunamo\SunamoStringGetLines\" />
