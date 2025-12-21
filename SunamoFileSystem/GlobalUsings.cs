@@ -1,5 +1,3 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 global using Diacritics.Extensions;
 global using Microsoft.Extensions.Logging;
 global using SunamoFileSystem._public.SunamoCollectionsGeneric.Collections;

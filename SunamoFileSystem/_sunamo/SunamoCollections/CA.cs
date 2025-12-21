@@ -1,10 +1,8 @@
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 namespace SunamoFileSystem._sunamo.SunamoCollections;
 
 internal class CA
 {
-    public static void InitFillWith<T>(List<T> arr, int columns)
+    internal static void InitFillWith<T>(List<T> arr, int columns)
     {
         for (var i = 0; i < columns; i++) arr.Add(default);
     }
