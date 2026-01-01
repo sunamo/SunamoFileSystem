@@ -14,15 +14,15 @@ internal partial class ThrowEx
         return ThrowIsNotNull(str, reallyThrow);
     }
 
-    internal static bool DifferentCountInLists<T>(string namefc, IList<T> countfc, string namesc, IList<T> countsc)
+    internal static bool DifferentCountInLists<T>(string firstCollectionName, IList<T> firstCollection, string secondCollectionName, IList<T> secondCollection)
     {
         return ThrowIsNotNull(
-            Exceptions.DifferentCountInLists(FullNameOfExecutedCode(), namefc, countfc.Count, namesc, countsc.Count));
+            Exceptions.DifferentCountInLists(FullNameOfExecutedCode(), firstCollectionName, firstCollection.Count, secondCollectionName, secondCollection.Count));
     }
 
 
-    internal static bool FileDoesntExists(string fulLPath)
-    { return ThrowIsNotNull(Exceptions.FileExists(FullNameOfExecutedCode(), fulLPath)); }
+    internal static bool FileDoesntExists(string fullPath)
+    { return ThrowIsNotNull(Exceptions.FileExists(FullNameOfExecutedCode(), fullPath)); }
     internal static bool FolderCannotBeDeleted(string folder, Exception ex)
     { return ThrowIsNotNull(Exceptions.FolderCannotBeDeleted(FullNameOfExecutedCode(), folder, ex)); }
 
@@ -45,8 +45,8 @@ internal partial class ThrowEx
     { return ThrowIsNotNull(Exceptions.IsNullOrWhitespace(FullNameOfExecutedCode(), argName, argValue, true)); }
     internal static bool NoPassedFolders(ICollection folders)
     { return ThrowIsNotNull(Exceptions.NoPassedFolders(FullNameOfExecutedCode(), folders)); }
-    internal static bool NotContains(string text, params string[] shouldContains)
-    { return ThrowIsNotNull(Exceptions.NotContains(FullNameOfExecutedCode(), text, shouldContains)); }
+    internal static bool NotContains(string text, params string[] expectedContents)
+    { return ThrowIsNotNull(Exceptions.NotContains(FullNameOfExecutedCode(), text, expectedContents)); }
 
     internal static bool NotImplementedCase(object notImplementedName)
     { return ThrowIsNotNull(Exceptions.NotImplementedCase, notImplementedName); }
@@ -55,9 +55,9 @@ internal partial class ThrowEx
     #region Other
     internal static string FullNameOfExecutedCode()
     {
-        Tuple<string, string, string> placeOfExc = Exceptions.PlaceOfException();
-        string f = FullNameOfExecutedCode(placeOfExc.Item1, placeOfExc.Item2, true);
-        return f;
+        Tuple<string, string, string> exceptionPlace = Exceptions.PlaceOfException();
+        string fullName = FullNameOfExecutedCode(exceptionPlace.Item1, exceptionPlace.Item2, true);
+        return fullName;
     }
 
     static string FullNameOfExecutedCode(object type, string methodName, bool fromThrowEx = false)

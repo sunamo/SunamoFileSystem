@@ -2,26 +2,26 @@ namespace SunamoFileSystem._sunamo.SunamoCollectionsChangeContent;
 
 internal class CAChangeContent
 {
-    internal static List<string> ChangeContent0(dynamic /*ChangeContentArgs*/ a, List<string> files_in,
-        Func<string, string> func)
+    internal static List<string> ChangeContent0(dynamic /*ChangeContentArgs*/ args, List<string> items,
+        Func<string, string> transformFunc)
     {
-        for (var i = 0; i < files_in.Count; i++) files_in[i] = func.Invoke(files_in[i]);
+        for (var i = 0; i < items.Count; i++) items[i] = transformFunc.Invoke(items[i]);
 
-        RemoveNullOrEmpty(a, files_in);
+        RemoveNullOrEmpty(args, items);
 
-        return files_in;
+        return items;
     }
 
-    private static void RemoveNullOrEmpty(dynamic /*ChangeContentArgs*/ a, List<string> files_in)
+    private static void RemoveNullOrEmpty(dynamic /*ChangeContentArgs*/ args, List<string> items)
     {
-        if (a != null)
+        if (args != null)
         {
-            if (a.removeNull) files_in.Remove(null);
+            if (args.removeNull) items.Remove(null);
 
-            if (a.removeEmpty)
-                for (var i = files_in.Count - 1; i >= 0; i--)
-                    if (files_in[i].Trim() == string.Empty)
-                        files_in.RemoveAt(i);
+            if (args.removeEmpty)
+                for (var i = items.Count - 1; i >= 0; i--)
+                    if (items[i].Trim() == string.Empty)
+                        items.RemoveAt(i);
         }
     }
 }

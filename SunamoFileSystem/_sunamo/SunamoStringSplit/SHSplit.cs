@@ -2,75 +2,75 @@ namespace SunamoFileSystem._sunamo.SunamoStringSplit;
 
 internal class SHSplit
 {
-    internal static List<string> Split(string item, params string[] space)
+    internal static List<string> Split(string text, params string[] delimiters)
     {
-        return item.Split(space, StringSplitOptions.RemoveEmptyEntries).ToList();
+        return text.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
     }
 
 
     #region SplitToPartsFromEnd
 
-    internal static List<string> SplitToPartsFromEnd(string what, int parts, params char[] deli)
+    internal static List<string> SplitToPartsFromEnd(string text, int parts, params char[] delimiters)
     {
-        List<char> chs = null;
-        List<bool> bw = null;
+        List<char> chars = null;
+        List<bool> isNotDelimiter = null;
         List<int> delimitersIndexes = null;
-        SplitCustom(what, out chs, out bw, out delimitersIndexes, deli);
+        SplitCustom(text, out chars, out isNotDelimiter, out delimitersIndexes, delimiters);
 
-        var vr = new List<string>(parts);
+        var partsList = new List<string>(parts);
         var stringBuilder = new StringBuilder();
-        for (var i = chs.Count - 1; i >= 0; i--)
-            if (!bw[i])
+        for (var i = chars.Count - 1; i >= 0; i--)
+            if (!isNotDelimiter[i])
             {
-                while (i != 0 && !bw[i - 1]) i--;
-                var data = stringBuilder.ToString();
+                while (i != 0 && !isNotDelimiter[i - 1]) i--;
+                var part = stringBuilder.ToString();
                 stringBuilder.Clear();
-                if (data != "") vr.Add(data);
+                if (part != "") partsList.Add(part);
             }
             else
             {
-                stringBuilder.Insert(0, chs[i]);
-                //stringBuilder.Append(chs[i]);
+                stringBuilder.Insert(0, chars[i]);
+                //stringBuilder.Append(chars[i]);
             }
 
-        var d2 = stringBuilder.ToString();
+        var remainingText = stringBuilder.ToString();
         stringBuilder.Clear();
-        if (d2 != "") vr.Add(d2);
-        var value = new List<string>(parts);
-        for (var i = 0; i < vr.Count; i++)
-            if (value.Count != parts)
+        if (remainingText != "") partsList.Add(remainingText);
+        var finalParts = new List<string>(parts);
+        for (var i = 0; i < partsList.Count; i++)
+            if (finalParts.Count != parts)
             {
-                value.Insert(0, vr[i]);
+                finalParts.Insert(0, partsList[i]);
             }
             else
             {
-                var ds = what[delimitersIndexes[i - 1]].ToString();
-                value[0] = vr[i] + ds + value[0];
+                var delimiterString = text[delimitersIndexes[i - 1]].ToString();
+                finalParts[0] = partsList[i] + delimiterString + finalParts[0];
             }
 
-        return value;
+        return finalParts;
     }
 
-    internal static void SplitCustom(string what, out List<char> chs, out List<bool> bs,
-        out List<int> delimitersIndexes, params char[] deli)
+    internal static void SplitCustom(string text, out List<char> chars, out List<bool> isNotDelimiter,
+        out List<int> delimitersIndexes, params char[] delimiters)
     {
-        chs = new List<char>(what.Length);
-        bs = new List<bool>(what.Length);
-        delimitersIndexes = new List<int>(what.Length / 6);
-        for (var i = 0; i < what.Length; i++)
+        chars = new List<char>(text.Length);
+        isNotDelimiter = new List<bool>(text.Length);
+        delimitersIndexes = new List<int>(text.Length / 6);
+        for (var i = 0; i < text.Length; i++)
         {
-            var isNotDeli = true;
-            var ch = what[i];
-            foreach (var item in deli)
-                if (item == ch)
+            var charIsNotDelimiter = true;
+            var currentChar = text[i];
+            foreach (var delimiter in delimiters)
+                if (delimiter == currentChar)
                 {
                     delimitersIndexes.Add(i);
-                    isNotDeli = false;
+                    charIsNotDelimiter = false;
                     break;
                 }
 
-            chs.Add(ch);
-            bs.Add(isNotDeli);
+            chars.Add(currentChar);
+            isNotDelimiter.Add(charIsNotDelimiter);
         }
 
         delimitersIndexes.Reverse();

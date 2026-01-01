@@ -1,23 +1,24 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders.Args;
 
+/// <summary>
+/// Arguments for getting folders from every folder recursively
+/// </summary>
 internal class GetFoldersEveryFolderArgs : GetFilesArgsFS
 {
     /// <summary>
-    ///     Auto call WithEndSlash
+    /// Auto call WithEndSlash
     /// </summary>
-    internal bool _trimA1AndLeadingBs;
+    internal new bool TrimFirstPathAndLeadingBackslashes;
 
-    internal List<string> excludeFromLocationsCOntains = null;
+    internal new List<string> ExcludeFromLocationsContains = null;
 
-    // nevím k čemu to je ale zdá se nesmysl, ověřovat můžu přes excludeFromLocationsCOntains != null
-    //internal bool excludeFromLocationsCOntainsBool = false;
-    internal bool writeToDebugEveryLoadedFolder = false;
+    internal bool WriteToDebugEveryLoadedFolder = false;
 
     internal GetFoldersEveryFolderArgs(GetFilesEveryFolderArgsFS e)
     {
-        _trimA1AndLeadingBs = e._trimA1AndLeadingBs;
-        followJunctions = e.followJunctions;
-        dIsJunctionPoint = e.dIsJunctionPoint;
+        TrimFirstPathAndLeadingBackslashes = e.TrimFirstPathAndLeadingBackslashes;
+        FollowJunctions = e.FollowJunctions;
+        IsJunctionPoint = e.IsJunctionPoint;
     }
 
     internal GetFoldersEveryFolderArgs()

@@ -93,12 +93,12 @@ internal class SH
     //    return null;
     //}
 
-    internal static string FirstCharUpper(string nazevPP)
+    internal static string FirstCharUpper(string text)
     {
-        if (nazevPP.Length == 1) return nazevPP.ToUpper();
+        if (text.Length == 1) return text.ToUpper();
 
-        var substring = nazevPP.Substring(1);
-        return nazevPP[0].ToString().ToUpper() + substring;
+        var substring = text.Substring(1);
+        return text[0].ToString().ToUpper() + substring;
     }
 
 

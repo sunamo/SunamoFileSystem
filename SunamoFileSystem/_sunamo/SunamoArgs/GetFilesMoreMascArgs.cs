@@ -1,10 +1,13 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
+/// <summary>
+/// Arguments for getting files with multiple mask patterns
+/// </summary>
 internal class GetFilesMoreMascArgs : GetFilesBaseArgsFS
 {
-    internal bool deleteFromDriveWhenCannotBeResolved = false;
+    internal bool DeleteFromDriveWhenCannotBeResolved = false;
     internal bool LoadFromFileWhenDebug = false;
-    internal string masc = "*";
-    internal string path;
-    internal SearchOption searchOption = SearchOption.TopDirectoryOnly;
+    internal string Masc = "*";
+    internal string Path = string.Empty;
+    internal SearchOption SearchOption = SearchOption.TopDirectoryOnly;
 }

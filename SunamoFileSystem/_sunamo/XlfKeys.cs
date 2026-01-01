@@ -1,7 +1,8 @@
 namespace SunamoFileSystem._sunamo;
 
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+/// <summary>
+/// Translation keys for localization
+/// </summary>
 internal class XlfKeys
 {
     internal const string FolderHasBeenRenamedTo = "FolderHasBeenRenamedTo";

@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._public.SunamoCollectionsGeneric.Collections;
 
-public class FsWatcherDictionary<T, U> : IDictionary<T, U>
+public class FsWatcherDictionary<T, U> : IDictionary<T, U> where T : notnull
 {
     private static Type type = typeof(FsWatcherDictionary<T, U>);
     private readonly Dictionary<T, U> d = new();

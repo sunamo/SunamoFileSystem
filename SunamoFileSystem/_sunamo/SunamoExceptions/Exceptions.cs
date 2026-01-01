@@ -29,8 +29,8 @@ internal sealed partial class Exceptions
 bool fillAlsoFirstTwo = true)
     {
         StackTrace st = new();
-        var value = st.ToString();
-        var lines = value.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        var stackTraceText = st.ToString();
+        var lines = stackTraceText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
         lines.RemoveAt(0);
         var i = 0;
         string type = string.Empty;
@@ -53,14 +53,14 @@ bool fillAlsoFirstTwo = true)
         }
         return new Tuple<string, string, string>(type, methodName, string.Join(Environment.NewLine, lines));
     }
-    internal static void TypeAndMethodName(string lines, out string type, out string methodName)
+    internal static void TypeAndMethodName(string stackTraceLine, out string type, out string methodName)
     {
-        var s2 = lines.Split("at ")[1].Trim();
-        var text = s2.Split("(")[0];
-        var parameter = text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        methodName = parameter[^1];
-        parameter.RemoveAt(parameter.Count - 1);
-        type = string.Join(".", parameter);
+        var trimmedLine = stackTraceLine.Split("at ")[1].Trim();
+        var methodFullName = trimmedLine.Split("(")[0];
+        var parts = methodFullName.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        methodName = parts[^1];
+        parts.RemoveAt(parts.Count - 1);
+        type = string.Join(".", parts);
     }
     internal static string CallingMethod(int value = 1)
     {
@@ -113,9 +113,9 @@ bool fillAlsoFirstTwo = true)
     #endregion
 
     #region OnlyReturnString 
-    internal static string? FileExists(string before, string fulLPath)
+    internal static string? FileExists(string before, string fullPath)
     {
-        return CheckBefore(before) + " " + "does not exists" + ": " + fulLPath;
+        return CheckBefore(before) + " " + "does not exists" + ": " + fullPath;
     }
     internal static string? Custom(string before, string message)
     {
@@ -136,22 +136,22 @@ bool fillAlsoFirstTwo = true)
     }
     internal static string? NotImplementedCase(string before, object notImplementedName)
     {
-        var fr = string.Empty;
+        var nameDescription = string.Empty;
         if (notImplementedName != null)
         {
-            fr = " for ";
+            nameDescription = " for ";
             if (notImplementedName.GetType() == typeof(Type))
-                fr += ((Type)notImplementedName).FullName;
+                nameDescription += ((Type)notImplementedName).FullName;
             else
-                fr += notImplementedName.ToString();
+                nameDescription += notImplementedName.ToString();
         }
-        return CheckBefore(before) + "Not implemented case" + fr + " . internal program error. Please contact developer" +
+        return CheckBefore(before) + "Not implemented case" + nameDescription + " . internal program error. Please contact developer" +
         ".";
     }
-    internal static string? NotContains(string before, string originalText, params string[] shouldContains)
+    internal static string? NotContains(string before, string originalText, params string[] expectedContents)
     {
         List<string> notContained = [];
-        foreach (var item in shouldContains)
+        foreach (var item in expectedContents)
             if (!originalText.Contains(item))
                 notContained.Add(item);
         return notContained.Count == 0
@@ -169,12 +169,12 @@ bool fillAlsoFirstTwo = true)
         return null;
     }
 
-    internal static string? DifferentCountInLists(string before, string namefc, int countfc, string namesc, int countsc)
+    internal static string? DifferentCountInLists(string before, string firstCollectionName, int firstCount, string secondCollectionName, int secondCount)
     {
-        if (countfc != countsc)
+        if (firstCount != secondCount)
             return CheckBefore(before) + " different count elements in collection" + " " +
-            string.Concat(namefc + "-" + countfc) + " vs. " +
-            string.Concat(namesc + "-" + countsc);
+            string.Concat(firstCollectionName + "-" + firstCount) + " vs. " +
+            string.Concat(secondCollectionName + "-" + secondCount);
         return null;
     }
 }

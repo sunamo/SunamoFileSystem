@@ -62,11 +62,11 @@ internal class FSGetFiles
         // There is not exc handle needed, its slowly then
         //try
         //{
-        if (e.usePbTime)
+        if (e.UseProgressBarTime)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
-            e.InsertPbTime(60);
-            e.UpdateTbPb(message);
+            e.InsertProgressBarTime(60);
+            e.UpdateProgressBarText(message);
         }
 
         dirs = FSGetFolders.GetFoldersEveryFolder(folder, new GetFoldersEveryFolderArgs(e)).ToList();
@@ -108,11 +108,11 @@ internal class FSGetFiles
         //{
         //    StopwatchStatic.Start();
         //}
-        if (e.usePb)
+        if (e.UseProgressBar)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
-            e.InsertPb(dirs.Count);
-            e.UpdateTbPb(message);
+            e.InsertProgressBar(dirs.Count);
+            e.UpdateProgressBarText(message);
         }
 
         var data = new List<string>();
@@ -133,10 +133,10 @@ internal class FSGetFiles
                 //data.Clear();
                 var f = GetFiles(item, mask, SearchOption.TopDirectoryOnly);
                 data.AddRange(f);
-                if (e.getNullIfThereIsMoreThanXFiles != -1)
-                    if (data.Count > e.getNullIfThereIsMoreThanXFiles)
+                if (e.GetNullIfThereIsMoreThanXFiles != -1)
+                    if (data.Count > e.GetNullIfThereIsMoreThanXFiles)
                     {
-                        if (e.usePb) e.Done();
+                        if (e.UseProgressBar) e.Done();
                         return null;
                     }
             }
@@ -147,7 +147,7 @@ internal class FSGetFiles
                 //ThrowEx.FileSystemException( ex);
             }
 
-            if (e.usePb) e.DoneOnePercent();
+            if (e.UseProgressBar) e.DoneOnePercent();
 #if DEBUG
             //before = data.Count;
 #endif
@@ -166,14 +166,14 @@ internal class FSGetFiles
         }
 
         list = list.Distinct().ToList();
-        if (e.usePb) e.Done();
+        if (e.UseProgressBar) e.Done();
         //if (measureTime)
         //{
         //    StopwatchStatic.StopAndPrintElapsed("GetFiles");
         //}
         //CAChangeContent.ChangeContent0(null, list, d2 => SH.FirstCharUpper(d2));
         for (var i = 0; i < list.Count; i++) list[i] = SH.FirstCharUpper(list[i]);
-        if (e._trimA1AndLeadingBs)
+        if (e.TrimFirstPathAndLeadingBackslashes)
             //list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
                 list[i] = list[i].Replace(folder, "").TrimStart('\\');
@@ -223,7 +223,7 @@ internal class FSGetFiles
                 //var result = Task.Run<List<string>>(async () => await GetFilesMoreMascAsync(folder, mask, searchOption));
                 //return result.Result;
                 var l2 = GetFilesMoreMasc(folder, mask, searchOption,
-                    new GetFilesMoreMascArgs { followJunctions = a.followJunctions });
+                    new GetFilesMoreMascArgs { FollowJunctions = a.FollowJunctions });
                 list.AddRange(l2);
 
                 #region Commented
@@ -316,7 +316,7 @@ internal class FSGetFiles
 
         #endregion
 
-        if (e.deleteFromDriveWhenCannotBeResolved)
+        if (e.DeleteFromDriveWhenCannotBeResolved)
             foreach (var item2 in masks)
             {
                 //if(SH.ContainsOnlyCase())
@@ -358,20 +358,20 @@ internal class FSGetFiles
     {
         if (a == null) a = new GetFilesArgsFS();
         CAChangeContent.ChangeContent0(null, list, data => SH.FirstCharUpper(data));
-        if (a._trimA1AndLeadingBs)
+        if (a.TrimFirstPathAndLeadingBackslashes)
             foreach (var folder in folders)
                 list = CAChangeContent.ChangeContent0(null, list, data => data = data.Replace(folder, "").TrimEnd('\\'));
-        if (a._trimExt)
+        if (a.TrimExtension)
             foreach (var folder in folders)
                 list = CAChangeContent.ChangeContent0(null, list, data => data = SHParts.RemoveAfterLast(data, '.'));
-        if (a.excludeFromLocationsCOntains != null)
+        if (a.ExcludeFromLocationsContains != null)
             // I want to find files recursively
-            foreach (var item in a.excludeFromLocationsCOntains)
+            foreach (var item in a.ExcludeFromLocationsContains)
                 list = list.Where(data => !data.Contains(item)).ToList();
         //CA.RemoveWhichContains(list, item, false);
         Dictionary<string, DateTime> dictLastModified = null;
         var isLastModifiedFromFn = a.LastModifiedFromFn != null;
-        if (a.dontIncludeNewest || a.byDateOfLastModifiedAsc || isLastModifiedFromFn)
+        if (a.DontIncludeNewest || a.ByDateOfLastModifiedAsc || isLastModifiedFromFn)
         {
             dictLastModified = new Dictionary<string, DateTime>();
             foreach (var item in list)
@@ -385,8 +385,8 @@ internal class FSGetFiles
             list = dictLastModified.OrderBy(t => t.Value).Select(result => result.Key).ToList();
         }
 
-        if (a.dontIncludeNewest) list.RemoveAt(list.Count - 1);
-        if (a.excludeWithMethod != null) a.excludeWithMethod.Invoke(list);
+        if (a.DontIncludeNewest) list.RemoveAt(list.Count - 1);
+        if (a.ExcludeWithMethod != null) a.ExcludeWithMethod.Invoke(list);
     }
 
     /// <summary>

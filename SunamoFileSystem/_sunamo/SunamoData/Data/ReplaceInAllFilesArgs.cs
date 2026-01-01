@@ -5,11 +5,11 @@ namespace SunamoFileSystem._sunamo.SunamoData.Data;
 /// </summary>
 internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 {
-    internal string from;
+    internal string from = string.Empty;
     internal bool isNotReplaceInTemporaryFiles;
     internal bool pairLinesInFromAndTo;
     internal bool replaceWithEmpty;
-    internal string to;
+    internal string to = string.Empty;
 
     internal ReplaceInAllFilesArgs()
     {

@@ -18,10 +18,10 @@ internal interface ITextOutputGenerator
     void Dictionary<Header, Value>(Dictionary<Header, List<Value>> ls, bool onlyCountInValue = false)
         where Header : IEnumerable<char>;
 
-    void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = "|");
+    void Dictionary<T1, T2>(Dictionary<T1, T2> d, string deli = "|") where T1 : notnull;
 
     string DictionaryBothToStringToSingleLine<Key, Value>(Dictionary<Key, Value> sorted, bool putValueAsFirst,
-        string delimiter = " ");
+        string delimiter = " ") where Key : notnull;
 
     void DictionaryKeyValuePair<T1, T2>(string header, IOrderedEnumerable<KeyValuePair<T1, T2>> ordered);
     void EndRunTime();

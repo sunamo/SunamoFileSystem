@@ -1,27 +1,29 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
-// todo nemělo by to dědit z GetFoldersEveryFolderArgs? ve vs2 to tak mám
+/// <summary>
+/// Arguments for getting files with advanced filtering options
+/// TODO: Should this inherit from GetFoldersEveryFolderArgs?
+/// TODO: This class has issues - need to clean up what should be here
+/// </summary>
 internal class GetFilesArgsFS : GetFilesBaseArgsFS
 {
-    internal bool _trimA1AndLeadingBs = false;
-
-    // todo s touhle třídou jsou jen problémy. udělat pořádek co tu má být a co tu nemám.
-    internal bool _trimExt = false;
-    internal bool byDateOfLastModifiedAsc = false;
-    internal bool dontIncludeNewest = false;
-    internal List<string> excludeFromLocationsCOntains = new();
+    internal new bool TrimFirstPathAndLeadingBackslashes = false;
+    internal bool TrimExtension = false;
+    internal bool ByDateOfLastModifiedAsc = false;
+    internal bool DontIncludeNewest = false;
+    internal List<string> ExcludeFromLocationsContains = new();
 
     /// <summary>
-    ///     Insert SunamoDevCodeHelper.RemoveTemporaryFilesVS etc.
+    /// Insert methods like SunamoDevCodeHelper.RemoveTemporaryFilesVS etc.
     /// </summary>
-    internal Action<List<string>> excludeWithMethod = null;
+    internal Action<List<string>>? ExcludeWithMethod = null;
 
-    internal Func<string, DateTime?> LastModifiedFromFn;
+    internal Func<string, DateTime?>? LastModifiedFromFn;
 
     /// <summary>
-    ///     1-7-2020 changed to false, stil forget to mention and method is bad
+    /// Changed to false on 1-7-2020, still forget to mention and method is problematic
     /// </summary>
-    internal bool useMascFromExtension = false;
+    internal bool UseMascFromExtension = false;
 
-    internal bool wildcard = false;
+    internal bool Wildcard = false;
 }

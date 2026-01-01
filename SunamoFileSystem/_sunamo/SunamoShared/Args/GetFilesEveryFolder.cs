@@ -1,6 +1,12 @@
 namespace SunamoFileSystem._sunamo.SunamoShared.Args;
 
+/// <summary>
+/// Arguments for getting files from every folder
+/// </summary>
 internal class GetFilesEveryFolder : GetFilesMoreMascArgs
 {
-    internal bool _trimA1 = false;
+    /// <summary>
+    /// If true, trims the first argument path
+    /// </summary>
+    internal bool TrimFirstPath { get; set; } = false;
 }

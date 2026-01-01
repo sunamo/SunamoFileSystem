@@ -7,8 +7,8 @@ internal abstract class CollectionWithoutDuplicatesBase<T> //: IDumpAsString
     private readonly List<T> wasNotAdded = new();
     private bool? _allowNull = false;
     internal List<T> c;
-    internal List<string> sr;
-    protected string ts = null;
+    internal List<string> sr = new();
+    protected string? ts = null;
 
     internal CollectionWithoutDuplicatesBase()
     {

@@ -38,9 +38,9 @@ public class PathFormatDetectorService(ILogger logger)
         }
         else if (path.Contains('\\') && path.Contains('/'))
         {
-            // Obsahuje oba oddělovače - může být složitější případ (např. UNC cesty ve Windows,
-            // nebo záměrná kombinace). Zde můžeme upřednostnit Windows, nebo vrátit neurčito.
-            // Záleží na konkrétním případu použití.
+            // Contains both separators - might be a complex case (e.g., UNC paths in Windows,
+            // or intentional combination). Here we can prioritize Windows or return undetermined.
+            // Depends on specific use case.
             if (logIfIsNotUnixOrWindowsPath)
             {
                 logger.LogError(path + " - Contains both \\ and /");

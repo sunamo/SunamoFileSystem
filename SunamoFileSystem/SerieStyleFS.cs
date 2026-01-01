@@ -1,7 +1,8 @@
+// variables names: ok
 namespace SunamoFileSystem;
 
 /// <summary>
-///     All styles here are taked from FSTests
+///     All styles here are taken from FSTests
 /// </summary>
 public enum SerieStyleFS
 {

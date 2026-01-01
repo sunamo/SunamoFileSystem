@@ -1,8 +1,11 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
-internal class GetFilesBaseArgsFS /*: GetFoldersEveryFolderArgs - nevracet - číst koment výše*/
+/// <summary>
+/// Base arguments for getting files
+/// </summary>
+internal class GetFilesBaseArgsFS
 {
-    internal bool _trimA1AndLeadingBs = false;
-    internal Func<string, bool> dIsJunctionPoint = null;
-    internal bool followJunctions = false;
+    internal bool TrimFirstPathAndLeadingBackslashes = false;
+    internal Func<string, bool> IsJunctionPoint = null;
+    internal bool FollowJunctions = false;
 }

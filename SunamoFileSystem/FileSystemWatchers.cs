@@ -1,13 +1,13 @@
 namespace SunamoFileSystem;
 
 /// <summary>
-///     If I want to watch files in more directories
+/// File system watcher for monitoring file changes in multiple directories
 /// </summary>
 public class FileSystemWatchers
 {
-    private static readonly bool watch = false;
+    private static readonly bool Watch = false;
 
-    private FileSystemWatcher _fileSystemWatcher;
+    private FileSystemWatcher _fileSystemWatcher = default!;
     private readonly Action<string, bool> _onStart;
     private readonly Action<string, bool> _onStop;
 
@@ -20,15 +20,21 @@ public class FileSystemWatchers
     private readonly Dictionary<WatcherChangeTypes, string> lastProcessedFile = new();
     private readonly Dictionary<WatcherChangeTypes, string> lastProcessedFileOld = new();
 
+    /// <summary>
+    /// Initializes a new instance of the FileSystemWatchers class
+    /// </summary>
+    /// <param name="onStart">Action to invoke when file monitoring starts</param>
+    /// <param name="onStop">Action to invoke when file monitoring stops</param>
     public FileSystemWatchers(Action<string, bool> onStart, Action<string, bool> onStop)
     {
-        if (watch)
-        {
-            _onStart = onStart;
-            _onStop = onStop;
+        _onStart = onStart;
+        _onStop = onStop;
 
-            var val = Enum.GetValues<WatcherChangeTypes>(); //EnumHelper.GetValues<WatcherChangeTypes>();
-            foreach (var item in val)
+        if (Watch)
+        {
+
+            var changeTypes = Enum.GetValues<WatcherChangeTypes>();
+            foreach (var item in changeTypes)
             {
                 lastProcessedFile.Add(item, string.Empty);
                 lastProcessedFileOld.Add(item, string.Empty);
@@ -37,13 +43,14 @@ public class FileSystemWatchers
     }
 
     /// <summary>
-    ///     Check whether folder is already indexing
-    ///     Is called from ProcessFile
+    /// Starts monitoring the specified folder for file changes
+    /// Checks whether folder is already being monitored
+    /// Is called from ProcessFile
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">The folder path to start monitoring</param>
     public void Start(string path)
     {
-        if (watch)
+        if (Watch)
         {
             // Adding handlers - must wrap up all
 
@@ -62,12 +69,14 @@ public class FileSystemWatchers
     }
 
     /// <summary>
-    ///     Is called just from Start
+    /// Registers a single folder for file system monitoring
+    /// Is called only from Start
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">The folder path to register</param>
+    /// <returns>The configured FileSystemWatcher instance</returns>
     private FileSystemWatcher RegisterSingleFolder(string path)
     {
-        if (watch)
+        if (Watch)
         {
             // A1 must be directory, never file
             _fileSystemWatcher = new FileSystemWatcher(path);
@@ -88,38 +97,36 @@ public class FileSystemWatchers
             _fileSystemWatcher.Renamed += FileSystemWatcher_Renamed;
 
             _fileSystemWatcher.EnableRaisingEvents = true;
-
-            //fileSystemWatcher.SynchronizingObject;
-            //fileSystemWatcher.InitializeLifetimeService();
         }
 
         return _fileSystemWatcher;
     }
 
-    public void Stop(string path, bool fromFileSystemWatcher = false)
+    /// <summary>
+    /// Stops monitoring the specified folder
+    /// </summary>
+    /// <param name="path">The folder path to stop monitoring</param>
+    /// <param name="isFromFileSystemWatcher">Indicates if this was called from FileSystemWatcher event</param>
+    public void Stop(string path, bool isFromFileSystemWatcher = false)
     {
-        if (watch)
+        if (Watch)
         {
-            _onStop.Invoke(path, fromFileSystemWatcher);
+            _onStop.Invoke(path, isFromFileSystemWatcher);
 
             var fileSystemWatcher = _watchers[path];
 
             _watchers.Remove(path);
 
             fileSystemWatcher.EnableRaisingEvents = false;
-            //fileSystemWatcher.Deleted -= FileSystemWatcher_Deleted;
-            //fileSystemWatcher.Changed -= FileSystemWatcher_Changed;
-            //fileSystemWatcher.Renamed -= FileSystemWatcher_Renamed;
-            //fileSystemWatcher.Dispose();
-
-
-            // During delete call onStop which call this method
         }
     }
 
+    /// <summary>
+    /// Handles file rename events
+    /// </summary>
     private void FileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
     {
-        if (watch)
+        if (Watch)
         {
             if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
@@ -155,9 +162,12 @@ public class FileSystemWatchers
         }
     }
 
+    /// <summary>
+    /// Handles file change events
+    /// </summary>
     private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
     {
-        if (watch)
+        if (Watch)
         {
             if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
@@ -172,9 +182,12 @@ public class FileSystemWatchers
         }
     }
 
+    /// <summary>
+    /// Handles file deletion events
+    /// </summary>
     private void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
     {
-        if (watch)
+        if (Watch)
         {
             if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
 

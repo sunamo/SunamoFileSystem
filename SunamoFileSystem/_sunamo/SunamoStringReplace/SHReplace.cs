@@ -18,8 +18,8 @@ internal class SHReplace
 
         WhitespaceCharService whitespaceChar = new WhitespaceCharService();
 
-        var parameter = text.Split(whitespaceChar.whiteSpaceChars
-            .ToArray()); //SHSplit.Split(text, AllChars.whiteSpaceChars.ConvertAll(d => d.ToString()).ToArray());
+        var parameter = text.Split(whitespaceChar.WhiteSpaceChars
+            .ToArray()); //SHSplit.Split(text, AllChars.WhiteSpaceChars.ConvertAll(d => d.ToString()).ToArray());
         return string.Join(" ", parameter);
     }
 }

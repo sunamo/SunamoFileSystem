@@ -36,7 +36,7 @@ internal class FSGetFolders
 
         if (folders != null)
         {
-            CA.RemoveWhichContainsList(folders, e.excludeFromLocationsCOntains, e.wildcard);
+            CA.RemoveWhichContainsList(folders, e.ExcludeFromLocationsContains, e.Wildcard);
             list.AddRange(folders);
             for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(folders[i], list, e);
             //foreach (var item in folders)
@@ -77,14 +77,13 @@ internal class FSGetFolders
         //    pbh = a.progressBarHelper.CreateInstance(a.pb, files.Count, this);
         //}
         GetFoldersEveryFolder(folder, list, e);
-        if (e._trimA1AndLeadingBs)
-            //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
+        if (e.TrimFirstPathAndLeadingBackslashes)
             for (var i = 0; i < list.Count; i++)
                 list[i] = list[i].Replace(folder, "").TrimStart('\\');
-        if (e.excludeFromLocationsCOntains != null)
+        if (e.ExcludeFromLocationsContains != null)
             // I want to find files recursively
-            foreach (var item in e.excludeFromLocationsCOntains)
-                CA.RemoveWhichContains(list, item, e.wildcard, Regex.IsMatch);
+            foreach (var item in e.ExcludeFromLocationsContains)
+                CA.RemoveWhichContains(list, item, e.Wildcard, Regex.IsMatch);
         return list;
     }
 

@@ -1,3 +1,4 @@
+// variables names: ok
 namespace SunamoFileSystem.Enums;
 
 public enum ComputerSizeUnits : byte
