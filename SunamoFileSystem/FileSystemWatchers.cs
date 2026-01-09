@@ -17,8 +17,8 @@ public class FileSystemWatchers
     private readonly FsWatcherDictionary<string, FileSystemWatcher> _watchers = new();
 
 
-    private readonly Dictionary<WatcherChangeTypes, string> lastProcessedFile = new();
-    private readonly Dictionary<WatcherChangeTypes, string> lastProcessedFileOld = new();
+    private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFile = new();
+    private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFileOld = new();
 
     /// <summary>
     /// Initializes a new instance of the FileSystemWatchers class
@@ -36,8 +36,8 @@ public class FileSystemWatchers
             var changeTypes = Enum.GetValues<WatcherChangeTypes>();
             foreach (var item in changeTypes)
             {
-                lastProcessedFile.Add(item, string.Empty);
-                lastProcessedFileOld.Add(item, string.Empty);
+                _lastProcessedFile.Add(item, string.Empty);
+                _lastProcessedFileOld.Add(item, string.Empty);
             }
         }
     }
@@ -128,12 +128,12 @@ public class FileSystemWatchers
     {
         if (Watch)
         {
-            if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
+            if (_lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
-            if (lastProcessedFileOld[e.ChangeType] == e.OldFullPath) return;
+            if (_lastProcessedFileOld[e.ChangeType] == e.OldFullPath) return;
 
-            lastProcessedFile[e.ChangeType] = e.FullPath;
-            lastProcessedFileOld[e.ChangeType] = e.OldFullPath;
+            _lastProcessedFile[e.ChangeType] = e.FullPath;
+            _lastProcessedFileOld[e.ChangeType] = e.OldFullPath;
 
             var existsNew = false;
             var existsOld = false;
@@ -169,9 +169,9 @@ public class FileSystemWatchers
     {
         if (Watch)
         {
-            if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
+            if (_lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
-            lastProcessedFile[e.ChangeType] = e.FullPath;
+            _lastProcessedFile[e.ChangeType] = e.FullPath;
 
 
             if (File.Exists(e.FullPath))
@@ -189,9 +189,9 @@ public class FileSystemWatchers
     {
         if (Watch)
         {
-            if (lastProcessedFile[e.ChangeType] == e.FullPath) return;
+            if (_lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
-            lastProcessedFile[e.ChangeType] = e.FullPath;
+            _lastProcessedFile[e.ChangeType] = e.FullPath;
 
 
             _onStop.Invoke(e.FullPath, true);

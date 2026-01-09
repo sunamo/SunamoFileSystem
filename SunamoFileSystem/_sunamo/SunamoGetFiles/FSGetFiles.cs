@@ -32,9 +32,16 @@ internal class FSGetFiles
         return dict;
     }
 
-    internal static List<string> GetFiles(string v1, string v2, SearchOption topDirectoryOnly)
+    /// <summary>
+    /// Gets files from the specified directory with the specified search pattern and search option
+    /// </summary>
+    /// <param name="path">The directory path to search in</param>
+    /// <param name="searchPattern">The search pattern to match against file names</param>
+    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories</param>
+    /// <returns>List of file paths matching the search criteria</returns>
+    internal static List<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
-        return Directory.GetFiles(v1, v2, topDirectoryOnly).ToList();
+        return Directory.GetFiles(path, searchPattern, searchOption).ToList();
     }
 
 

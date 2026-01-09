@@ -1,35 +1,68 @@
 namespace SunamoFileSystem._sunamo.SunamoValues.Constants;
 
+/// <summary>
+/// Numeric constants.
+/// EN: Numeric constants.
+/// CZ: Numerické konstanty.
+/// </summary>
 internal class NumConsts
 {
     #region For easy copy
 
-    internal const int mOne = -1;
+    /// <summary>
+    /// Minus one (-1).
+    /// </summary>
+    internal const int MOne = -1;
 
     #endregion
 
-    internal const int defaultPortIfCannotBeParsed = 587;
+    /// <summary>
+    /// Default port if cannot be parsed (587).
+    /// </summary>
+    internal const int DefaultPortIfCannotBeParsed = 587;
 
     /// <summary>
-    ///     Min age is 18 due to GDPR - below 18 is needed parent agreement of child
+    /// Minimum age is 18 due to GDPR - below 18 is needed parent agreement of child.
     /// </summary>
     internal const int MinAge = 18;
 
-    internal const long kB = 1024;
-    internal const double zeroDouble = 0;
-    internal const float zeroFloat = 0;
+    /// <summary>
+    /// One kilobyte in bytes (1024).
+    /// </summary>
+    internal const long KB = 1024;
 
     /// <summary>
-    ///     at int should be no postfix
+    /// Zero as double.
     /// </summary>
-    internal const int one = 1;
-
-    internal const int zeroInt = 0;
-    internal static short nDtMinVal = 10101;
-    internal static short nDtMaxVal = 32271;
+    internal const double ZeroDouble = 0;
 
     /// <summary>
-    ///     one thousand
+    /// Zero as float.
     /// </summary>
-    internal static int to = 1000;
+    internal const float ZeroFloat = 0;
+
+    /// <summary>
+    /// One (at int should be no postfix).
+    /// </summary>
+    internal const int One = 1;
+
+    /// <summary>
+    /// Zero as int.
+    /// </summary>
+    internal const int ZeroInt = 0;
+
+    /// <summary>
+    /// DateTime minimum value.
+    /// </summary>
+    internal static short NDtMinVal = 10101;
+
+    /// <summary>
+    /// DateTime maximum value.
+    /// </summary>
+    internal static short NDtMaxVal = 32271;
+
+    /// <summary>
+    /// One thousand (1000).
+    /// </summary>
+    internal static int ThousandValue = 1000;
 }

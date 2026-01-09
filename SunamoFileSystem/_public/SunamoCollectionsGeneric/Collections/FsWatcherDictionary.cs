@@ -2,7 +2,7 @@ namespace SunamoFileSystem._public.SunamoCollectionsGeneric.Collections;
 
 public class FsWatcherDictionary<T, U> : IDictionary<T, U> where T : notnull
 {
-    private static Type type = typeof(FsWatcherDictionary<T, U>);
+    private static Type Type = typeof(FsWatcherDictionary<T, U>);
     private readonly Dictionary<T, U> d = new();
 
     public U this[T key]
@@ -70,8 +70,8 @@ public class FsWatcherDictionary<T, U> : IDictionary<T, U> where T : notnull
 
     public bool TryGetValue(T key, out U value)
     {
-        var vr = d.TryGetValue(key, out value);
-        return vr;
+        var result = d.TryGetValue(key, out value);
+        return result;
     }
 
     IEnumerator IEnumerable.GetEnumerator()

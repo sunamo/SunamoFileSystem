@@ -1,64 +1,31 @@
 namespace SunamoFileSystem._sunamo.SunamoTextOutputGenerator;
 
 /// <summary>
-///     In Comparing
+/// Generator for text output.
+/// EN: Generator for text output.
+/// CZ: Generátor pro textový výstup.
 /// </summary>
-internal class TextOutputGenerator //: ITextOutputGenerator
+internal class TextOutputGenerator
 {
-    private static readonly string s_znakNadpisu = "*";
+    private static readonly string HeadingCharacter = "*";
 
-    // při převádění na nugety jsem to změnil na ITextBuilder stringBuilder = TextBuilder.Create();
-    // ale asi to byla blbost, teď mám v _sunamo Create() která je ale null místo abych použil ctor
-    // takže vracím nazpět.
-    //internal TextBuilder stringBuilder = new TextBuilder();
-    internal StringBuilder stringBuilder = new();
+    internal StringBuilder StringBuilder = new();
 
-    //internal string prependEveryNoWhite
-    //{
-    //    get => stringBuilder.prependEveryNoWhite;
-    //    set => stringBuilder.prependEveryNoWhite = value;
-    //}
-
+    /// <summary>
+    /// Returns the string representation of the generated text.
+    /// </summary>
+    /// <returns>The generated text.</returns>
     public override string ToString()
     {
-        var ts = stringBuilder.ToString();
-        return ts;
+        var result = StringBuilder.ToString();
+        return result;
     }
 
+    /// <summary>
+    /// Undoes the last operation.
+    /// </summary>
     internal void Undo()
     {
         ThrowEx.NotImplementedMethod();
-        //stringBuilder.Undo();
     }
-
-
-
-
-    #region Other adding methods
-
-
-
-    #endregion
-
-    #region List
-
-
-
-
-
-
-
-
-
-    #endregion
-
-    #region Dictionary
-
-
-
-
-
-
-
-    #endregion
 }

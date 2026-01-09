@@ -96,18 +96,18 @@ bool fillAlsoFirstTwo = true)
         }
         return null;
     }
-    readonly static StringBuilder sbAdditionalInfoInner = new();
-    readonly static StringBuilder sbAdditionalInfo = new();
+    internal readonly static StringBuilder AdditionalInfoInnerStringBuilder = new();
+    internal readonly static StringBuilder AdditionalInfoStringBuilder = new();
     internal static string AddParams()
     {
-        sbAdditionalInfo.Insert(0, Environment.NewLine);
-        sbAdditionalInfo.Insert(0, "Outer:");
-        sbAdditionalInfo.Insert(0, Environment.NewLine);
-        sbAdditionalInfoInner.Insert(0, Environment.NewLine);
-        sbAdditionalInfoInner.Insert(0, "Inner:");
-        sbAdditionalInfoInner.Insert(0, Environment.NewLine);
-        var addParams = sbAdditionalInfo.ToString();
-        var addParamsInner = sbAdditionalInfoInner.ToString();
+        AdditionalInfoStringBuilder.Insert(0, Environment.NewLine);
+        AdditionalInfoStringBuilder.Insert(0, "Outer:");
+        AdditionalInfoStringBuilder.Insert(0, Environment.NewLine);
+        AdditionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
+        AdditionalInfoInnerStringBuilder.Insert(0, "Inner:");
+        AdditionalInfoInnerStringBuilder.Insert(0, Environment.NewLine);
+        var addParams = AdditionalInfoStringBuilder.ToString();
+        var addParamsInner = AdditionalInfoInnerStringBuilder.ToString();
         return addParams + addParamsInner;
     }
     #endregion

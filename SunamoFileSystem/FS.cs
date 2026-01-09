@@ -42,7 +42,7 @@ public class FS
     public static string ReplaceIncorrectFor = string.Empty;
     public static Action<string>? DeleteFileMaybeLocked;
     public static Func<string, bool, List<Process>>? FileUtilWhoIsLocking = null;
-    private static Type type = typeof(FS);
+    private static Type Type = typeof(FS);
     static FS()
     {
         InvalidFileNameStringsReadonly = new List<string>(InvalidFileNameCharsReadonly.Count);
@@ -152,11 +152,16 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         }
         return result;
     }
-    public static string FirstCharUpper(string nazevPP)
+    /// <summary>
+    /// Converts the first character of a string to uppercase
+    /// </summary>
+    /// <param name="text">The text to process</param>
+    /// <returns>String with first character in uppercase</returns>
+    public static string FirstCharUpper(string text)
     {
-        if (nazevPP.Length == 1) return nazevPP.ToUpper();
-        var substring = nazevPP.Substring(1);
-        return nazevPP[0].ToString().ToUpper() + substring;
+        if (text.Length == 1) return text.ToUpper();
+        var substring = text.Substring(1);
+        return text[0].ToString().ToUpper() + substring;
     }
     public static bool TryDeleteFile(string item)
     {
@@ -173,11 +178,16 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
             return false;
         }
     }
-    public static async Task WriteAllTextWithExc(string file, string obsah)
+    /// <summary>
+    /// Writes all text to file with exception handling
+    /// </summary>
+    /// <param name="file">The file path to write to</param>
+    /// <param name="content">The content to write</param>
+    public static async Task WriteAllTextWithExc(string file, string content)
     {
         try
         {
-            await File.WriteAllTextAsync(file, obsah);
+            await File.WriteAllTextAsync(file, content);
         }
         catch (Exception)
         {
@@ -489,16 +499,17 @@ List<string>
         }
     }
     /// <summary>
-    ///     Get path A2/name folder of file A1/name A1
+    /// Places a file in a folder by combining the target folder path with the file's parent folder name and file name
     /// </summary>
-    /// <param name="var"></param>
-    /// <param name="zmenseno"></param>
+    /// <param name="var">The source file path</param>
+    /// <param name="zmenseno">The target folder path</param>
+    /// <returns>Combined path: targetFolder/parentFolderName/fileName</returns>
     public static string PlaceInFolder(string var, string zmenseno)
     {
         //return Slozka.ci.PridejNadslozku(var, zmenseno);
-        var nad = Path.GetDirectoryName(var);
-        var naz = Path.GetFileName(nad);
-        return Path.Combine(zmenseno, Path.Combine(naz, Path.GetFileName(var)));
+        var parentPath = Path.GetDirectoryName(var);
+        var parentFolderName = Path.GetFileName(parentPath);
+        return Path.Combine(zmenseno, Path.Combine(parentFolderName, Path.GetFileName(var)));
     }
     /// <summary>
     ///     Všechny soubory které se podaří přesunout vymažu z A1
@@ -696,14 +707,14 @@ void
         var path = (ReplaceInAllFilesArgs)o;
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
         // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
-        var fasterMethodForReplacing = path.fasterMethodForReplacing;
-        var files = path.files;
-        var inDownloadedFolders = path.inDownloadedFolders;
-        var inFoldersToDelete = path.inFoldersToDelete;
-        var inGitFiles = path.inGitFiles;
-        var isMultilineWithVariousIndent = path.isMultilineWithVariousIndent;
-        var writeEveryReadedFileAsStatus = path.writeEveryReadedFileAsStatus;
-        var writeEveryWrittenFileAsStatus = path.writeEveryWrittenFileAsStatus;
+        var fasterMethodForReplacing = path.FasterMethodForReplacing;
+        var files = path.Files;
+        var inDownloadedFolders = path.InDownloadedFolders;
+        var inFoldersToDelete = path.InFoldersToDelete;
+        var inGitFiles = path.InGitFiles;
+        var isMultilineWithVariousIndent = path.IsMultilineWithVariousIndent;
+        var writeEveryReadedFileAsStatus = path.WriteEveryReadedFileAsStatus;
+        var writeEveryWrittenFileAsStatus = path.WriteEveryWrittenFileAsStatus;
         #endregion
         #region ReplaceInAllFilesArgs
         var from = path.from;
@@ -754,9 +765,9 @@ void
         await ReplaceInAllFiles(replaceFrom, replaceTo,
             new ReplaceInAllFilesArgsBase
             {
-                files = files,
-                isMultilineWithVariousIndent = isMultilineWithVariousIndent,
-                fasterMethodForReplacing = fasterMethodForReplacing
+                Files = files,
+                IsMultilineWithVariousIndent = isMultilineWithVariousIndent,
+                FasterMethodForReplacing = fasterMethodForReplacing
             }, EncodingHelperIsBinary);
     }
     /// <summary>
@@ -777,15 +788,15 @@ void
     {
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
         // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
-        var fasterMethodForReplacing = path.fasterMethodForReplacing;
-        var files = path.files;
-        var inDownloadedFolders = path.inDownloadedFolders;
-        var inFoldersToDelete = path.inFoldersToDelete;
-        var inGitFiles = path.inGitFiles;
-        var isMultilineWithVariousIndent = path.isMultilineWithVariousIndent;
-        var writeEveryReadedFileAsStatus = path.writeEveryReadedFileAsStatus;
-        var writeEveryWrittenFileAsStatus = path.writeEveryWrittenFileAsStatus;
-        var dRemoveGitFiles = path.dRemoveGitFiles;
+        var fasterMethodForReplacing = path.FasterMethodForReplacing;
+        var files = path.Files;
+        var inDownloadedFolders = path.InDownloadedFolders;
+        var inFoldersToDelete = path.InFoldersToDelete;
+        var inGitFiles = path.InGitFiles;
+        var isMultilineWithVariousIndent = path.IsMultilineWithVariousIndent;
+        var writeEveryReadedFileAsStatus = path.WriteEveryReadedFileAsStatus;
+        var writeEveryWrittenFileAsStatus = path.WriteEveryWrittenFileAsStatus;
+        var dRemoveGitFiles = path.DRemoveGitFiles;
         #endregion
         if (!inGitFiles || !inFoldersToDelete || !inDownloadedFolders)
             dRemoveGitFiles(files, inGitFiles, inDownloadedFolders, inFoldersToDelete);
@@ -1081,17 +1092,17 @@ void
     {
         var dirs = DirectoriesWithToken(value, AscDesc.Desc);
         foreach (var item in dirs)
-            if (IsDirectoryEmpty(item.t, true, true))
+            if (IsDirectoryEmpty(item.Value, true, true))
             {
                 if (doNotDeleteWhichContains.Length > 0)
                 {
                     if (!doNotDeleteWhichContains.Any(data =>
-                            item.t.Contains(data))) //CANewSH.ContainsAnyFromArray(item.t, doNotDeleteWhichContains))
-                        TryDeleteDirectory(item.t);
+                            item.Value.Contains(data))) //CANewSH.ContainsAnyFromArray(item.Value, doNotDeleteWhichContains))
+                        TryDeleteDirectory(item.Value);
                 }
                 else
                 {
-                    TryDeleteDirectory(item.t);
+                    TryDeleteDirectory(item.Value);
                 }
             }
         if (IsDirectoryEmpty(value, false, true) && !doNotDeleteWhichContains.Any()) TryDeleteDirectory(value);
@@ -1102,9 +1113,9 @@ void
     //}
     public static int CompareTWithInt<T>(TWithInt<T> first, TWithInt<T> second)
     {
-        if (first.count > second.count)
+        if (first.Count > second.Count)
             return 1;
-        if (first.count < second.count) return -1;
+        if (first.Count < second.Count) return -1;
         return 0;
     }
     public static List<TWithInt<string>> DirectoriesWithToken(string value, AscDesc sortOrder)
@@ -1114,8 +1125,8 @@ void
         foreach (var item in dirs)
             result.Add(new TWithInt<string>
             {
-                t = item,
-                count = SH.OccurencesOfStringIn(item, "\"")
+                Value = item,
+                Count = SH.OccurencesOfStringIn(item, "\"")
             });
         result.Sort(CompareTWithInt);
         if (sortOrder == AscDesc.Desc) result.Reverse();
@@ -1481,12 +1492,12 @@ void
             var dires = DirectoriesWithToken(folder, AscDesc.Desc);
             foreach (var item in dires)
             {
-                var dirPath = WithoutEndSlash(item.t);
+                var dirPath = WithoutEndSlash(item.Value);
                 var dirName = Path.GetFileName(dirPath);
                 if (dirName.HasDiacritics())
                 {
                     var dirNameWithoutDiac = dirName.RemoveDiacritics(); //SH.TextWithoutDiacritic(dirName);
-                    RenameDirectory(logger, item.t, dirNameWithoutDiac, directoryCollisionOption, fileCollisionOption);
+                    RenameDirectory(logger, item.Value, dirNameWithoutDiac, directoryCollisionOption, fileCollisionOption);
                 }
             }
         }
@@ -2205,25 +2216,25 @@ string
     public static string GetSizeInAutoString(double size)
     {
         var unit = ComputerSizeUnits.B;
-        if (size > NumConsts.kB)
+        if (size > NumConsts.KB)
         {
             unit = ComputerSizeUnits.KB;
-            size /= NumConsts.kB;
+            size /= NumConsts.KB;
         }
-        if (size > NumConsts.kB)
+        if (size > NumConsts.KB)
         {
             unit = ComputerSizeUnits.MB;
-            size /= NumConsts.kB;
+            size /= NumConsts.KB;
         }
-        if (size > NumConsts.kB)
+        if (size > NumConsts.KB)
         {
             unit = ComputerSizeUnits.GB;
-            size /= NumConsts.kB;
+            size /= NumConsts.KB;
         }
-        if (size > NumConsts.kB)
+        if (size > NumConsts.KB)
         {
             unit = ComputerSizeUnits.TB;
-            size /= NumConsts.kB;
+            size /= NumConsts.KB;
         }
         return size + " " + unit;
     }
@@ -3086,11 +3097,11 @@ string
         {
             // When deleting will be successful, create new dir
             var generator = new TextOutputGenerator();
-            generator.stringBuilder.Append(withEndFlash);
-            //generator.stringBuilder.CanUndo = true;
+            generator.StringBuilder.Append(withEndFlash);
+            //generator.StringBuilder.CanUndo = true;
             for (; resultSerie < int.MaxValue; resultSerie++)
             {
-                generator.stringBuilder.Append(resultSerie);
+                generator.StringBuilder.Append(resultSerie);
                 var newDirectory = generator.ToString();
                 if (!Directory.Exists(newDirectory))
                 {

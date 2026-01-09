@@ -17,14 +17,14 @@ internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 
     internal ReplaceInAllFilesArgs(ReplaceInAllFilesArgsBase b)
     {
-        files = b.files;
-        isMultilineWithVariousIndent = b.isMultilineWithVariousIndent;
-        writeEveryReadedFileAsStatus = b.writeEveryReadedFileAsStatus;
-        writeEveryWrittenFileAsStatus = b.writeEveryWrittenFileAsStatus;
-        fasterMethodForReplacing = b.fasterMethodForReplacing;
-        inGitFiles = b.inGitFiles;
-        inDownloadedFolders = b.inDownloadedFolders;
-        inFoldersToDelete = b.inFoldersToDelete;
-        dRemoveGitFiles = b.dRemoveGitFiles;
+        Files = b.Files;
+        IsMultilineWithVariousIndent = b.IsMultilineWithVariousIndent;
+        WriteEveryReadedFileAsStatus = b.WriteEveryReadedFileAsStatus;
+        WriteEveryWrittenFileAsStatus = b.WriteEveryWrittenFileAsStatus;
+        FasterMethodForReplacing = b.FasterMethodForReplacing;
+        InGitFiles = b.InGitFiles;
+        InDownloadedFolders = b.InDownloadedFolders;
+        InFoldersToDelete = b.InFoldersToDelete;
+        DRemoveGitFiles = b.DRemoveGitFiles;
     }
 }

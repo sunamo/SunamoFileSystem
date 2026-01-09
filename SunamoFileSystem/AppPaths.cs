@@ -12,7 +12,7 @@ public class AppPaths
     /// <returns>The directory path of the main module</returns>
     public static string GetStartupPath()
     {
-        return Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        return Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!;
     }
 
     /// <summary>

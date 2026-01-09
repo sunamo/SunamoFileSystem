@@ -2,7 +2,7 @@ namespace SunamoFileSystem._sunamo.SunamoInterfaces.Interfaces;
 
 internal interface ITextOutputGenerator
 {
-    string prependEveryNoWhite { get; set; }
+    string PrependEveryNoWhite { get; set; }
     void PairBullet(string key, string v);
     void Append(string text);
     void AppendFormat(string text, params string[] p);
