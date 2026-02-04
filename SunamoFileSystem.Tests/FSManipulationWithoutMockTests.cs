@@ -1,3 +1,4 @@
+// variables names: ok
 namespace SunamoFileSystem.Tests;
 
 using SunamoGetFiles._public.SunamoArgs;

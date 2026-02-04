@@ -5,26 +5,26 @@ namespace SunamoFileSystem._sunamo.SunamoData.Data;
 /// </summary>
 internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 {
-    internal string from = string.Empty;
-    internal bool isNotReplaceInTemporaryFiles;
-    internal bool pairLinesInFromAndTo;
-    internal bool replaceWithEmpty;
-    internal string to = string.Empty;
+    internal string From = string.Empty;
+    internal bool IsNotReplaceInTemporaryFiles;
+    internal bool PairLinesInFromAndTo;
+    internal bool ReplaceWithEmpty;
+    internal string To = string.Empty;
 
     internal ReplaceInAllFilesArgs()
     {
     }
 
-    internal ReplaceInAllFilesArgs(ReplaceInAllFilesArgsBase b)
+    internal ReplaceInAllFilesArgs(ReplaceInAllFilesArgsBase baseArgs)
     {
-        Files = b.Files;
-        IsMultilineWithVariousIndent = b.IsMultilineWithVariousIndent;
-        WriteEveryReadedFileAsStatus = b.WriteEveryReadedFileAsStatus;
-        WriteEveryWrittenFileAsStatus = b.WriteEveryWrittenFileAsStatus;
-        FasterMethodForReplacing = b.FasterMethodForReplacing;
-        InGitFiles = b.InGitFiles;
-        InDownloadedFolders = b.InDownloadedFolders;
-        InFoldersToDelete = b.InFoldersToDelete;
-        DRemoveGitFiles = b.DRemoveGitFiles;
+        Files = baseArgs.Files;
+        IsMultilineWithVariousIndent = baseArgs.IsMultilineWithVariousIndent;
+        WriteEveryReadedFileAsStatus = baseArgs.WriteEveryReadedFileAsStatus;
+        WriteEveryWrittenFileAsStatus = baseArgs.WriteEveryWrittenFileAsStatus;
+        FasterMethodForReplacing = baseArgs.FasterMethodForReplacing;
+        InGitFiles = baseArgs.InGitFiles;
+        InDownloadedFolders = baseArgs.InDownloadedFolders;
+        InFoldersToDelete = baseArgs.InFoldersToDelete;
+        DRemoveGitFiles = baseArgs.DRemoveGitFiles;
     }
 }

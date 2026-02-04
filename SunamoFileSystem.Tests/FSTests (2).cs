@@ -1,3 +1,4 @@
+// variables names: ok
 // EN: Variable names have been checked and replaced with self-descriptive names
 // CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 
@@ -92,8 +93,6 @@ public partial class FSTests
         var mbs = FS.GetSizeInAutoString(mb, unit);
         var gbs = FS.GetSizeInAutoString(gb, unit);
         var gbsMinusOne = FS.GetSizeInAutoString(gb - 1, unit);
-
-        int i = 0;
     }
 
 

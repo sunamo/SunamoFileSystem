@@ -1,3 +1,4 @@
+// variables names: ok
 // EN: Variable names have been checked and replaced with self-descriptive names
 // CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 
@@ -39,7 +40,7 @@ public partial class FSTests
     [Fact]
     public void InsertBetweenFileNameAndPathTest()
     {
-        var result = FS.InsertBetweenFileNameAndPath("a", null, "_");
+        var result = FS.InsertBetweenFileNameAndPath("a", null!, "_");
     }
     [Fact]
     public void MoveDirectoryNoRecursiveTest()
@@ -52,21 +53,17 @@ public partial class FSTests
         }
         Directory.Delete(bp + "From", true);
         Directory.Delete(bp + "To", true);
-        ZipFile.ExtractToDirectory(sourceZip, Path.GetDirectoryName(sourceZip));
+        ZipFile.ExtractToDirectory(sourceZip, Path.GetDirectoryName(sourceZip)!);
         FS.MoveDirectoryNoRecursive(logger, bp + @"From\", bp + @"To\", DirectoryMoveCollisionOption.Overwrite, FileMoveCollisionOption.ThrowEx);
     }
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-#pragma warning disable IDE0060 // Remove unused parameter
-    public void DeleteAllEmptyDirectoriesTest(bool b)
-#pragma warning restore IDE0060 // Remove unused parameter
+    [Fact]
+    public void DeleteAllEmptyDirectoriesTest()
     {
         // Jen takhle to funguje. Extrahovat tím že se složka sama vytvoří nejde.
         var path = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoFileSystem\DeleteAllEmptyDirectoriesTest.zip";
-        var p2 = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+        var p2 = Path.Combine(Path.GetDirectoryName(path)!, Path.GetFileNameWithoutExtension(path));
         // extract pomocí System.IO.Compression
-        ZipFile.ExtractToDirectory(path, p2);
+        ZipFile.ExtractToDirectory(path, p2!);
         FS.DeleteAllEmptyDirectories(p2, ".stfolder");
     }
     [Fact]

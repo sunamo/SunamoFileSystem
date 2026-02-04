@@ -9,8 +9,8 @@ using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 public class FS
 {
     public const string DEndsWithReplaceInFile = "SubdomainHelperSimple.cs";
-    protected static readonly List<char> InvalidFileNameCharsReadonly = Path.GetInvalidFileNameChars().ToList();
-    protected static readonly List<string> InvalidFileNameStringsReadonly;
+    protected static readonly List<char> invalidFileNameCharsReadonly = Path.GetInvalidFileNameChars().ToList();
+    protected static readonly List<string> invalidFileNameStringsReadonly;
     public static bool IsAbsolutePath(string path)
     {
         return !String.IsNullOrWhiteSpace(path)
@@ -31,37 +31,36 @@ public class FS
         foreach (var directory in Directory.GetDirectories(sourceDir))
             CopyFolder(directory, Path.Combine(targetDir, Path.GetFileName(directory)));
     }
-    protected static List<char> InvalidPathChars;
+    protected static List<char> invalidPathChars;
     /// <summary>
     /// Field as string because array requires ToArray() every time to construct string
     /// </summary>
     public static string InvalidFileNameCharsString;
     public static List<char> InvalidFileNameChars;
-    protected static List<char> InvalidCharsForMapPath;
-    protected static List<char> InvalidFileNameCharsWithoutDelimiterOfFolders;
+    protected static List<char> invalidCharsForMapPath;
+    protected static List<char> invalidFileNameCharsWithoutDelimiterOfFolders;
     public static string ReplaceIncorrectFor = string.Empty;
     public static Action<string>? DeleteFileMaybeLocked;
     public static Func<string, bool, List<Process>>? FileUtilWhoIsLocking = null;
-    private static Type Type = typeof(FS);
     static FS()
     {
-        InvalidFileNameStringsReadonly = new List<string>(InvalidFileNameCharsReadonly.Count);
-        foreach (var item in InvalidFileNameCharsReadonly) InvalidFileNameStringsReadonly.Add(item.ToString());
-        InvalidPathChars = new List<char>(Path.GetInvalidPathChars());
-        if (!InvalidPathChars.Contains('/')) InvalidPathChars.Add('/');
-        if (!InvalidPathChars.Contains('\\')) InvalidPathChars.Add('\\');
-        InvalidFileNameChars = new List<char>(InvalidFileNameCharsReadonly);
-        InvalidFileNameCharsString = string.Join("", InvalidFileNameCharsReadonly);
+        invalidFileNameStringsReadonly = new List<string>(invalidFileNameCharsReadonly.Count);
+        foreach (var item in invalidFileNameCharsReadonly) invalidFileNameStringsReadonly.Add(item.ToString());
+        invalidPathChars = new List<char>(Path.GetInvalidPathChars());
+        if (!invalidPathChars.Contains('/')) invalidPathChars.Add('/');
+        if (!invalidPathChars.Contains('\\')) invalidPathChars.Add('\\');
+        InvalidFileNameChars = new List<char>(invalidFileNameCharsReadonly);
+        InvalidFileNameCharsString = string.Join("", invalidFileNameCharsReadonly);
         for (var i = (char)65529; i < 65534; i++) InvalidFileNameChars.Add(i);
-        InvalidCharsForMapPath = new List<char>();
-        InvalidCharsForMapPath.AddRange(InvalidFileNameChars.ToArray());
-        foreach (var item in InvalidFileNameCharsReadonly)
-            if (!InvalidCharsForMapPath.Contains(item))
-                InvalidCharsForMapPath.Add(item);
-        InvalidCharsForMapPath.Remove('/');
-        InvalidFileNameCharsWithoutDelimiterOfFolders = new List<char>(InvalidFileNameChars.ToArray());
-        InvalidFileNameCharsWithoutDelimiterOfFolders.Remove('\\');
-        InvalidFileNameCharsWithoutDelimiterOfFolders.Remove('/');
+        invalidCharsForMapPath = new List<char>();
+        invalidCharsForMapPath.AddRange(InvalidFileNameChars.ToArray());
+        foreach (var item in invalidFileNameCharsReadonly)
+            if (!invalidCharsForMapPath.Contains(item))
+                invalidCharsForMapPath.Add(item);
+        invalidCharsForMapPath.Remove('/');
+        invalidFileNameCharsWithoutDelimiterOfFolders = new List<char>(InvalidFileNameChars.ToArray());
+        invalidFileNameCharsWithoutDelimiterOfFolders.Remove('\\');
+        invalidFileNameCharsWithoutDelimiterOfFolders.Remove('/');
     }
     /// <summary>
     /// Creates all parent folders of the specified path if they don't exist
@@ -163,18 +162,18 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         var substring = text.Substring(1);
         return text[0].ToString().ToUpper() + substring;
     }
-    public static bool TryDeleteFile(string item)
+    public static bool TryDeleteFile(string filePath)
     {
         // TODO: To all code message logging as here
         try
         {
             // If file won't exists, wont throw any exception
-            File.Delete(item);
+            File.Delete(filePath);
             return true;
         }
         catch
         {
-            //ThisApp.Error(Translate.FromKey(XlfKeys.FileCanTBeDeleted) + ": " + item);
+            //ThisApp.Error(Translate.FromKey(XlfKeys.FileCanTBeDeleted) + ": " + filePath);
             return false;
         }
     }
@@ -228,13 +227,14 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     ///     ReplaceIncorrectCharactersFile - can specify char for replace with
     ///     ReplaceInvalidFileNameChars - all wrong chars skip
     /// </summary>
-    /// <param name="filename"></param>
-    /// <returns></returns>
-    public static string ReplaceInvalidFileNameChars(string filename, params char[] ch)
+    /// <param name="filename">The filename to process</param>
+    /// <param name="characters">Characters to keep even if they're invalid</param>
+    /// <returns>Filename with invalid characters removed</returns>
+    public static string ReplaceInvalidFileNameChars(string filename, params char[] characters)
     {
         var stringBuilder = new StringBuilder();
         foreach (var item in filename)
-            if (!InvalidFileNameChars.Contains(item) || ch.Contains(item))
+            if (!InvalidFileNameChars.Contains(item) || characters.Contains(item))
                 stringBuilder.Append(item);
         return stringBuilder.ToString();
     }
@@ -263,10 +263,11 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     ///     ALL EXT. HAVE TO BE ALWAYS LOWER
     ///     Return in lowercase
     /// </summary>
-    /// <param name="v"></param>
-    public static string GetExtension(string value, GetExtensionArgs a = null)
+    /// <param name="value">The file path to extract extension from</param>
+    /// <param name="args">Optional arguments for extension extraction</param>
+    public static string GetExtension(string value, GetExtensionArgs args = null)
     {
-        if (a == null) a = new GetExtensionArgs();
+        if (args == null) args = new GetExtensionArgs();
         var result = "";
         var lastDot = value.LastIndexOf('.');
         if (lastDot == -1) return string.Empty;
@@ -277,17 +278,17 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         result = value.Substring(lastDot);
         if (!IsExtension(result))
         {
-            if (a.FilesWithoutExtensionReturnAsIs) return result;
+            if (args.FilesWithoutExtensionReturnAsIs) return result;
             return string.Empty;
         }
-        if (!a.ReturnOriginalCase) result = result.ToLower();
+        if (!args.ReturnOriginalCase) result = result.ToLower();
         return result;
     }
     public static bool IsExtension(string result)
     {
         if (string.IsNullOrWhiteSpace(result)) return false;
         if (!result.TrimStart('.').ToLower()
-                .All(count => (char.IsLetter(count) && char.IsLower(count)) || char.IsDigit(count))) return false;
+                .All(character => (char.IsLetter(character) && char.IsLower(character)) || char.IsDigit(character))) return false;
         return true;
     }
     //public static StorageFile CiStorageFile<StorageFolder, StorageFile>(string path, AbstractCatalog<StorageFolder, StorageFile> ac)
@@ -307,9 +308,9 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     {
         foreach (var item in subfolderNames)
         {
-            var f = Path.Combine(from, item);
+            var sourcePath = Path.Combine(from, item);
             var temp = Path.Combine(to, item);
-            MoveAllRecursivelyAndThenDirectory(logger, f, temp, fo);
+            MoveAllRecursivelyAndThenDirectory(logger, sourcePath, temp, fo);
         }
     }
     public static void TrimBasePathAndTrailingBs(List<string> text, string basePath)
@@ -381,29 +382,35 @@ List<string>
     ///     'CAChangeContent.ChangeContent0(null,List&lt;string&gt;, Func&lt;string, string, string&gt;)'
     ///     and 'CAChangeContent.ChangeContent0(null,List&lt;string&gt;, Func&lt;string, string&gt;)'
     /// </summary>
-    /// <param name="a">Path to convert to absolute path</param>
-    public static string AbsoluteFromCombinePath(string a)
+    /// <param name="path">Path to convert to absolute path</param>
+    public static string AbsoluteFromCombinePath(string path)
     {
-        var result = Path.GetFullPath(new Uri(a).LocalPath);
+        var result = Path.GetFullPath(new Uri(path).LocalPath);
         return result;
     }
-    public static string WrapWithQm(string item, bool? forceNotIncludeQm)
+    /// <summary>
+    /// Wraps text with quote marks if needed
+    /// </summary>
+    /// <param name="text">Text to wrap</param>
+    /// <param name="forceNotIncludeQm">Force not to include quote marks</param>
+    /// <returns>Text wrapped with quote marks if needed</returns>
+    public static string WrapWithQm(string text, bool? forceNotIncludeQm)
     {
-        if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return SH.WrapWithQm(item);
-        return item;
+        if (text.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return SH.WrapWithQm(text);
+        return text;
     }
-    public static List<string> FilterInRootAndInSubFolder(string rf, List<string> fs)
+    public static List<string> FilterInRootAndInSubFolder(string rootFolder, List<string> files)
     {
-        WithEndSlash(ref rf);
-        var count = rf.Length;
-        var subFolder = new List<string>(fs.Count);
-        for (var i = fs.Count - 1; i >= 0; i--)
+        WithEndSlash(ref rootFolder);
+        var count = rootFolder.Length;
+        var subFolder = new List<string>(files.Count);
+        for (var i = files.Count - 1; i >= 0; i--)
         {
-            var item = fs[i];
+            var item = files[i];
             if (item.Substring(count).Contains("\""))
             {
                 subFolder.Add(item);
-                fs.RemoveAt(i);
+                files.RemoveAt(i);
             }
         }
         return subFolder;
@@ -412,18 +419,18 @@ List<string>
     {
         for (var i = 0; i < subfolders.Count; i++) subfolders[i] = Path.GetFileName(subfolders[i]);
     }
-    public static List<string> FilesWhichContainsAll(object sunamo, string masc, params string[] mustContains)
+    public static List<string> FilesWhichContainsAll(object sunamo, string searchPattern, params string[] requiredContents)
     {
-        return FilesWhichContainsAll(sunamo, masc, mustContains);
+        return FilesWhichContainsAll(sunamo, searchPattern, requiredContents);
     }
-    public static string PathSpecialAndLevel(string basePath, string item, int value)
+    public static string PathSpecialAndLevel(string basePath, string relativePath, int value)
     {
         basePath = basePath.Trim('\\');
-        item = item.Trim('\\');
-        item = item.Replace(basePath, string.Empty);
+        relativePath = relativePath.Trim('\\');
+        relativePath = relativePath.Replace(basePath, string.Empty);
         var pBasePath = SHSplit.Split(basePath, "\"");
         var basePathC = pBasePath.Count;
-        var path = SHSplit.Split(item, "\"");
+        var path = SHSplit.Split(relativePath, "\"");
         var i = 0;
         for (; i < path.Count; i++)
             if (path[i].StartsWith("_"))
@@ -432,16 +439,16 @@ List<string>
                 //i--;
                 break;
         for (var yValue = 0; yValue < i; yValue++) path.RemoveAt(0);
-        var h = path.Count - i + basePathC;
-        var to = Math.Min(value, h);
+        var remainingSegments = path.Count - i + basePathC;
+        var to = Math.Min(value, remainingSegments);
         i = 0;
         for (; i < to; i++) pBasePath.Add(path[i]);
         return string.Join("\"", pBasePath);
     }
-    public static string GetDirectoryNameIfIsFile(string f)
+    public static string GetDirectoryNameIfIsFile(string path)
     {
-        if (File.Exists(f)) return Path.GetDirectoryName(f);
-        return f;
+        if (File.Exists(path)) return Path.GetDirectoryName(path);
+        return path;
     }
     public static string MaskFromExtensions(List<string> allExtensions)
     {
@@ -460,56 +467,58 @@ List<string>
     /// <summary>
     ///     RenameNumberedSerieFiles - Rename files by linear names - 0,1,...,x
     /// </summary>
-    /// <param name="d"></param>
-    /// <param name="p"></param>
-    /// <param name="startFrom"></param>
-    /// <param name="ext"></param>
+    /// <param name="logger">Logger instance</param>
+    /// <param name="data">New names of files without extension</param>
+    /// <param name="path">Directory path containing files</param>
+    /// <param name="startFrom">Starting index for renaming</param>
+    /// <param name="ext">File extension</param>
     public static void RenameNumberedSerieFiles(ILogger logger, List<string> data, string path, int startFrom, string ext)
     {
-        var masc = MascFromExtension(ext);
-        var f = FSGetFiles.GetFiles(path, masc, SearchOption.TopDirectoryOnly);
-        RenameNumberedSerieFiles(logger, data, f, startFrom, ext);
+        var searchPattern = MascFromExtension(ext);
+        var files = FSGetFiles.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
+        RenameNumberedSerieFiles(logger, data, files, startFrom, ext);
     }
     /// <summary>
     ///     A1 is new names of files without extension. Can use LinearHelper
     /// </summary>
-    /// <param name="d"></param>
-    /// <param name="p"></param>
-    /// <param name="startFrom"></param>
-    /// <param name="ext"></param>
-    public static void RenameNumberedSerieFiles(ILogger logger, List<string> data, List<string> f, int startFrom, string ext)
+    /// <param name="logger">Logger instance</param>
+    /// <param name="data">New names of files without extension</param>
+    /// <param name="files">List of file paths to rename</param>
+    /// <param name="startFrom">Starting index for renaming</param>
+    /// <param name="ext">File extension</param>
+    public static void RenameNumberedSerieFiles(ILogger logger, List<string> data, List<string> files, int startFrom, string ext)
     {
-        var path = Path.GetDirectoryName(f[0]);
-        if (f.Count >= data.Count)
+        var path = Path.GetDirectoryName(files[0]);
+        if (files.Count >= data.Count)
         {
-            var fCountMinusONe = f.Count - 1;
-            //var result = f.First();
+            var filesCountMinusOne = files.Count - 1;
+            //var result = files.First();
             for (var i = startFrom; ; i++)
             {
-                if (fCountMinusONe < i) break;
-                var result = f[i];
-                var temp = path + i + ext;
-                if (f.Contains(temp))
+                if (filesCountMinusOne < i) break;
+                var result = files[i];
+                var numberedFilePath = path + i + ext;
+                if (files.Contains(numberedFilePath))
                     //break;
                     continue;
                 // AddSerie is useless coz file never will be exists
-                //FS.RenameFile(temp, data[i - startFrom] + ext, FileMoveCollisionOption.AddSerie);
-                RenameFile(logger, result, temp, FileMoveCollisionOption.AddSerie);
+                //FS.RenameFile(numberedFilePath, data[i - startFrom] + ext, FileMoveCollisionOption.AddSerie);
+                RenameFile(logger, result, numberedFilePath, FileMoveCollisionOption.AddSerie);
             }
         }
     }
     /// <summary>
     /// Places a file in a folder by combining the target folder path with the file's parent folder name and file name
     /// </summary>
-    /// <param name="var">The source file path</param>
-    /// <param name="zmenseno">The target folder path</param>
+    /// <param name="sourcePath">The source file path</param>
+    /// <param name="targetFolder">The target folder path</param>
     /// <returns>Combined path: targetFolder/parentFolderName/fileName</returns>
-    public static string PlaceInFolder(string var, string zmenseno)
+    public static string PlaceInFolder(string sourcePath, string targetFolder)
     {
-        //return Slozka.ci.PridejNadslozku(var, zmenseno);
-        var parentPath = Path.GetDirectoryName(var);
+        //return Slozka.ci.PridejNadslozku(sourcePath, targetFolder);
+        var parentPath = Path.GetDirectoryName(sourcePath);
         var parentFolderName = Path.GetFileName(parentPath);
-        return Path.Combine(zmenseno, Path.Combine(parentFolderName, Path.GetFileName(var)));
+        return Path.Combine(targetFolder, Path.Combine(parentFolderName, Path.GetFileName(sourcePath)));
     }
     /// <summary>
     ///     Všechny soubory které se podaří přesunout vymažu z A1
@@ -564,12 +573,12 @@ List<string>
             filesFrom.RemoveAt(i);
         }
     }
-    public static void CopyMoveFilesInListSimple(ILogger logger, List<string> f, string basePathCjHtml1, string basePathCjHtml2,
+    public static void CopyMoveFilesInListSimple(ILogger logger, List<string> files, string basePathCjHtml1, string basePathCjHtml2,
         bool copy, bool overwrite = true)
     {
         List<string> wasntExistsInFrom = null;
         var mustExistsInTarget = false;
-        CopyMoveFilesInList(logger, f, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
+        CopyMoveFilesInList(logger, files, basePathCjHtml1, basePathCjHtml2, wasntExistsInFrom, mustExistsInTarget, copy, null,
             overwrite);
     }
     public static void CreateInOtherLocationSameFolderStructure(string from, string to)
@@ -690,10 +699,10 @@ void
         var files = FSGetFiles.GetFiles(folder, "*.*", so);
         foreach (var item in files)
         {
-            var fs = new FileInfo(item).Length;
-            if (fs == 0)
+            var fileSize = new FileInfo(item).Length;
+            if (fileSize == 0)
                 TryDeleteFile(item);
-            else if (fs < 4)
+            else if (fileSize < 4)
                 if ((
 #if ASYNC
                         await
@@ -702,9 +711,9 @@ void
                     TryDeleteFile(item);
         }
     }
-    private static async Task ReplaceInAllFilesWorker(object o, Func<string, bool> EncodingHelperIsBinary)
+    private static async Task ReplaceInAllFilesWorker(object args, Func<string, bool> EncodingHelperIsBinary)
     {
-        var path = (ReplaceInAllFilesArgs)o;
+        var path = (ReplaceInAllFilesArgs)args;
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
         // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
         var fasterMethodForReplacing = path.FasterMethodForReplacing;
@@ -717,11 +726,11 @@ void
         var writeEveryWrittenFileAsStatus = path.WriteEveryWrittenFileAsStatus;
         #endregion
         #region ReplaceInAllFilesArgs
-        var from = path.from;
-        var to = path.to;
-        var pairLinesInFromAndTo = path.pairLinesInFromAndTo;
-        var replaceWithEmpty = path.replaceWithEmpty;
-        var isNotReplaceInTemporaryFiles = path.isNotReplaceInTemporaryFiles;
+        var from = path.From;
+        var to = path.To;
+        var pairLinesInFromAndTo = path.PairLinesInFromAndTo;
+        var replaceWithEmpty = path.ReplaceWithEmpty;
+        var isNotReplaceInTemporaryFiles = path.IsNotReplaceInTemporaryFiles;
         #endregion
         if (isMultilineWithVariousIndent)
         {
@@ -738,20 +747,20 @@ void
                 foreach (var item in from2) to2.Add(string.Empty);
             }
             ThrowEx.DifferentCountInLists("from2", from2, "to2", to2);
-            await ReplaceInAllFiles(from2, to2, o as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
+            await ReplaceInAllFiles(from2, to2, args as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
         }
         else
         {
             await ReplaceInAllFiles(new List<string>([from]), new List<string>([to])
-                , o as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
+                , args as ReplaceInAllFilesArgsBase, EncodingHelperIsBinary);
         }
     }
-    public static async Task ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase o,
+    public static async Task ReplaceInAllFiles(string from, string to, ReplaceInAllFilesArgsBase args,
         Func<string, bool> EncodingHelperIsBinary)
     {
-        var result = new ReplaceInAllFilesArgs(o);
-        result.from = from;
-        result.to = to;
+        var result = new ReplaceInAllFilesArgs(args);
+        result.From = from;
+        result.To = to;
         await ReplaceInAllFilesWorker(result, EncodingHelperIsBinary);
         //Thread temp = new Thread(new ParameterizedThreadStart(ReplaceInAllFilesWorker));
         //temp.Start(result);
@@ -783,20 +792,20 @@ void
 #else
 void
 #endif
-        ReplaceInAllFiles(IList<string> replaceFrom, IList<string> replaceTo, ReplaceInAllFilesArgsBase path,
+        ReplaceInAllFiles(IList<string> replaceFrom, IList<string> replaceTo, ReplaceInAllFilesArgsBase args,
             Func<string, bool> EncodingHelperIsBinary)
     {
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
         // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
-        var fasterMethodForReplacing = path.FasterMethodForReplacing;
-        var files = path.Files;
-        var inDownloadedFolders = path.InDownloadedFolders;
-        var inFoldersToDelete = path.InFoldersToDelete;
-        var inGitFiles = path.InGitFiles;
-        var isMultilineWithVariousIndent = path.IsMultilineWithVariousIndent;
-        var writeEveryReadedFileAsStatus = path.WriteEveryReadedFileAsStatus;
-        var writeEveryWrittenFileAsStatus = path.WriteEveryWrittenFileAsStatus;
-        var dRemoveGitFiles = path.DRemoveGitFiles;
+        var fasterMethodForReplacing = args.FasterMethodForReplacing;
+        var files = args.Files;
+        var inDownloadedFolders = args.InDownloadedFolders;
+        var inFoldersToDelete = args.InFoldersToDelete;
+        var inGitFiles = args.InGitFiles;
+        var isMultilineWithVariousIndent = args.IsMultilineWithVariousIndent;
+        var writeEveryReadedFileAsStatus = args.WriteEveryReadedFileAsStatus;
+        var writeEveryWrittenFileAsStatus = args.WriteEveryWrittenFileAsStatus;
+        var dRemoveGitFiles = args.DRemoveGitFiles;
         #endregion
         if (!inGitFiles || !inFoldersToDelete || !inDownloadedFolders)
             dRemoveGitFiles(files, inGitFiles, inDownloadedFolders, inFoldersToDelete);
@@ -905,11 +914,11 @@ void
     /// <summary>
     ///     Remove all extensions, not only one
     /// </summary>
-    /// <param name="item"></param>
-    public static string GetFileNameWithoutExtensions(string item)
+    /// <param name="path">File path to process</param>
+    public static string GetFileNameWithoutExtensions(string path)
     {
-        while (Path.HasExtension(item)) item = Path.GetFileNameWithoutExtension(item);
-        return item;
+        while (Path.HasExtension(path)) path = Path.GetFileNameWithoutExtension(path);
+        return path;
     }
     public static void CopyAs0KbFilesSubfolders
         (string pathDownload, string pathVideos0Kb)
@@ -949,15 +958,15 @@ void
         SH.FirstCharUpper(ref result);
         return result;
     }
-    public static void CopyFilesOfExtensions(string folderFrom, string FolderTo, params string[] extensions)
+    public static void CopyFilesOfExtensions(string folderFrom, string folderTo, params string[] extensions)
     {
         folderFrom = WithEndSlash(folderFrom);
-        FolderTo = WithEndSlash(FolderTo);
+        folderTo = WithEndSlash(folderTo);
         var filesOfExtension = FSGetFiles.FilesOfExtensions(folderFrom, extensions);
         foreach (var item in filesOfExtension)
             foreach (var path in item.Value)
             {
-                var newPath = path.Replace(folderFrom, FolderTo);
+                var newPath = path.Replace(folderFrom, folderTo);
                 CreateUpfoldersPsysicallyUnlessThere(newPath);
                 File.Copy(path, newPath);
             }
@@ -1060,44 +1069,45 @@ void
         SH.FirstCharUpper(ref result);
         return result;
     }
-    public static long GetSizeIn(long value, ComputerSizeUnits b, ComputerSizeUnits to)
+    public static long GetSizeIn(long value, ComputerSizeUnits fromUnit, ComputerSizeUnits to)
     {
-        if (b == to) return value;
-        var toLarger = (byte)b < (byte)to;
+        if (fromUnit == to) return value;
+        var toLarger = (byte)fromUnit < (byte)to;
         if (toLarger)
         {
-            value = ConvertToSmallerComputerUnitSize(value, b, ComputerSizeUnits.B);
+            value = ConvertToSmallerComputerUnitSize(value, fromUnit, ComputerSizeUnits.B);
             if (to == ComputerSizeUnits.Auto)
                 throw new Exception(
-                    "Byl specifikov\u00E1n value\u00FDstupn\u00ED ComputerSizeUnit, nem\u016F\u017Eu toto nastaven\u00ED zm\u011Bnit");
-            if (to == ComputerSizeUnits.KB && b != ComputerSizeUnits.KB)
+                    "Output ComputerSizeUnit was specified, cannot change this setting");
+            if (to == ComputerSizeUnits.KB && fromUnit != ComputerSizeUnits.KB)
                 value /= 1024;
-            else if (to == ComputerSizeUnits.MB && b != ComputerSizeUnits.MB)
+            else if (to == ComputerSizeUnits.MB && fromUnit != ComputerSizeUnits.MB)
                 value /= 1024 * 1024;
-            else if (to == ComputerSizeUnits.GB && b != ComputerSizeUnits.GB)
+            else if (to == ComputerSizeUnits.GB && fromUnit != ComputerSizeUnits.GB)
                 value /= 1024 * 1024 * 1024;
-            else if (to == ComputerSizeUnits.TB && b != ComputerSizeUnits.TB) value /= 1024L * 1024L * 1024L * 1024L;
+            else if (to == ComputerSizeUnits.TB && fromUnit != ComputerSizeUnits.TB) value /= 1024L * 1024L * 1024L * 1024L;
         }
         else
         {
-            value = ConvertToSmallerComputerUnitSize(value, b, to);
+            value = ConvertToSmallerComputerUnitSize(value, fromUnit, to);
         }
         return value;
     }
     /// <summary>
     ///     Zjistí všechny složky rekurzivně z A1 a prvně maže samozřejmě ty, které mají více tokenů
     /// </summary>
-    /// <param name="v"></param>
-    public static void DeleteAllEmptyDirectories(string value/*, bool deleteAlsoA1*/, params string[] doNotDeleteWhichContains)
+    /// <param name="value">The directory path to process</param>
+    /// <param name="excludePatterns">Paths containing these strings will not be deleted</param>
+    public static void DeleteAllEmptyDirectories(string value/*, bool deleteAlsoA1*/, params string[] excludePatterns)
     {
         var dirs = DirectoriesWithToken(value, AscDesc.Desc);
         foreach (var item in dirs)
             if (IsDirectoryEmpty(item.Value, true, true))
             {
-                if (doNotDeleteWhichContains.Length > 0)
+                if (excludePatterns.Length > 0)
                 {
-                    if (!doNotDeleteWhichContains.Any(data =>
-                            item.Value.Contains(data))) //CANewSH.ContainsAnyFromArray(item.Value, doNotDeleteWhichContains))
+                    if (!excludePatterns.Any(data =>
+                            item.Value.Contains(data))) //CANewSH.ContainsAnyFromArray(item.Value, excludePatterns))
                         TryDeleteDirectory(item.Value);
                 }
                 else
@@ -1105,7 +1115,7 @@ void
                     TryDeleteDirectory(item.Value);
                 }
             }
-        if (IsDirectoryEmpty(value, false, true) && !doNotDeleteWhichContains.Any()) TryDeleteDirectory(value);
+        if (IsDirectoryEmpty(value, false, true) && !excludePatterns.Any()) TryDeleteDirectory(value);
     }
     //private static List<TWithInt<string>> DirectoriesWithToken(string value, AscDesc desc)
     //{
@@ -1144,9 +1154,11 @@ void
     ///     Return message if success, or null
     ///     A5 false
     /// </summary>
-    /// <param name="p"></param>
-    /// <param name="to"></param>
-    /// <param name="directoryMoveCollisionOption"></param>
+    /// <param name="logger">Logger instance</param>
+    /// <param name="from">Source directory path</param>
+    /// <param name="to">Destination directory path</param>
+    /// <param name="directoryMoveCollisionOption">Directory collision handling option</param>
+    /// <param name="fileMoveCollisionOption">File collision handling option</param>
     public static string MoveDirectoryNoRecursive(ILogger logger, string from, string to, DirectoryMoveCollisionOption directoryMoveCollisionOption,
         FileMoveCollisionOption fileMoveCollisionOption)
     {
@@ -1199,11 +1211,11 @@ void
         DeleteAllEmptyDirectories(from);
         return resultMessage;
     }
-    private static bool IsDirectoryEmpty(string item, bool folders, bool files)
+    private static bool IsDirectoryEmpty(string directoryPath, bool folders, bool files)
     {
         var itemCount = 0;
-        if (folders) itemCount += Directory.GetDirectories(item, "*", SearchOption.TopDirectoryOnly).Length;
-        if (files) itemCount += FSGetFiles.GetFiles(item, "*", SearchOption.TopDirectoryOnly).Count;
+        if (folders) itemCount += Directory.GetDirectories(directoryPath, "*", SearchOption.TopDirectoryOnly).Length;
+        if (files) itemCount += FSGetFiles.GetFiles(directoryPath, "*", SearchOption.TopDirectoryOnly).Count;
         return itemCount == 0;
     }
     /// <summary>
@@ -1276,7 +1288,7 @@ void
     ///     non direct edit
     ///     working with full paths or just filenames
     /// </summary>
-    /// <param name="l"></param>
+    /// <param name="list">List of strings to order by natural number sequence</param>
     public static List<string> OrderByNaturalNumberSerie(List<string> list)
     {
         var filenames = new List<Tuple<string, int, string>>();
@@ -1339,17 +1351,17 @@ void
             FS.DeleteFoldersWhichNotContains(@"E:\", "bin", new List<string>(["node_modules"]));
         }
     }
-    public static void DeleteFoldersWhichNotContains(string value, string folder, IList<string> v2)
+    public static void DeleteFoldersWhichNotContains(string value, string folder, IList<string> excludedContainingTexts)
     {
-        var f = Directory.GetDirectories(value, folder, SearchOption.AllDirectories).ToList();
-        for (int i = f.Count - 1; i >= 0; i--)
+        var folders = Directory.GetDirectories(value, folder, SearchOption.AllDirectories).ToList();
+        for (int i = folders.Count - 1; i >= 0; i--)
         {
-            if (CA.ReturnWhichContainsIndexes(f[i], v2).Count != 0)
+            if (CA.ReturnWhichContainsIndexes(folders[i], excludedContainingTexts).Count != 0)
             {
-                f.RemoveAt(i);
+                folders.RemoveAt(i);
             }
         }
-        foreach (var item in f)
+        foreach (var item in folders)
         {
             //FS.DeleteF
         }
@@ -1357,7 +1369,7 @@ void
     /// <summary>
     ///     Vyhazuje výjimky, takže musíš volat value try-catch bloku
     /// </summary>
-    /// <param name="p"></param>
+    /// <param name="path">The directory path to delete</param>
     public static void DeleteAllRecursivelyAndThenDirectory(string path)
     {
         DeleteAllRecursively(path, true);
@@ -1453,7 +1465,7 @@ void
     /// <summary>
     ///     Pokud by byla cesta zakončená backslashem, vrátila by metoda Path.GetFileName prázdný řetězec.
     /// </summary>
-    /// <param name="s"></param>
+    /// <param name="text">The file path to process</param>
     public static string GetFileNameWithoutExtensionLower(string text)
     {
         return GetFileNameWithoutExtension(text).ToLower();
@@ -1472,17 +1484,17 @@ void
     /// </summary>
     /// <param name="item"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string NormalizeExtension(string item)
+    public static string NormalizeExtension(string extension)
     {
-        return "." + item.TrimStart('.');
+        return "." + extension.TrimStart('.');
     }
     public static string GetNormalizedExtension(string filename)
     {
         return NormalizeExtension(filename);
     }
-    public static long ModifiedinUnix(string dsi)
+    public static long ModifiedinUnix(string filePath)
     {
-        return (long)File.GetLastWriteTimeUtc(dsi).Subtract(DTConstants.UnixFsStart).TotalSeconds;
+        return (long)File.GetLastWriteTimeUtc(filePath).Subtract(DTConstants.UnixFsStart).TotalSeconds;
     }
     public static void ReplaceDiacriticRecursive(ILogger logger, string folder, bool dirs, bool files, DirectoryMoveCollisionOption directoryCollisionOption,
         FileMoveCollisionOption fileCollisionOption)
@@ -1560,9 +1572,9 @@ void
     /// <param name="path"></param>
     /// <param name="file"></param>
     /// <param name="ext"></param>
-    public static void GetFileNameWithoutExtensionAndExtension(string fn, out string file, out string ext)
+    public static void GetFileNameWithoutExtensionAndExtension(string filePath, out string file, out string ext)
     {
-        file = Path.GetFileNameWithoutExtension(fn);
+        file = Path.GetFileNameWithoutExtension(filePath);
         ext = Path.GetExtension(file);
     }
     public static void SaveStream(string path, Stream text)
@@ -1748,11 +1760,11 @@ string
     /// <param name="path"></param>
     /// <param name="file"></param>
     /// <param name="ext"></param>
-    public static void GetPathAndFileName(string fn, out string path, out string file, out string ext)
+    public static void GetPathAndFileName(string filePath, out string path, out string file, out string ext)
     {
-        path = WithEndSlash(Path.GetDirectoryName(fn));
-        file = Path.GetFileNameWithoutExtension(fn);
-        ext = Path.GetExtension(fn);
+        path = WithEndSlash(Path.GetDirectoryName(filePath));
+        file = Path.GetFileNameWithoutExtension(filePath);
+        ext = Path.GetExtension(filePath);
     }
     /// <summary>
     ///     Not working - see unit tests
@@ -1866,7 +1878,7 @@ string
     {
         var stringBuilder = new StringBuilder();
         foreach (var item in path)
-            if (!InvalidPathChars.Contains(item))
+            if (!invalidPathChars.Contains(item))
                 stringBuilder.Append(item);
         var result = stringBuilder.ToString();
         SH.FirstCharUpper(ref result);
@@ -1876,7 +1888,7 @@ string
     {
         List<char> invalidFileNameChars2 = null;
         if (isPath)
-            invalidFileNameChars2 = InvalidFileNameCharsWithoutDelimiterOfFolders;
+            invalidFileNameChars2 = invalidFileNameCharsWithoutDelimiterOfFolders;
         else
             invalidFileNameChars2 = InvalidFileNameChars;
         var stringBuilder = new StringBuilder();
@@ -1889,7 +1901,7 @@ string
     }
     public static bool ContainsInvalidPathCharForPartOfMapPath(string path)
     {
-        foreach (var item in InvalidCharsForMapPath)
+        foreach (var item in invalidCharsForMapPath)
             if (path.IndexOf(item) != -1)
                 return true;
         return false;
@@ -1990,20 +2002,20 @@ string
     //    ThrowNotImplementedUwp();
     //    return false;
     //}
-    public static string ChangeExtension(string item, string newExt, bool physically)
+    public static string ChangeExtension(string filePath, string newExt, bool physically)
     {
-        //if (UH.HasHttpProtocol(item))
+        //if (UH.HasHttpProtocol(filePath))
         //{
-        //    return UH.ChangeExtension(item, Path.GetExtension(item, new GetExtensionArgs { ReturnOriginalCase = true }), newExt);
+        //    return UH.ChangeExtension(filePath, Path.GetExtension(filePath, new GetExtensionArgs { ReturnOriginalCase = true }), newExt);
         //}
-        var directory = Path.GetDirectoryName(item);
-        var fnwoe = Path.GetFileNameWithoutExtension(item);
+        var directory = Path.GetDirectoryName(filePath);
+        var fnwoe = Path.GetFileNameWithoutExtension(filePath);
         var newPath = Path.Combine(directory, fnwoe + newExt);
         if (physically)
             try
             {
                 if (File.Exists(newPath)) File.Delete(newPath);
-                File.Move(item, newPath);
+                File.Move(filePath, newPath);
             }
             catch
             {
@@ -2076,10 +2088,10 @@ string
                     var nextByte = stream.ReadByte();
                     if (nextByte != -1)
                     {
-                        var temp = new byte[readBuffer.Length * 2];
-                        Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
-                        Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
-                        readBuffer = temp;
+                        var expandedBuffer = new byte[readBuffer.Length * 2];
+                        Buffer.BlockCopy(readBuffer, 0, expandedBuffer, 0, readBuffer.Length);
+                        Buffer.SetByte(expandedBuffer, totalBytesRead, (byte)nextByte);
+                        readBuffer = expandedBuffer;
                         totalBytesRead++;
                     }
                 }
@@ -2131,15 +2143,15 @@ string
         }
         return result;
     }
-    public static string ChangeFilename(string item, string newFileNameWithoutPath, bool physically)
+    public static string ChangeFilename(string filePath, string newFileNameWithoutPath, bool physically)
     {
-        var directory = Path.GetDirectoryName(item);
+        var directory = Path.GetDirectoryName(filePath);
         var newPath = Path.Combine(directory, newFileNameWithoutPath);
         if (physically)
             try
             {
                 if (File.Exists(newPath)) File.Delete(newPath);
-                File.Move(item, newPath);
+                File.Move(filePath, newPath);
             }
             catch
             {
@@ -2166,8 +2178,8 @@ string
     /// <summary>
     ///     A2 true - bs to slash. false - slash to bs
     /// </summary>
-    /// <param name="path"></param>
-    /// <param name="v"></param>
+    /// <param name="path">The path to process</param>
+    /// <param name="slash">True to convert backslashes to slashes, false for opposite</param>
     public static string Slash(string path, bool slash)
     {
         string result = null;
@@ -2183,14 +2195,14 @@ string
     /// <summary>
     ///     Pokusí se max. 10x smazat soubor A1, pokud se nepodaří, GF, jinak GT
     /// </summary>
-    /// <param name="item"></param>
-    public static bool TryDeleteWithRepetition(string item)
+    /// <param name="filePath">Path to the file to delete</param>
+    public static bool TryDeleteWithRepetition(string filePath)
     {
         var attemptCount = 0;
         while (true)
             try
             {
-                File.Delete(item);
+                File.Delete(filePath);
                 return true;
             }
             catch
@@ -2199,12 +2211,12 @@ string
                 if (attemptCount == 9) return false;
             }
     }
-    public static bool TryDeleteFile(string item, out string message)
+    public static bool TryDeleteFile(string filePath, out string message)
     {
         message = null;
         try
         {
-            File.Delete(item);
+            File.Delete(filePath);
             return true;
         }
         catch (Exception ex)
@@ -2238,9 +2250,9 @@ string
         }
         return size + " " + unit;
     }
-    public static string GetSizeInAutoString(long value, ComputerSizeUnits b)
+    public static string GetSizeInAutoString(long value, ComputerSizeUnits fromUnit)
     {
-        return GetSizeInAutoString((double)value, b);
+        return GetSizeInAutoString((double)value, fromUnit);
     }
     /// <summary>
     ///     A1 is input unit, not output
@@ -2248,11 +2260,11 @@ string
     /// <param name="value"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static string GetSizeInAutoString(double value, ComputerSizeUnits b)
+    public static string GetSizeInAutoString(double value, ComputerSizeUnits fromUnit)
     {
-        if (b != ComputerSizeUnits.B)
+        if (fromUnit != ComputerSizeUnits.B)
             // Získám hodnotu value bytech
-            value = ConvertToSmallerComputerUnitSize(value, b, ComputerSizeUnits.B);
+            value = ConvertToSmallerComputerUnitSize(value, fromUnit, ComputerSizeUnits.B);
         if (value < 1024) return value + " B";
         var previous = value;
         value /= 1024;
@@ -2268,22 +2280,22 @@ string
         if (value < 1) return previous + " GB";
         return value + " TB";
     }
-    private static long ConvertToSmallerComputerUnitSize(long value, ComputerSizeUnits b, ComputerSizeUnits to)
+    private static long ConvertToSmallerComputerUnitSize(long value, ComputerSizeUnits fromUnit, ComputerSizeUnits to)
     {
-        return ConvertToSmallerComputerUnitSize(value, b, to);
+        return ConvertToSmallerComputerUnitSize(value, fromUnit, to);
     }
-    private static double ConvertToSmallerComputerUnitSize(double value, ComputerSizeUnits b, ComputerSizeUnits to)
+    private static double ConvertToSmallerComputerUnitSize(double value, ComputerSizeUnits fromUnit, ComputerSizeUnits to)
     {
         if (to == ComputerSizeUnits.Auto)
             throw new Exception(
-                "Byl specifikov\u00E1n value\u00FDstupn\u00ED ComputerSizeUnit, nem\u016F\u017Eu toto nastaven\u00ED zm\u011Bnit");
-        if (to == ComputerSizeUnits.KB && b != ComputerSizeUnits.KB)
+                "Output ComputerSizeUnit was specified, cannot change this setting");
+        if (to == ComputerSizeUnits.KB && fromUnit != ComputerSizeUnits.KB)
             value *= 1024;
-        else if (to == ComputerSizeUnits.MB && b != ComputerSizeUnits.MB)
+        else if (to == ComputerSizeUnits.MB && fromUnit != ComputerSizeUnits.MB)
             value *= 1024 * 1024;
-        else if (to == ComputerSizeUnits.GB && b != ComputerSizeUnits.GB)
+        else if (to == ComputerSizeUnits.GB && fromUnit != ComputerSizeUnits.GB)
             value *= 1024 * 1024 * 1024;
-        else if (to == ComputerSizeUnits.TB && b != ComputerSizeUnits.TB) value *= 1024L * 1024L * 1024L * 1024L;
+        else if (to == ComputerSizeUnits.TB && fromUnit != ComputerSizeUnits.TB) value *= 1024L * 1024L * 1024L * 1024L;
         return value;
     }
     /// <summary>
@@ -2302,21 +2314,21 @@ string
     /// <summary>
     ///     Replacement can be configured with replaceIncorrectFor
     /// </summary>
-    /// <param name="p"></param>
+    /// <param name="path">The file path to process</param>
     public static string ReplaceIncorrectCharactersFile(string path)
     {
-        var temp = path;
+        var result = path;
         foreach (var item in InvalidFileNameChars)
         {
             var stringBuilder = new StringBuilder();
-            foreach (var item2 in temp)
+            foreach (var item2 in result)
                 if (item != item2)
                     stringBuilder.Append(item2);
                 else
                     stringBuilder.Append("");
-            temp = stringBuilder.ToString();
+            result = stringBuilder.ToString();
         }
-        return temp;
+        return result;
     }
     /// <summary>
     ///     ReplaceIncorrectCharactersFile - can specify char for replace with
@@ -2324,55 +2336,55 @@ string
     ///     A2 - can specify more letter in one string
     ///     A3 is applicable only for A2. In general is use replaceIncorrectFor
     /// </summary>
-    /// <param name="p"></param>
-    /// <param name="replaceAllOfThisByA3"></param>
-    /// <param name="replaceForThis"></param>
+    /// <param name="path">The file path to process</param>
+    /// <param name="replaceAllOfThisByA3">Characters to additionally replace</param>
+    /// <param name="replaceForThis">Replacement string</param>
     public static string ReplaceIncorrectCharactersFile(string path, string replaceAllOfThisByA3, string replaceForThis)
     {
-        var temp = path;
+        var result = path;
         foreach (var item in InvalidFileNameChars)
         {
             var stringBuilder = new StringBuilder();
-            foreach (var item2 in temp)
+            foreach (var item2 in result)
                 if (item != item2)
                     stringBuilder.Append(item2);
                 else
                     stringBuilder.Append(replaceForThis);
-            temp = stringBuilder.ToString();
+            result = stringBuilder.ToString();
         }
         if (!string.IsNullOrEmpty(replaceAllOfThisByA3))
             foreach (var item in replaceAllOfThisByA3)
-                temp = /*SHReplace.ReplaceAll*/ temp.Replace(item.ToString(), replaceForThis)
-                    ; //(temp, replaceForThis, item.ToString());
-        return temp;
+                result = /*SHReplace.ReplaceAll*/ result.Replace(item.ToString(), replaceForThis)
+                    ; //(result, replaceForThis, item.ToString());
+        return result;
     }
     /// <summary>
     ///     Pro odstranění špatných znaků odstraní všechny výskyty A2 za mezery a udělá z více mezere jediné
     /// </summary>
-    /// <param name="p"></param>
-    /// <param name="replaceAllOfThisThen"></param>
+    /// <param name="path">The file path to process</param>
+    /// <param name="replaceAllOfThisThen">Characters to replace with empty string</param>
     public static string ReplaceIncorrectCharactersFile(string path, string replaceAllOfThisThen)
     {
         var replaceFor = "";
-        var temp = path;
+        var result = path;
         foreach (var item in InvalidFileNameChars)
         {
             var stringBuilder = new StringBuilder();
-            foreach (var item2 in temp)
+            foreach (var item2 in result)
                 if (item != item2)
                     stringBuilder.Append(item2);
                 else
                     stringBuilder.Append(replaceFor);
-            temp = stringBuilder.ToString();
+            result = stringBuilder.ToString();
         }
         if (!string.IsNullOrEmpty(replaceAllOfThisThen))
         {
-            temp = temp.Replace(replaceAllOfThisThen,
-                replaceFor); // SHReplace.ReplaceAll(temp, replaceFor, replaceAllOfThisThen);
-            temp = temp.Replace(" ",
-                replaceFor); //SHReplace.ReplaceAll(temp, replaceFor, "");
+            result = result.Replace(replaceAllOfThisThen,
+                replaceFor); // SHReplace.ReplaceAll(result, replaceFor, replaceAllOfThisThen);
+            result = result.Replace(" ",
+                replaceFor); //SHReplace.ReplaceAll(result, replaceFor, "");
         }
-        return temp;
+        return result;
     }
     /// <summary>
     /// Toto vkládá jako novou složku.
@@ -2454,11 +2466,11 @@ string
         //}
         //return ext2;
     }
-    public static bool IsCountOfFilesMoreThan(string bpMb, string masc, int getNullIfThereIsMoreThanXFiles)
+    public static bool IsCountOfFilesMoreThan(string folderPath, string searchPattern, int getNullIfThereIsMoreThanXFiles)
     {
-        var f = FSGetFiles.GetFilesEveryFolder(bpMb, masc, SearchOption.AllDirectories,
+        var files = FSGetFiles.GetFilesEveryFolder(folderPath, searchPattern, SearchOption.AllDirectories,
             new GetFilesEveryFolderArgsFS { GetNullIfThereIsMoreThanXFiles = getNullIfThereIsMoreThanXFiles });
-        return f == null;
+        return files == null;
     }
     public static List<string> GetFiles(string folderPath, bool recursive)
     {
@@ -2485,25 +2497,25 @@ string
     /// <param name="item"></param>
     /// <param name="fileTo"></param>
     /// <param name="collisionOption"></param>
-    public static void MoveFile(ILogger logger, string item, string fileTo, FileMoveCollisionOption collisionOption)
+    public static void MoveFile(ILogger logger, string sourceFilePath, string fileTo, FileMoveCollisionOption collisionOption)
     {
-        if (CopyMoveFilePrepare(ref item, ref fileTo, collisionOption))
+        if (CopyMoveFilePrepare(ref sourceFilePath, ref fileTo, collisionOption))
             try
             {
-                item = MakeUncLongPath(item);
+                sourceFilePath = MakeUncLongPath(sourceFilePath);
                 fileTo = MakeUncLongPath(fileTo);
                 if (collisionOption == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo)) return;
-                File.Move(item, fileTo, collisionOption == FileMoveCollisionOption.Overwrite);
+                File.Move(sourceFilePath, fileTo, collisionOption == FileMoveCollisionOption.Overwrite);
             }
             catch (Exception ex)
             {
-                logger.LogError(item + " : " + ex.Message);
+                logger.LogError(sourceFilePath + " : " + ex.Message);
             }
     }
-    public static bool CopyMoveFilePrepare(ref string item, ref string fileTo, FileMoveCollisionOption collisionOption)
+    public static bool CopyMoveFilePrepare(ref string sourceFilePath, ref string fileTo, FileMoveCollisionOption collisionOption)
     {
         //var fileTo = fileTo2.ToString();
-        item = @"\\?\" + item;
+        sourceFilePath = @"\\?\" + sourceFilePath;
         MakeUncLongPath(ref fileTo);
         CreateUpfoldersPsysicallyUnlessThere(fileTo);
         // Toto tu je důležité, nevím který kokot to zakomentoval
@@ -2511,10 +2523,10 @@ string
         {
             if (collisionOption == FileMoveCollisionOption.AddFileSize)
             {
-                var newFn = InsertBetweenFileNameAndExtension(fileTo, " " + new FileInfo(item).Length);
+                var newFn = InsertBetweenFileNameAndExtension(fileTo, " " + new FileInfo(sourceFilePath).Length);
                 if (File.Exists(newFn))
                 {
-                    File.Delete(item);
+                    File.Delete(sourceFilePath);
                     return true;
                 }
                 fileTo = newFn;
@@ -2537,9 +2549,9 @@ string
             {
                 // Cant delete from because then is file deleting
                 if (DeleteFileMaybeLocked != null)
-                    DeleteFileMaybeLocked(item);
+                    DeleteFileMaybeLocked(sourceFilePath);
                 else
-                    File.Delete(item);
+                    File.Delete(sourceFilePath);
             }
             else if (collisionOption == FileMoveCollisionOption.Overwrite)
             {
@@ -2550,12 +2562,12 @@ string
             }
             else if (collisionOption == FileMoveCollisionOption.LeaveLarger)
             {
-                var fsFrom = new FileInfo(item).Length;
+                var fsFrom = new FileInfo(sourceFilePath).Length;
                 var fsTo = new FileInfo(fileTo).Length;
                 if (fsFrom > fsTo)
                     File.Delete(fileTo);
                 else //if (fsFrom < fsTo)
-                    File.Delete(item);
+                    File.Delete(sourceFilePath);
             }
             else if (collisionOption == FileMoveCollisionOption.DontManipulate)
             {
@@ -2568,12 +2580,12 @@ string
         }
         return true;
     }
-    public static long GetFileSize(string item)
+    public static long GetFileSize(string filePath)
     {
         FileInfo fi = null;
         try
         {
-            fi = new FileInfo(item);
+            fi = new FileInfo(filePath);
         }
         catch (Exception ex)
         {
@@ -2622,28 +2634,28 @@ string
             foreach (var item in files) MoveOrCopy(logger, path, to, collisionOption, move, item);
         }
     }
-    private static void MoveOrCopy(ILogger logger, string path, string to, FileMoveCollisionOption collisionOption, bool move, string item)
+    private static void MoveOrCopy(ILogger logger, string path, string to, FileMoveCollisionOption collisionOption, bool move, string filePath)
     {
-        var fileTo = to + item.Substring(path.Length);
+        var fileTo = to + filePath.Substring(path.Length);
         if (move)
-            MoveFile(logger, item, fileTo, collisionOption);
+            MoveFile(logger, filePath, fileTo, collisionOption);
         else
-            CopyFile(logger, item, fileTo, collisionOption);
+            CopyFile(logger, filePath, fileTo, collisionOption);
     }
     public static
         void
-        CopyFile(ILogger logger, string item2, string fileTo2, FileMoveCollisionOption collisionOption, bool terminateProcessIfIsInUsed = false)
+        CopyFile(ILogger logger, string sourceFilePath, string fileTo2, FileMoveCollisionOption collisionOption, bool terminateProcessIfIsInUsed = false)
     {
         var fileTo = fileTo2;
-        var item = item2;
+        var source = sourceFilePath;
         var shouldCopy =
-            CopyMoveFilePrepare(ref item, ref fileTo, collisionOption);
+            CopyMoveFilePrepare(ref source, ref fileTo, collisionOption);
         if (shouldCopy)
         {
             if (collisionOption == FileMoveCollisionOption.DontManipulate &&
                 File.Exists(fileTo))
                 return;
-            CopyFile(logger, item, fileTo, terminateProcessIfIsInUsed);
+            CopyFile(logger, source, fileTo, terminateProcessIfIsInUsed);
         }
     }
     /// <summary>
@@ -2686,13 +2698,13 @@ string
             }
         }
     }
-    public static void CopyFile(string item, string fileTo2, FileMoveCollisionOption collisionOption)
+    public static void CopyFile(string sourceFilePath, string fileTo2, FileMoveCollisionOption collisionOption)
     {
         var fileTo = fileTo2;
-        if (CopyMoveFilePrepare(ref item, ref fileTo, collisionOption))
+        if (CopyMoveFilePrepare(ref sourceFilePath, ref fileTo, collisionOption))
         {
             if (collisionOption == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo)) return;
-            File.Copy(item, fileTo);
+            File.Copy(sourceFilePath, fileTo);
         }
     }
     public static DateTime LastModified(string rel)
@@ -2879,20 +2891,20 @@ string
         }
         return false;
     }
-    public static string AllIncludeIfOnlyLetters(string item)
+    public static string AllIncludeIfOnlyLetters(string extension)
     {
-        item = item.ToLower().TrimStart('*').TrimStart('.');
+        extension = extension.ToLower().TrimStart('*').TrimStart('.');
 
-        if (item == "")
+        if (extension == "")
         {
-            item = "*";
+            extension = "*";
         }
 
-        //if ( SH.ContainsOnlyCase(item.ToLower(), false, false))
+        //if ( SH.ContainsOnlyCase(extension.ToLower(), false, false))
         //{
-        item = "*." + item;
+        extension = "*." + extension;
         //}
-        return item;
+        return extension;
     }
     /// <summary>
     /// Retun null if serie is not defined
@@ -2915,24 +2927,24 @@ string
     /// <param name="folder"></param>
     /// <param name="fn"></param>
     /// <param name="ext"></param>
-    public static string GetFileSeries(string folder, string fn, string ext)
+    public static string GetFileSeries(string folder, string fileName, string ext)
     {
         var nextNumber = 0;
         var files = FSGetFiles.GetFiles(folder);
         foreach (var item in files)
         {
             int path;
-            var withoutFn =
-                new Regex(fn).Replace(Path.GetFileName(item), "",
-                    1); /*SHReplace.ReplaceOnce(Path.GetFileName(item), fn, "")));*/
-            var withoutFnAndExt = SHReplace.ReplaceOnce(withoutFn, ext, "");
-            withoutFnAndExt = withoutFnAndExt.TrimStart('_');
-            if (int.TryParse(withoutFnAndExt, out path))
+            var withoutFileName =
+                new Regex(fileName).Replace(Path.GetFileName(item), "",
+                    1); /*SHReplace.ReplaceOnce(Path.GetFileName(item), fileName, "")));*/
+            var withoutFileNameAndExt = SHReplace.ReplaceOnce(withoutFileName, ext, "");
+            withoutFileNameAndExt = withoutFileNameAndExt.TrimStart('_');
+            if (int.TryParse(withoutFileNameAndExt, out path))
                 if (path > nextNumber)
                     nextNumber = path;
         }
         nextNumber++;
-        return Path.Combine(folder, fn + "_" + nextNumber + ext);
+        return Path.Combine(folder, fileName + "_" + nextNumber + ext);
     }
     ///// <summary>
     ///// If path ends with backslash, Path.GetDirectoryName returns empty string
@@ -3028,25 +3040,25 @@ string
     //        ThrowNotImplementedUwp();
     //    }
     //}
-    public static bool? ExistsDirectoryNull(string item)
+    public static bool? ExistsDirectoryNull(string directoryPath)
     {
-        return ExistsDirectoryNull(item, false);
+        return ExistsDirectoryNull(directoryPath, false);
     }
-    public static bool? ExistsDirectoryNull(string item, bool _falseIfContainsNoFile = false)
+    public static bool? ExistsDirectoryNull(string directoryPath, bool isFalseIfContainsNoFile = false)
     {
-        return ExistsDirectory(item, _falseIfContainsNoFile);
+        return ExistsDirectory(directoryPath, isFalseIfContainsNoFile);
     }
-    public static bool ExistsDirectory(string item, bool _falseIfContainsNoFile = false)
+    public static bool ExistsDirectory(string directoryPath, bool isFalseIfContainsNoFile = false)
     {
-        if (_falseIfContainsNoFile)
+        if (isFalseIfContainsNoFile)
         {
-            if (Directory.Exists(item) && Directory.GetFiles(item, "*", SearchOption.AllDirectories).Length == 0)
+            if (Directory.Exists(directoryPath) && Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
             {
                 return false;
             }
         }
-        return Directory.Exists(item);
-        //return ExistsDirectory<string, string>(item, null, _falseIfContainsNoFile);
+        return Directory.Exists(directoryPath);
+        //return ExistsDirectory<string, string>(directoryPath, null, isFalseIfContainsNoFile);
     }
     #region For easy copy
     //[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -3121,13 +3133,13 @@ string
     {
         await File.WriteAllTextAsync(path, content);
     }
-    public static bool IsAllInSameFolder(List<string> count)
+    public static bool IsAllInSameFolder(List<string> paths)
     {
-        if (count.Count > 0)
+        if (paths.Count > 0)
         {
-            var f = Path.GetDirectoryName(count[0]);
-            for (var i = 1; i < count.Count; i++)
-                if (Path.GetDirectoryName(count[i]) != f)
+            var baseDirectory = Path.GetDirectoryName(paths[0]);
+            for (var i = 1; i < paths.Count; i++)
+                if (Path.GetDirectoryName(paths[i]) != baseDirectory)
                     return false;
         }
         return true;
@@ -3144,14 +3156,14 @@ string
     }
     public static bool ContainsInvalidFileNameChars(string arg)
     {
-        foreach (var item in InvalidFileNameStringsReadonly)
+        foreach (var item in invalidFileNameStringsReadonly)
             if (arg.Contains(item))
                 return true;
         return false;
     }
-    public static void NumberByDateModified(ILogger logger, string folder, string masc, SearchOption so)
+    public static void NumberByDateModified(ILogger logger, string folder, string searchPattern, SearchOption so)
     {
-        var files = FSGetFiles.GetFiles(folder, masc, so, new GetFilesArgsFS { ByDateOfLastModifiedAsc = true });
+        var files = FSGetFiles.GetFiles(folder, searchPattern, so, new GetFilesArgsFS { ByDateOfLastModifiedAsc = true });
         var i = 1;
         foreach (var item in files)
         {
@@ -3166,34 +3178,34 @@ string
     /// </summary>
     /// <param name="rp"></param>
     /// <returns></returns>
-    public static string GetDirectoryName(string rp)
+    public static string GetDirectoryName(string path)
     {
         // Zde zároveň vyhazuji výjimky
-        var deli = DetectPathDelimiterChar(rp);
-        if (string.IsNullOrEmpty(rp)) ThrowEx.IsNullOrEmpty("rp", rp);
-        if (!IsWindowsPathFormat(rp)) ThrowEx.IsNotWindowsPathFormat("rp", rp, true, FS.IsWindowsPathFormat);
-        rp = rp.TrimEnd(deli);
-        var dex = rp.LastIndexOf(deli);
-        if (dex != -1)
+        var deli = DetectPathDelimiterChar(path);
+        if (string.IsNullOrEmpty(path)) ThrowEx.IsNullOrEmpty("path", path);
+        if (!IsWindowsPathFormat(path)) ThrowEx.IsNotWindowsPathFormat("path", path, true, FS.IsWindowsPathFormat);
+        path = path.TrimEnd(deli);
+        var delimiterIndex = path.LastIndexOf(deli);
+        if (delimiterIndex != -1)
         {
-            var result = rp.Substring(0, dex + 1);
+            var result = path.Substring(0, delimiterIndex + 1);
             FirstCharUpper(ref result);
             return result;
         }
         return "";
     }
-    public static Tuple<bool, bool> DetectPathDelimiter(string rp)
+    public static Tuple<bool, bool> DetectPathDelimiter(string path)
     {
-        var containsFs = rp.Contains("/");
-        var containsBs = rp.Contains("\\");
+        var containsFs = path.Contains("/");
+        var containsBs = path.Contains("\\");
         if (containsBs && containsFs) throw new Exception("Path contains both fs & bs");
         return Tuple.Create(containsFs, containsBs);
     }
-    public static char DetectPathDelimiterChar(string rp)
+    public static char DetectPathDelimiterChar(string path)
     {
-        var temp = DetectPathDelimiter(rp);
-        var containsFs = temp.Item1;
-        var containsBs = temp.Item2;
+        var delimiterInfo = DetectPathDelimiter(path);
+        var containsFs = delimiterInfo.Item1;
+        var containsBs = delimiterInfo.Item2;
         var deli = 'a';
         if (containsBs)
             deli = '\\';
@@ -3359,19 +3371,19 @@ string
     /// <param name="fn"></param>
     /// <param name="path"></param>
     /// <param name="file"></param>
-    public static void GetPathAndFileName(string fn, out string path, out string file)
+    public static void GetPathAndFileName(string filePath, out string path, out string file)
     {
-        path = WithEndSlash(GetDirectoryName(fn));
-        file = GetFileName(fn);
+        path = WithEndSlash(GetDirectoryName(filePath));
+        file = GetFileName(filePath);
     }
-    public static string GetFileName(string fn)
+    public static string GetFileName(string filePath)
     {
-        return PathMs.GetFileName(fn.TrimEnd(Path.DirectorySeparatorChar));
+        return PathMs.GetFileName(filePath.TrimEnd(Path.DirectorySeparatorChar));
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string NormalizeExtension2(string item)
+    public static string NormalizeExtension2(string extension)
     {
-        return item.ToLower().TrimStart('.');
+        return extension.ToLower().TrimStart('.');
     }
     //private static void ThrowNotImplementedUwp()
     //{
@@ -3563,7 +3575,7 @@ string
     //        {
     //            SH.FirstCharUpper(ref selectedFile);
     //            //ThrowEx.FirstLetterIsNotUpper(selectedFile);
-    //            if (filesWhichSurelyExists.Contains(selectedFile))
+    //            if (FilesWhichSurelyExists.Contains(selectedFile))
     //            {
     //                return true;
     //            }
@@ -3751,15 +3763,15 @@ string
     //{
     //var element = (GetFilesMoreMascArgs)o;
     #endregion
-    public static string FilesWithSameName(string vs, string value, SearchOption allDirectories)
+    public static string FilesWithSameName(string folder, string searchPattern, SearchOption searchOption)
     {
-        WithEndSlash(ref vs);
-        var f = new Dictionary<string, List<string>>();
-        var text = FSGetFiles.GetFiles(vs, value, allDirectories);
-        foreach (var item in text) DictionaryHelper.AddOrCreate(f, Path.GetFileName(item), item);
+        WithEndSlash(ref folder);
+        var filesByName = new Dictionary<string, List<string>>();
+        var text = FSGetFiles.GetFiles(folder, searchPattern, searchOption);
+        foreach (var item in text) DictionaryHelper.AddOrCreate(filesByName, Path.GetFileName(item), item);
         var stringBuilder = new StringBuilder();
         //TextOutputGenerator tog = new TextOutputGenerator();
-        foreach (var item in f)
+        foreach (var item in filesByName)
             if (item.Value.Count > 1)
             {
                 foreach (var item2 in item.Value) stringBuilder.AppendLine(item2);
@@ -3832,27 +3844,27 @@ string
         path = SHParts.RemoveAfterLast(path, ".");
         sbExt.Append(ext);
         ext = sbExt.ToString();
-        var g = path;
+        var fullPath = path;
         if (directory.Length != 0)
         {
-            g = g.Substring(directory.Length);
+            fullPath = fullPath.Substring(directory.Length);
         }
         // Nejdříve ořežu všechny přípony a to i tehdy, má li soubor více přípon
         if (serieStyle == SerieStyleFS.Brackets || serieStyle == SerieStyleFS.All)
             while (true)
             {
-                g = g.Trim();
-                var lb = g.LastIndexOf('(');
-                var rb = g.LastIndexOf(')');
+                fullPath = fullPath.Trim();
+                var lb = fullPath.LastIndexOf('(');
+                var rb = fullPath.LastIndexOf(')');
                 if (lb != -1 && rb != -1)
                 {
-                    var between = g.Substring(lb + 1, rb - lb - 1); //SH.GetTextBetweenTwoCharsInts(g, lb, rb);
+                    var between = fullPath.Substring(lb + 1, rb - lb - 1); //SH.GetTextBetweenTwoCharsInts(fullPath, lb, rb);
                     if (double.TryParse(between, out var _) /*SH.IsNumber(between, [])*/)
                     {
                         serie = int.Parse(between);
                         seriesCount++;
                         // text - 4, on end (1) -
-                        g = g.Substring(0, lb);
+                        fullPath = fullPath.Substring(0, lb);
                     }
                     else
                     {
@@ -3866,27 +3878,26 @@ string
             }
         if (serieStyle == SerieStyleFS.Dash || serieStyle == SerieStyleFS.All)
         {
-            var dex = g.IndexOf('-');
-            if (g[g.Length - 3] == '-')
+            if (fullPath[fullPath.Length - 3] == '-')
             {
-                serie = int.Parse(g.Substring(g.Length - 2));
-                g = g.Substring(0, g.Length - 3);
+                serie = int.Parse(fullPath.Substring(fullPath.Length - 2));
+                fullPath = fullPath.Substring(0, fullPath.Length - 3);
             }
-            else if (g[g.Length - 2] == '-')
+            else if (fullPath[fullPath.Length - 2] == '-')
             {
-                serie = int.Parse(g.Substring(g.Length - 1));
-                g = g.Substring(0, g.Length - 2);
+                serie = int.Parse(fullPath.Substring(fullPath.Length - 1));
+                fullPath = fullPath.Substring(0, fullPath.Length - 2);
             }
             if (serie != -1)
                 // To true hasSerie
                 seriesCount++;
         }
         if (serieStyle == SerieStyleFS.Underscore || serieStyle == SerieStyleFS.All)
-            RemoveSerieUnderscore(ref serie, ref g, ref seriesCount);
+            RemoveSerieUnderscore(ref serie, ref fullPath, ref seriesCount);
         if (seriesCount != 0) hasSerie = true;
-        g = g.Trim();
-        if (a1IsWithPath) return directory + g + ext;
-        return g + ext;
+        fullPath = fullPath.Trim();
+        if (a1IsWithPath) return directory + fullPath + ext;
+        return fullPath + ext;
     }
     public static string RemoveSerieUnderscore(string data)
     {
@@ -3895,15 +3906,15 @@ string
         RemoveSerieUnderscore(ref serie, ref data, ref seriesCount);
         return data;
     }
-    private static void RemoveSerieUnderscore(ref int serie, ref string g, ref int seriesCount)
+    private static void RemoveSerieUnderscore(ref int serie, ref string text, ref int seriesCount)
     {
         while (true)
         {
-            var dex = g.LastIndexOf('_');
-            if (dex != -1)
+            var underscoreIndex = text.LastIndexOf('_');
+            if (underscoreIndex != -1)
             {
-                var serieS = g.Substring(dex + 1);
-                g = g.Substring(0, dex);
+                var serieS = text.Substring(underscoreIndex + 1);
+                text = text.Substring(0, underscoreIndex);
                 if (int.TryParse(serieS, out serie)) seriesCount++;
             }
             else
@@ -3914,9 +3925,9 @@ string
     }
     #endregion
     #region For easy copy from FSShared.cs
-    public static void DeleteFile(string item)
+    public static void DeleteFile(string filePath)
     {
-        File.Delete(item);
+        File.Delete(filePath);
     }
     ///// <summary>
     ///// Vrátí cestu a název souboru text ext
@@ -3944,11 +3955,11 @@ string
     /// <param name="path"></param>
     /// <param name="file"></param>
     /// <param name="ext"></param>
-    public static void GetPathAndFileNameWithoutExtension(string fn, out string path, out string file, out string ext)
+    public static void GetPathAndFileNameWithoutExtension(string filePath, out string path, out string file, out string ext)
     {
-        path = Path.GetDirectoryName(fn) + '\\';
-        file = GetFileNameWithoutExtension(fn);
-        ext = Path.GetExtension(fn);
+        path = Path.GetDirectoryName(filePath) + '\\';
+        file = GetFileNameWithoutExtension(filePath);
+        ext = Path.GetExtension(filePath);
     }
     public static string PathWithoutExtension(string path)
     {
@@ -3979,8 +3990,9 @@ string
     /// <summary>
     ///     Convert to UNC path
     /// </summary>
-    /// <param name="item"></param>
-    public static bool ExistsDirectoryWorker(string item, bool _falseIfContainsNoFile = false)
+    /// <param name="directoryPath">The directory path to check</param>
+    /// <param name="isFalseIfContainsNoFile">Return false if directory contains no files</param>
+    public static bool ExistsDirectoryWorker(string directoryPath, bool isFalseIfContainsNoFile = false)
     {
         // Not working, flags from GeoCachingTool wasnt transfered to standard
 #if NETFX_CORE
@@ -3989,19 +4001,19 @@ ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-
 #if WINDOWS_UWP
 ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
 #endif
-        if (item == @"\\?\" || item == string.Empty) return false;
-        var item2 = MakeUncLongPath(item);
+        if (directoryPath == @"\\?\" || directoryPath == string.Empty) return false;
+        var normalizedPath = MakeUncLongPath(directoryPath);
         // Directory.Exists if pass SE or only start of Unc return false
-        var result = Directory.Exists(item2);
-        if (_falseIfContainsNoFile)
+        var result = Directory.Exists(normalizedPath);
+        if (isFalseIfContainsNoFile)
             if (result)
             {
-                var f = FSGetFiles.GetFiles(item, "*", SearchOption.AllDirectories).Count;
-                result = f > 0;
+                var fileCount = FSGetFiles.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Count;
+                result = fileCount > 0;
             }
         return result;
     }
-    public static List<string> filesWhichSurelyExists = new();
+    public static List<string> FilesWhichSurelyExists = new();
     /// <summary>
     ///     Dont check for size
     ///     Into A2 is good put true - when storage was fulled, all new files will be written with zero size. But then failing
@@ -4022,7 +4034,7 @@ bool
     {
         selectedFile = SH.FirstCharUpper(selectedFile);
         //ThrowEx.FirstLetterIsNotUpper(selectedFile);
-        if (filesWhichSurelyExists.Contains(selectedFile)) return true;
+        if (FilesWhichSurelyExists.Contains(selectedFile)) return true;
         if (selectedFile == @"\\?\" || selectedFile == string.Empty) return false;
         MakeUncLongPath(ref selectedFile);
         var exists = File.Exists(selectedFile);
@@ -4032,10 +4044,10 @@ bool
             var ext = Path.GetExtension(selectedFile).ToLower();
             // Musím to kontrolovat jen když je to tmp, logicky
             if (ext == ".tmp") return false;
-            var count = string.Empty;
+            var content = string.Empty;
             try
             {
-                count =
+                content =
 #if ASYNC
                     await
 #endif
@@ -4045,7 +4057,7 @@ bool
             {
                 if (ex.Message.StartsWith("The process cannot access the file")) return true;
             }
-            if (count == string.Empty)
+            if (content == string.Empty)
                 // Měl jsem tu chybu že ač exists bylo true, File.ReadAllTextAsync selhalo protože soubor neexistoval.
                 // Vyřešil jsem to kontrolou přípony, snad
                 return false;
@@ -4058,31 +4070,32 @@ bool
     /// </summary>
     /// <param name="upFolderName"></param>
     /// <param name="dirNameDecoded"></param>
-    public static string Combine(params string[] text)
+    public static string Combine(params string[] parts)
     {
-        //return Path.Combine(text);
-        return CombineWorker(true, false, text);
+        //return Path.Combine(paths);
+        return CombineWorker(true, false, parts);
     }
-    public static string CombineFile(params string[] text)
+    public static string CombineFile(params string[] parts)
     {
-        return CombineWorker(true, true, text);
+        return CombineWorker(true, true, parts);
     }
-    public static string CombineDir(params string[] text)
+    public static string CombineDir(params string[] parts)
     {
-        return CombineWorker(true, false, text);
+        return CombineWorker(true, false, parts);
     }
     /// <summary>
     ///     Cant return with end slash becuase is working also with files
     /// </summary>
-    /// <param name="FirstCharUpper"></param>
-    /// <param name="s"></param>
-    private static string CombineWorker(bool FirstCharUpper, bool file, params string[] text)
+    /// <param name="isFirstCharUpper">Whether to uppercase the first character</param>
+    /// <param name="file">Whether the path is a file (true) or directory (false)</param>
+    /// <param name="paths">Path parts to combine</param>
+    private static string CombineWorker(bool isFirstCharUpper, bool file, params string[] paths)
     {
-        for (var i = 0; i < text.Length; i++) text[i] = text[i].TrimStart('\\');
-        //s = CA.TrimStartChar('\\', text.ToList()).ToArray();
-        var result = Path.Combine(text);
+        for (var i = 0; i < paths.Length; i++) paths[i] = paths[i].TrimStart('\\');
+        //s = CA.TrimStartChar('\\', paths.ToList()).ToArray();
+        var result = Path.Combine(paths);
         if (result[2] != '\\') result = result.Insert(2, "\"");
-        if (FirstCharUpper)
+        if (isFirstCharUpper)
             result = SH.FirstCharUpper(ref result);
         else
             result = SH.FirstCharUpper(ref result);
@@ -4095,34 +4108,34 @@ bool
     {
         return GetFolderSize(new DirectoryInfo(path));
     }
-    public static long GetFolderSize(DirectoryInfo data)
+    public static long GetFolderSize(DirectoryInfo directoryInfo)
     {
         long size = 0;
         // Add file sizes.
         //
-        FileInfo[] fis = null;
+        FileInfo[] files = null;
         try
         {
-            fis = data.GetFiles();
+            files = directoryInfo.GetFiles();
         }
         catch (DirectoryNotFoundException ex)
         {
-            fis = new FileInfo[0];
+            files = new FileInfo[0];
             //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api a zbylé složky value něm jsou junctiony které ale ztratily svůj cíl
         }
-        foreach (var fi in fis) size += fi.Length;
+        foreach (var fileInfo in files) size += fileInfo.Length;
         // Add subdirectory sizes.
-        DirectoryInfo[] dis = null;
+        DirectoryInfo[] subdirectories = null;
         try
         {
-            dis = data.GetDirectories();
+            subdirectories = directoryInfo.GetDirectories();
         }
         catch (DirectoryNotFoundException ex)
         {
-            dis = new DirectoryInfo[0];
+            subdirectories = new DirectoryInfo[0];
             //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api a zbylé složky value něm jsou junctiony které ale ztratily svůj cíl
         }
-        foreach (var di in dis) size += GetFolderSize(di);
+        foreach (var subdirectory in subdirectories) size += GetFolderSize(subdirectory);
         return size;
     }
     public static Dictionary<string, List<string>> GroupFilesByName(List<string> filesInSubfolders)
@@ -4131,19 +4144,19 @@ bool
         foreach (var item in filesInSubfolders) DictionaryHelper.AddOrCreate(result, Path.GetFileName(item), item);
         return result;
     }
-    public static string BasePath(List<string> ms, string path)
+    public static string BasePath(List<string> basePaths, string path)
     {
-        foreach (var item in ms)
+        foreach (var item in basePaths)
             if (path.Contains(item))
                 return item;
         return null;
     }
-    public static bool HasAnyFoldersOrFiles(string folderWhereToCreate)
+    public static bool HasAnyFoldersOrFiles(string folder)
     {
-        return Directory.GetFiles(folderWhereToCreate).Length > 0 ||
-               Directory.GetDirectories(folderWhereToCreate).Length > 0;
+        return Directory.GetFiles(folder).Length > 0 ||
+               Directory.GetDirectories(folder).Length > 0;
     }
-    public static void MoveDirectoryNoRecursive(string v1, string v2, DirectoryMoveCollisionOption throwEx1, object throwEx2)
+    public static void MoveDirectoryNoRecursive(string sourcePath, string targetPath, DirectoryMoveCollisionOption directoryMoveCollisionOption, object fileMoveCollisionOption)
     {
         throw new NotImplementedException();
     }

@@ -1,5 +1,7 @@
+// variables names: ok
 namespace RunnerFileSystem;
 
+#if NET9_0_OR_GREATER
 using SunamoCl;
 
 partial class Program
@@ -34,3 +36,4 @@ partial class Program
         return CLActions.MergeActions(actions, actionsAsync);
     }
 }
+#endif

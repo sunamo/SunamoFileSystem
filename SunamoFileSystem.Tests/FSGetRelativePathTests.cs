@@ -1,3 +1,4 @@
+// variables names: ok
 namespace SunamoFileSystem.Tests;
 
 public partial class FSTests

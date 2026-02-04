@@ -56,7 +56,7 @@ internal class DictionaryHelper
     /// <param name="sl"></param>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    internal static void AddOrCreate<Key, Value, ColType>(IDictionary<Key, List<Value>> dict, Key key, Value value,
+    internal static void AddOrCreate<Key, Value, ColType>(IDictionary<Key, List<Value>> dictionary, Key key, Value value,
         bool withoutDuplicitiesInValue = false, Dictionary<Key, List<string>>? stringDict = null) where Key : notnull
     {
         var compWithString = false;
@@ -66,7 +66,7 @@ internal class DictionaryHelper
         {
             var keyAsList = key as IList<ColType>;
             var contains = false;
-            foreach (var item in dict)
+            foreach (var item in dictionary)
             {
                 var dictionaryKeyAsList = item.Key as IList<ColType>;
                 if (dictionaryKeyAsList.SequenceEqual(keyAsList)) contains = true;
@@ -74,7 +74,7 @@ internal class DictionaryHelper
 
             if (contains)
             {
-                foreach (var item in dict)
+                foreach (var item in dictionary)
                 {
                     var dictionaryKeyAsList = item.Key as IList<ColType>;
                     if (dictionaryKeyAsList.SequenceEqual(keyAsList))
@@ -90,7 +90,7 @@ internal class DictionaryHelper
             {
                 List<Value> valueList = new();
                 valueList.Add(value);
-                dict.Add(key, valueList);
+                dictionary.Add(key, valueList);
 
                 if (compWithString)
                 {
@@ -103,13 +103,13 @@ internal class DictionaryHelper
         else
         {
             var add = true;
-            lock (dict)
+            lock (dictionary)
             {
-                if (dict.ContainsKey(key))
+                if (dictionary.ContainsKey(key))
                 {
                     if (withoutDuplicitiesInValue)
                     {
-                        if (dict[key].Contains(value))
+                        if (dictionary[key].Contains(value))
                             add = false;
                         else if (compWithString)
                             if (stringDict[key].Contains(value.ToString()))
@@ -118,7 +118,7 @@ internal class DictionaryHelper
 
                     if (add)
                     {
-                        var existingValues = dict[key];
+                        var existingValues = dictionary[key];
 
                         if (existingValues != null) existingValues.Add(value);
 
@@ -132,15 +132,15 @@ internal class DictionaryHelper
                 }
                 else
                 {
-                    if (!dict.ContainsKey(key))
+                    if (!dictionary.ContainsKey(key))
                     {
                         List<Value> valueList = new();
                         valueList.Add(value);
-                        dict.Add(key, valueList);
+                        dictionary.Add(key, valueList);
                     }
                     else
                     {
-                        dict[key].Add(value);
+                        dictionary[key].Add(value);
                     }
 
                     if (compWithString)
@@ -161,10 +161,10 @@ internal class DictionaryHelper
         }
     }
 
-    internal static void AddOrCreate<Key, Value>(IDictionary<Key, List<Value>> dict, Key key, Value value,
+    internal static void AddOrCreate<Key, Value>(IDictionary<Key, List<Value>> dictionary, Key key, Value value,
         bool withoutDuplicitiesInValue = false, Dictionary<Key, List<string>>? stringDict = null) where Key : notnull
     {
-        AddOrCreate<Key, Value, object>(dict, key, value, withoutDuplicitiesInValue, stringDict);
+        AddOrCreate<Key, Value, object>(dictionary, key, value, withoutDuplicitiesInValue, stringDict);
     }
 
     #endregion

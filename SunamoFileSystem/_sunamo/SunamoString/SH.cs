@@ -2,42 +2,59 @@ namespace SunamoFileSystem._sunamo.SunamoString;
 
 internal class SH
 {
-    internal static string FirstCharUpper(ref string result)
+    internal static string FirstCharUpper(ref string text)
     {
-        result = FirstCharUpper(result);
-        return result;
+        text = FirstCharUpper(text);
+        return text;
     }
 
-    internal static string WrapWithQm(string commitMessage)
+    /// <summary>
+    /// Wraps text with quote marks if needed.
+    /// </summary>
+    /// <param name="text">The text to wrap</param>
+    /// <returns>Text wrapped with quote marks</returns>
+    internal static string WrapWithQm(string text)
     {
-        return WrapWithQm(commitMessage, true);
+        return WrapWithQm(text, true);
     }
 
-    internal static string WrapWithQm(string item, bool? forceNotIncludeQm)
+    /// <summary>
+    /// Wraps text with quote marks if needed.
+    /// </summary>
+    /// <param name="text">The text to wrap</param>
+    /// <param name="forceNotIncludeQm">Force not to include quote marks</param>
+    /// <returns>Text wrapped with quote marks if needed</returns>
+    internal static string WrapWithQm(string text, bool? forceNotIncludeQm)
     {
-        if (item.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return WrapWithQm(item);
-        return item;
+        if (text.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return WrapWithQm(text);
+        return text;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static string WrapWith(string value, string wrapper)
+    internal static string WrapWith(string text, string wrapper)
     {
-        return wrapper + value + wrapper;
+        return wrapper + text + wrapper;
     }
 
-    internal static int OccurencesOfStringIn(string source, string searchString)
+    internal static int OccurencesOfStringIn(string text, string searchString)
     {
-        return source.Split(new[] { searchString }, StringSplitOptions.None).Length - 1;
+        return text.Split(new[] { searchString }, StringSplitOptions.None).Length - 1;
     }
 
-    internal static bool IsContained(string item, string contains)
+    /// <summary>
+    /// Checks if text contains a substring (supports negation with ! prefix).
+    /// </summary>
+    /// <param name="text">The text to search in</param>
+    /// <param name="contains">The substring to search for (prefix with ! for negation)</param>
+    /// <returns>True if contained (or not contained with negation)</returns>
+    internal static bool IsContained(string text, string contains)
     {
         var (negation, contains2) = IsNegationTuple(contains);
         contains = contains2;
 
-        if (negation && item.Contains(contains))
+        if (negation && text.Contains(contains))
             return false;
-        if (!negation && !item.Contains(contains)) return false;
+        if (!negation && !text.Contains(contains)) return false;
 
         return true;
     }

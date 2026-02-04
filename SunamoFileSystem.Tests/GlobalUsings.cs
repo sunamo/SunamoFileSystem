@@ -9,6 +9,5 @@ global using SunamoGetFolders;
 global using SunamoTest;
 global using System.IO.Compression;
 global using ILogger = Microsoft.Extensions.Logging.ILogger;
-global using Microsoft.Extensions.Logging;
 global using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;
 global using SunamoFileSystem.Tests;

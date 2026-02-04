@@ -1,5 +1,7 @@
+// variables names: ok
 namespace RunnerFileSystem;
 
+#if NET9_0_OR_GREATER
 using Microsoft.Extensions.DependencyInjection;
 using SunamoFileSystem.Tests;
 using SunamoCl.SunamoCmd;
@@ -63,3 +65,14 @@ false
         await t.AllExtensionsInFolders();
     }
 }
+#else
+// Stub for net8.0 - SunamoCl and SunamoDependencyInjection packages only support net9.0+
+internal partial class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("This application requires .NET 9.0 or higher.");
+        Console.WriteLine("Please use net9.0 or net10.0 target framework.");
+    }
+}
+#endif

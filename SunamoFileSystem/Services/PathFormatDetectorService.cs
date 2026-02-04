@@ -2,15 +2,15 @@ namespace SunamoFileSystem.Services;
 
 public class PathFormatDetectorService(ILogger logger)
 {
-    public bool IsWindowsPathFormat(string argValue)
+    public bool IsWindowsPathFormat(string path)
     {
-        if (string.IsNullOrWhiteSpace(argValue)) return false;
+        if (string.IsNullOrWhiteSpace(path)) return false;
         var badFormat = false;
-        if (argValue.Length < 3) return badFormat;
-        if (!char.IsLetter(argValue[0])) badFormat = true;
-        if (char.IsLetter(argValue[1])) badFormat = true;
-        if (argValue.Length > 2)
-            if (argValue[1] != '\\' && argValue[2] != '\\')
+        if (path.Length < 3) return badFormat;
+        if (!char.IsLetter(path[0])) badFormat = true;
+        if (char.IsLetter(path[1])) badFormat = true;
+        if (path.Length > 2)
+            if (path[1] != '\\' && path[2] != '\\')
                 badFormat = true;
         return !badFormat;
     }

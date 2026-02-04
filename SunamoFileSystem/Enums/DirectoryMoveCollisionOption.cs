@@ -1,4 +1,3 @@
-// variables names: ok
 namespace SunamoFileSystem.Enums;
 
 public enum DirectoryMoveCollisionOption

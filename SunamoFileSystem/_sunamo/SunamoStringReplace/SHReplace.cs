@@ -5,13 +5,13 @@ internal class SHReplace
     /// <summary>
     /// Replaces the first occurrence of a pattern in the input string
     /// </summary>
-    /// <param name="input">The input string</param>
+    /// <param name="text">The input string</param>
     /// <param name="what">The pattern to search for</param>
     /// <param name="replacement">The replacement string</param>
     /// <returns>String with first occurrence replaced</returns>
-    internal static string ReplaceOnce(string input, string what, string replacement)
+    internal static string ReplaceOnce(string text, string what, string replacement)
     {
-        return new Regex(what).Replace(input, replacement, 1);
+        return new Regex(what).Replace(text, replacement, 1);
     }
 
     internal static string ReplaceAllDoubleSpaceToSingle2(string text, bool alsoHtml = false)

@@ -1,0 +1,63 @@
+FS.cs - Seznam problémů k opravě:
+
+KRITICKÉ - Nepoužívané private elementy:
+- Řádek 45: private static Type Type = typeof(FS); - SMAZAT (nepoužívá se)
+
+JEDNOPÍSMENNÉ PARAMETRY (musí být přejmenovány):
+- GetExtension(string value, GetExtensionArgs a = null) - a → args
+- ReplaceInvalidFileNameChars(string filename, params char[] ch) - ch → characters
+- GetDirectoryNameIfIsFile(string f) - f → path
+- RenameNumberedSerieFiles(..., List<string> f, ...) - f → files
+- PlaceInFolder(string var, string zmenseno) - var → sourcePath, zmenseno → targetFolder (české slovo!)
+- CopyMoveFilesInListSimple(..., List<string> f, ...) - f → files
+- ReplaceInAllFilesWorker(object o, ...) - o → args
+- ReplaceInAllFiles(..., ReplaceInAllFilesArgsBase o, ...) - o → args
+- ReplaceInAllFiles(..., ReplaceInAllFilesArgsBase path, ...) - path → args (zavádějící název)
+- GetSizeIn(long value, ComputerSizeUnits b, ComputerSizeUnits to) - b → fromUnit
+- DeleteFoldersWhichNotContains(string value, string folder, IList<string> v2) - v2 → excludedContainingTexts
+- ModifiedinUnix(string dsi) - dsi → filePath
+- OrderByNaturalNumberSerie(List<string> list) - OK (list je správné pro List<string>)
+
+ZAVÁDĚJÍCÍ NÁZVY:
+- Řádek 340: var count = new CollectionWithoutDuplicates<string>(); - count → uniqueLines
+- Řádek 311: var temp = Path.Combine(to, item); - temp → targetPath
+- Řádek 497: var temp = path + i + ext; - temp → numberedFilePath
+
+NESHODUJÍCÍ SE XML DOKUMENTACE:
+- Řádek 106: <param name="v"></param> ale parametr je value
+- Řádek 129: <param name="v"></param> ale parametr je value
+- Řádek 266: <param name="v"></param> ale parametr je value
+- Řádek 469-472: <param name="d"></param>, <param name="p"></param> - neexistující parametry
+- Řádek 482-485: <param name="d"></param>, <param name="p"></param> - neexistující parametry
+- Řádek 679: <param name="v"></param> - neexistující parametr
+- Řádek 853: <param name="v"></param> ale parametr je value
+- Řádek 1096: <param name="v"></param> ale parametr je value
+- Řádek 1153: <param name="p"></param> ale parametr je from
+- Řádek 1285: <param name="l"></param> ale parametr je list
+- Řádek 1366: <param name="p"></param> ale parametr je path
+- Řádek 1462: <param name="s"></param> ale parametr je text
+
+CHYBĚJÍCÍ XML DOKUMENTACE <param> tagy:
+- CreateDirectory(string value) - chybí <param>
+- WithEndSlash(ref string value) - chybí <param>
+- RenameNumberedSerieFiles - všechny parametry
+- DeleteAllEmptyDirectories - všechny parametry
+- ...a mnoho dalších
+
+ČESKÉ TEXTY:
+- Řádek 513: zmenseno (parameter)
+- Řádek 1078: Exception message s escaped unicode - přeložit do AJ
+
+SQL KEYWORDS/RESERVED WORDS:
+- Řádek 513: var (parameter name) - je reserved word v C#!
+
+LAMBDA PARAMETRY:
+- Řádek 290: All(count => ...) - count → character
+
+CAMELCASE vs PASCALCASE:
+- Řádek 958: CopyFilesOfExtensions(string folderFrom, string FolderTo, ...) - FolderTo → folderTo
+
+ZKRATKY V NÁZVECH:
+- Řádek 1636: LetterAndDigitCharService letterAndDigitChar → letterAndDigitCharService
+
+TODO: Pokračovat s analýzou zbytku souboru (řádky 2000-4168)
