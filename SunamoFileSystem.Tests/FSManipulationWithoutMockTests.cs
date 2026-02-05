@@ -58,9 +58,9 @@ public class FSManipulationWithoutMockTests
     public void DeleteFilesWithSameContent()
     {
         string folder = @"D:\_Test\sunamo\Helpers\FileSystem\FS\DeleteFilesWithSameContent\";
-        var files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { _trimA1AndLeadingBs = true });
+        var files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { TrimRootFolderAndLeadingBackslashes = true });
         FS.DeleteFilesWithSameContent(files);
-        files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { _trimA1AndLeadingBs = true });
+        files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { TrimRootFolderAndLeadingBackslashes = true });
         var filesExcepted = CA.ToListString(TestDataTxt.a, TestDataTxt.ab);
         Assert.Equal<string>(filesExcepted, files);
     }
@@ -68,9 +68,9 @@ public class FSManipulationWithoutMockTests
     public void DeleteFilesWithSameContentBytes()
     {
         string folder = @"D:\_Test\sunamo\Helpers\FileSystem\FS\DeleteFilesWithSameContentBytes\";
-        var files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { _trimA1AndLeadingBs = false });
+        var files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { TrimRootFolderAndLeadingBackslashes = false });
         FS.DeleteFilesWithSameContentBytes(files);
-        files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { _trimA1AndLeadingBs = true });
+        files = FSGetFiles.GetFilesEveryFolder(logger, folder, "*.txt", System.IO.SearchOption.AllDirectories, new GetFilesEveryFolderArgs { TrimRootFolderAndLeadingBackslashes = true });
         var filesExcepted = CA.ToListString(TestDataTxt.a, TestDataTxt.ab);
         Assert.Equal<string>(filesExcepted, files);
     }

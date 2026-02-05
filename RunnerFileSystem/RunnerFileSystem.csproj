@@ -11,8 +11,8 @@
     <ProjectReference Include="..\SunamoFileSystem.Tests\SunamoFileSystem.Tests.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="SunamoCl" Version="25.6.13.1" />
-    <PackageReference Include="SunamoDependencyInjection" Version="25.6.3.2" />
+    <PackageReference Include="SunamoCl" Version="26.2.4.1" />
+    <PackageReference Include="SunamoDependencyInjection" Version="26.2.4.1" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);ASYNC</DefineConstants>
