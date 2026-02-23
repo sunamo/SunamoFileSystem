@@ -5,8 +5,9 @@ internal class FSGetFiles
     /// <summary>
     ///     Non recursive
     /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="fileExt"></param>
+    /// <param name="folder">The directory path to search in.</param>
+    /// <param name="fileExt">The file extension to filter by.</param>
+    /// <returns>List of file paths with the specified extension.</returns>
     internal static List<string> FilesOfExtension(string folder, string fileExt)
     {
         return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
@@ -17,8 +18,9 @@ internal class FSGetFiles
     ///     Keys returns with normalized ext
     ///     In case zero files of ext wont be included in dict
     /// </summary>
-    /// <param name="folderFrom"></param>
-    /// <param name="extensions"></param>
+    /// <param name="folderFrom">The directory path to search in.</param>
+    /// <param name="extensions">The file extensions to filter by.</param>
+    /// <returns>Dictionary mapping normalized extensions to their file paths.</returns>
     internal static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
     {
         var dict = new Dictionary<string, List<string>>();
@@ -48,20 +50,20 @@ internal class FSGetFiles
     /// <summary>
     ///     In item1 is all directories, in Item2 all files
     /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="ask"></param>
-    /// <param name="searchOption"></param>
-    /// <param name="_trimA1"></param>
-    internal static List<string> GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
-        GetFilesEveryFolderArgsFS e = null)
+    /// <param name="folder">The root directory to search in.</param>
+    /// <param name="mask">The file search pattern mask.</param>
+    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories.</param>
+    /// <param name="e">Optional arguments for controlling the file retrieval behavior.</param>
+    /// <returns>List of file paths found, or null if the file count exceeds the limit.</returns>
+    internal static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
+        GetFilesEveryFolderArgsFS? e = null)
     {
 
         if (e == null) e = new GetFilesEveryFolderArgsFS();
         // TODO: některé soubory vrací vícekrát. toto je workaround než zjistím proč
         // TODO: je důležité se toho zbavit co nejdříve protože při načítání to zbytečně zpomaluje
         var list = new List<string>();
-        List<string> dirs = null;
-        var measureTime = false;
+        List<string>? dirs = null;
         //if (measureTime)
         //{
         //    //StopwatchStatic.Start();
@@ -72,8 +74,8 @@ internal class FSGetFiles
         if (e.UseProgressBarTime)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
-            e.InsertProgressBarTime(60);
-            e.UpdateProgressBarText(message);
+            e.InsertProgressBarTime!(60);
+            e.UpdateProgressBarText!(message);
         }
 
         dirs = FSGetFolders.GetFoldersEveryFolder(folder, new GetFoldersEveryFolderArgs(e)).ToList();
@@ -82,10 +84,9 @@ internal class FSGetFiles
 #endif
         if (e.FilterFoundedFolders != null)
         {
-            string si = null;
             for (var i = dirs.Count - 1; i >= 0; i--)
             {
-                si = dirs[i];
+                var si = dirs[i];
                 //if (si.Contains(@"\standard\.git"))
                 //{
                 //}
@@ -118,8 +119,8 @@ internal class FSGetFiles
         if (e.UseProgressBar)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
-            e.InsertProgressBar(dirs.Count);
-            e.UpdateProgressBarText(message);
+            e.InsertProgressBar!(dirs.Count);
+            e.UpdateProgressBarText!(message);
         }
 
         var data = new List<string>();
@@ -143,7 +144,7 @@ internal class FSGetFiles
                 if (e.GetNullIfThereIsMoreThanXFiles != -1)
                     if (data.Count > e.GetNullIfThereIsMoreThanXFiles)
                     {
-                        if (e.UseProgressBar) e.Done();
+                        if (e.UseProgressBar) e.Done!();
                         return null;
                     }
             }
@@ -154,7 +155,7 @@ internal class FSGetFiles
                 //ThrowEx.FileSystemException( ex);
             }
 
-            if (e.UseProgressBar) e.DoneOnePercent();
+            if (e.UseProgressBar) e.DoneOnePercent!();
 #if DEBUG
             //before = data.Count;
 #endif
@@ -173,7 +174,7 @@ internal class FSGetFiles
         }
 
         list = list.Distinct().ToList();
-        if (e.UseProgressBar) e.Done();
+        if (e.UseProgressBar) e.Done!();
         //if (measureTime)
         //{
         //    StopwatchStatic.StopAndPrintElapsed("GetFiles");
@@ -198,11 +199,13 @@ internal class FSGetFiles
     ///     A4 must have underscore otherwise is suggested while I try type true
     ///     A2 can be delimited by semicolon. In case more extension use GetFilesOfExtensions
     /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="mask"></param>
-    /// <param name="searchOption"></param>
+    /// <param name="folder2">The directory path to search in, can be semicolon-delimited.</param>
+    /// <param name="mask">The file search pattern mask, can be semicolon or comma-delimited.</param>
+    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories.</param>
+    /// <param name="a">Optional arguments for controlling file retrieval behavior.</param>
+    /// <returns>List of file paths matching the search criteria.</returns>
     internal static List<string> GetFiles(string folder2, string mask, SearchOption searchOption,
-        GetFilesArgsFS a = null)
+        GetFilesArgsFS? a = null)
     {
 #if DEBUG
         if (folder2.TrimEnd('\\') == @"\monoConsoleSqlClient")
@@ -285,11 +288,11 @@ internal class FSGetFiles
 
 
     internal static List<string> GetFilesMoreMasc(string path, string masc, SearchOption searchOption,
-        GetFilesMoreMascArgs e = null)
+        GetFilesMoreMascArgs? e = null)
     {
         if (e == null) e = new GetFilesMoreMascArgs();
 #if DEBUG
-        string data = null;
+        string? data = null;
         if (e.LoadFromFileWhenDebug)
         {
             var text = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
@@ -361,7 +364,7 @@ internal class FSGetFiles
         return result;
     }
 
-    internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgsFS a)
+    internal static void FilterByGetFilesArgs(List<string> list, IEnumerable<string> folders, GetFilesArgsFS? a)
     {
         if (a == null) a = new GetFilesArgsFS();
         CAChangeContent.ChangeContent0(null, list, data => SH.FirstCharUpper(data));
@@ -376,7 +379,7 @@ internal class FSGetFiles
             foreach (var item in a.ExcludeFromLocationsContains)
                 list = list.Where(data => !data.Contains(item)).ToList();
         //CA.RemoveWhichContains(list, item, false);
-        Dictionary<string, DateTime> dictLastModified = null;
+        Dictionary<string, DateTime>? dictLastModified = null;
         var isLastModifiedFromFn = a.LastModifiedFromFn != null;
         if (a.DontIncludeNewest || a.ByDateOfLastModifiedAsc || isLastModifiedFromFn)
         {
@@ -384,7 +387,7 @@ internal class FSGetFiles
             foreach (var item in list)
             {
                 DateTime? dt = null;
-                if (isLastModifiedFromFn) dt = a.LastModifiedFromFn(Path.GetFileNameWithoutExtension(item));
+                if (isLastModifiedFromFn) dt = a.LastModifiedFromFn!(Path.GetFileNameWithoutExtension(item));
                 if (!dt.HasValue) dt = FS.LastModified(item);
                 dictLastModified.Add(item, dt.Value);
             }
@@ -399,14 +402,15 @@ internal class FSGetFiles
     /// <summary>
     ///     No recursive, all extension
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">The directory path to search in.</param>
+    /// <returns>List of all files in the directory.</returns>
     internal static List<string> GetFiles(string path)
     {
         return GetFiles(path, "*", SearchOption.TopDirectoryOnly);
     }
 
     internal static List<string> AllFilesInFolders(IList<string> folders, IList<string> exts, SearchOption so,
-        GetFilesArgsFS a = null)
+        GetFilesArgsFS? a = null)
     {
         var files = new List<string>();
         foreach (var item in folders)

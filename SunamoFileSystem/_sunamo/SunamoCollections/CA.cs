@@ -13,7 +13,7 @@ internal class CA
     /// <param name="count">Number of default elements to add</param>
     internal static void InitFillWith<T>(List<T> list, int count)
     {
-        for (var i = 0; i < count; i++) list.Add(default);
+        for (var i = 0; i < count; i++) list.Add(default!);
     }
 
     internal enum SearchStrategyCA
@@ -75,8 +75,8 @@ internal class CA
     /// <param name="isWildcard">Whether to use wildcard matching</param>
     /// <param name="wildcardIsMatch">Wildcard matching function</param>
     internal static void RemoveWhichContainsList(List<string> list, List<string> patterns, bool isWildcard,
-        Func<string, string, bool> wildcardIsMatch = null)
+        Func<string, string, bool>? wildcardIsMatch = null)
     {
-        foreach (var pattern in patterns) RemoveWhichContains(list, pattern, isWildcard, wildcardIsMatch);
+        foreach (var pattern in patterns) RemoveWhichContains(list, pattern, isWildcard, wildcardIsMatch!);
     }
 }

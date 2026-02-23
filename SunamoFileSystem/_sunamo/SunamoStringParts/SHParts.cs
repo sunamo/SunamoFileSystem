@@ -4,7 +4,7 @@ internal class SHParts
 {
     internal static string RemoveAfterLast(string text, object delimiter)
     {
-        var dex = text.LastIndexOf(delimiter.ToString());
+        var dex = text.LastIndexOf(delimiter.ToString()!);
         if (dex != -1)
         {
             var result = text.Substring(0, dex); //SHSubstring.Substring(, 0, dex, new SubstringArgs());

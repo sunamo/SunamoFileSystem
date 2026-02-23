@@ -12,9 +12,9 @@ internal class SHSplit
 
     internal static List<string> SplitToPartsFromEnd(string text, int parts, params char[] delimiters)
     {
-        List<char> chars = null;
-        List<bool> isNotDelimiter = null;
-        List<int> delimitersIndexes = null;
+        List<char>? chars = null;
+        List<bool>? isNotDelimiter = null;
+        List<int>? delimitersIndexes = null;
         SplitCustom(text, out chars, out isNotDelimiter, out delimitersIndexes, delimiters);
 
         var partsList = new List<string>(parts);

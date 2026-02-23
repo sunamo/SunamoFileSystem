@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  SunamoFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem\bin\Debug\net8.0\SunamoFileSystem.dll
+  SunamoFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem\bin\Debug\net10.0\SunamoFileSystem.dll
+  SunamoFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem\bin\Debug\net9.0\SunamoFileSystem.dll
+  SunamoFileSystem.Tests -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem.Tests\bin\Debug\net9.0\SunamoFileSystem.Tests.dll
+  SunamoFileSystem.Tests -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem.Tests\bin\Debug\net8.0\SunamoFileSystem.Tests.dll
+  SunamoFileSystem.Tests -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\SunamoFileSystem.Tests\bin\Debug\net10.0\SunamoFileSystem.Tests.dll
+  RunnerFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\RunnerFileSystem\bin\Debug\net8.0\RunnerFileSystem.dll
+  RunnerFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\RunnerFileSystem\bin\Debug\net9.0\RunnerFileSystem.dll
+  RunnerFileSystem -> E:\vs\Projects\PlatformIndependentNuGetPackages\SunamoFileSystem\RunnerFileSystem\bin\Debug\net10.0\RunnerFileSystem.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.39

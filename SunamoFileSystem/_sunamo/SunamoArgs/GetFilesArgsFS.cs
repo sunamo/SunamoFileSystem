@@ -18,7 +18,7 @@ internal class GetFilesArgsFS : GetFilesBaseArgsFS
     /// </summary>
     internal Action<List<string>>? ExcludeWithMethod = null;
 
-    internal Func<string, DateTime?>? LastModifiedFromFn;
+    internal Func<string, DateTime?>? LastModifiedFromFn = null;
 
     /// <summary>
     /// Changed to false on 1-7-2020, still forget to mention and method is problematic

@@ -22,7 +22,7 @@ public class TWithInt<T>
     /// Returns a string representation of the value.
     /// </summary>
     /// <returns>String representation of the value, or "(nulled)" if value is default.</returns>
-    public override string ToString()
+    public override string? ToString()
     {
         return EqualityComparer<T>.Default.Equals(Value, default) ? "(nulled)" : Value!.ToString();
     }

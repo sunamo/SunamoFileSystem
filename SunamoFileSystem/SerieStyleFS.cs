@@ -21,5 +21,9 @@ public enum SerieStyleFS
     ///     abc_001_01.txt.txt
     /// </summary>
     Underscore,
+
+    /// <summary>
+    ///     Match all serie styles.
+    /// </summary>
     All
 }

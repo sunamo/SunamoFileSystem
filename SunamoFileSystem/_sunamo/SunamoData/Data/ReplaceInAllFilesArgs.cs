@@ -6,9 +6,9 @@ namespace SunamoFileSystem._sunamo.SunamoData.Data;
 internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 {
     internal string From = string.Empty;
-    internal bool IsNotReplaceInTemporaryFiles;
-    internal bool PairLinesInFromAndTo;
-    internal bool ReplaceWithEmpty;
+    internal bool IsNotReplaceInTemporaryFiles = false;
+    internal bool PairLinesInFromAndTo = false;
+    internal bool ReplaceWithEmpty = false;
     internal string To = string.Empty;
 
     internal ReplaceInAllFilesArgs()

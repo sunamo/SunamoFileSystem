@@ -7,8 +7,6 @@ namespace SunamoFileSystem._sunamo.SunamoTextOutputGenerator;
 /// </summary>
 internal class TextOutputGenerator
 {
-    private static readonly string HeadingCharacter = "*";
-
     internal StringBuilder StringBuilder = new();
 
     /// <summary>

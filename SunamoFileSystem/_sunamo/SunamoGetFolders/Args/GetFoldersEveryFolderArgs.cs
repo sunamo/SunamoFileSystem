@@ -10,7 +10,7 @@ internal class GetFoldersEveryFolderArgs : GetFilesArgsFS
     /// </summary>
     internal new bool TrimFirstPathAndLeadingBackslashes;
 
-    internal new List<string> ExcludeFromLocationsContains = null;
+    internal new List<string>? ExcludeFromLocationsContains = null;
 
     internal bool WriteToDebugEveryLoadedFolder = false;
 
