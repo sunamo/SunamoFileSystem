@@ -20,14 +20,6 @@ internal class DictionaryHelper
         return result;
     }
 
-    /// <summary>
-    ///     In addition to method AddOrCreate, more is checking whether value in collection does not exists
-    /// </summary>
-    /// <typeparam name="Key">The type of keys in the dictionary.</typeparam>
-    /// <typeparam name="Value">The type of values in the lists.</typeparam>
-    /// <param name="dictionary">The dictionary to add to.</param>
-    /// <param name="key">The key to add or update.</param>
-    /// <param name="value">The value to add if not already present.</param>
     internal static void AddOrCreateIfDontExists<Key, Value>(Dictionary<Key, List<Value>> dictionary, Key key, Value value) where Key : notnull
     {
         if (dictionary.ContainsKey(key))
@@ -44,20 +36,6 @@ internal class DictionaryHelper
 
     #region AddOrCreate
 
-    /// <summary>
-    ///     A3 is inner type of collection entries
-    ///     dictS => is comparing with string
-    ///     As inner must be List, not IList etc.
-    ///     From outside is not possible as inner use other class based on IList
-    /// </summary>
-    /// <typeparam name="Key">The type of keys in the dictionary.</typeparam>
-    /// <typeparam name="Value">The type of values in the lists.</typeparam>
-    /// <typeparam name="ColType">The inner type of collection entries for sequence comparison.</typeparam>
-    /// <param name="dictionary">The dictionary to add to or create entry in.</param>
-    /// <param name="key">The key to add or update.</param>
-    /// <param name="value">The value to add.</param>
-    /// <param name="withoutDuplicitiesInValue">Whether to prevent duplicate values in the list.</param>
-    /// <param name="stringDict">Optional parallel string dictionary for string comparison.</param>
     internal static void AddOrCreate<Key, Value, ColType>(IDictionary<Key, List<Value>> dictionary, Key key, Value value,
         bool withoutDuplicitiesInValue = false, Dictionary<Key, List<string>>? stringDict = null) where Key : notnull
     {

@@ -1,16 +1,7 @@
 namespace SunamoFileSystem.Services;
 
-/// <summary>
-/// Service for detecting path format (Windows vs Unix).
-/// </summary>
-/// <param name="logger">Logger instance for diagnostic messages.</param>
 public class PathFormatDetectorService(ILogger logger)
 {
-    /// <summary>
-    /// Determines whether the specified path uses Windows path format (e.g., C:\folder).
-    /// </summary>
-    /// <param name="path">The file system path to check.</param>
-    /// <returns>True if the path uses Windows path format; otherwise, false.</returns>
     public bool IsWindowsPathFormat(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) return false;
@@ -24,12 +15,7 @@ public class PathFormatDetectorService(ILogger logger)
         return !badFormat;
     }
 
-    /// <summary>
-    /// Return true if Windows, false if Unix
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="logIfIsNotUnixOrWindowsPath"></param>
-    /// <returns></returns>
+    // Return true if Windows, false if Unix
     public bool? DetectPathType(string path, bool logIfIsNotUnixOrWindowsPath = false)
     {
         if (IsWindowsPathFormat(path))

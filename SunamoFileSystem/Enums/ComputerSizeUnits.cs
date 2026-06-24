@@ -1,37 +1,22 @@
 namespace SunamoFileSystem.Enums;
 
-/// <summary>
-/// Units of computer storage size measurement.
-/// </summary>
 public enum ComputerSizeUnits : byte
 {
-    /// <summary>
-    /// Automatically determine the most appropriate unit.
-    /// </summary>
+    // Automatically determine the most appropriate unit.
     Auto = 0,
 
-    /// <summary>
-    /// Bytes.
-    /// </summary>
+    // Bytes.
     B = 1,
 
-    /// <summary>
-    /// Kilobytes.
-    /// </summary>
+    // Kilobytes.
     KB = 2,
 
-    /// <summary>
-    /// Megabytes.
-    /// </summary>
+    // Megabytes.
     MB = 3,
 
-    /// <summary>
-    /// Gigabytes.
-    /// </summary>
+    // Gigabytes.
     GB = 4,
 
-    /// <summary>
-    /// Terabytes.
-    /// </summary>
+    // Terabytes.
     TB = 5
 }

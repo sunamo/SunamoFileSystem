@@ -1,8 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
-/// <summary>
-/// Arguments for getting files with multiple mask patterns
-/// </summary>
 internal class GetFilesMoreMascArgs : GetFilesBaseArgsFS
 {
     internal bool DeleteFromDriveWhenCannotBeResolved = false;

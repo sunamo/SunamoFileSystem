@@ -1,42 +1,25 @@
 namespace SunamoFileSystem.Enums;
 
-/// <summary>
-/// Specifies how to handle collisions when moving a file to a location where a file already exists.
-/// </summary>
 public enum FileMoveCollisionOption
 {
-    /// <summary>
-    /// Add a numeric series suffix to the file name to avoid collision.
-    /// </summary>
+    // Add a numeric series suffix to the file name to avoid collision.
     AddSerie,
 
-    /// <summary>
-    /// Add the file size to the file name to differentiate it.
-    /// </summary>
+    // Add the file size to the file name to differentiate it.
     AddFileSize,
 
-    /// <summary>
-    /// Overwrite the existing file at the destination.
-    /// </summary>
+    // Overwrite the existing file at the destination.
     Overwrite,
 
-    /// <summary>
-    /// Discard the source file and keep the existing destination file.
-    /// </summary>
+    // Discard the source file and keep the existing destination file.
     DiscardFrom,
 
-    /// <summary>
-    /// Keep the larger file and discard the smaller one.
-    /// </summary>
+    // Keep the larger file and discard the smaller one.
     LeaveLarger,
 
-    /// <summary>
-    /// Do not perform any manipulation; leave both files as they are.
-    /// </summary>
+    // Do not perform any manipulation; leave both files as they are.
     DontManipulate,
 
-    /// <summary>
-    /// Throw an exception when a collision is detected.
-    /// </summary>
+    // Throw an exception when a collision is detected.
     ThrowEx
 }

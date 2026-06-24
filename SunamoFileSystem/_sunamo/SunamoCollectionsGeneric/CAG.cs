@@ -1,18 +1,9 @@
 namespace SunamoFileSystem._sunamo.SunamoCollectionsGeneric;
 
-/// <summary>
-/// Collection Array Generic helper methods
-/// </summary>
 internal class CAG
 {
-    /// <summary>
-    /// Returns elements that exist in both collections
-    /// Modifies both collections - keeps only elements that are unique to each
-    /// </summary>
-    /// <typeparam name="T">Element type</typeparam>
-    /// <param name="collection1">First collection</param>
-    /// <param name="collection2">Second collection</param>
-    /// <returns>List of elements that exist in both collections</returns>
+    // Returns elements that exist in both collections
+    // Modifies both collections - keeps only elements that are unique to each
     internal static List<T> CompareList<T>(List<T> collection1, List<T> collection2) where T : IEquatable<T>
     {
         var existsInBoth = new List<T>();

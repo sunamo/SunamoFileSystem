@@ -1,8 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoData.Data;
 
-/// <summary>
-///     Is passed into ReplaceInAllFilesWorker
-/// </summary>
 internal class ReplaceInAllFilesArgs : ReplaceInAllFilesArgsBase
 {
     internal string From = string.Empty;
