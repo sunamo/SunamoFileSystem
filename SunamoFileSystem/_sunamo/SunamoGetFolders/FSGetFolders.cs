@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
-internal class FSGetFolders
+public class FSGetFolders
 {
 
 
@@ -54,7 +54,12 @@ internal class FSGetFolders
         }
     }
 
-    internal static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
+    public static List<string> GetFoldersEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, GetFilesArgsFS? e = null)
+    {
+        return GetFoldersEveryFolder(folder, e);
+    }
+
+    public static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
     {
         if (e == null) e = new GetFilesArgsFS();
         var list = new List<string>();

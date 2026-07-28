@@ -2,7 +2,7 @@ namespace SunamoFileSystem._sunamo.SunamoArgs;
 
 // TODO: Should this inherit from GetFoldersEveryFolderArgs?
 // TODO: This class has issues - need to clean up what should be here
-internal class GetFilesArgsFS : GetFilesBaseArgsFS
+public class GetFilesArgsFS : GetFilesBaseArgsFS
 {
     internal new bool TrimFirstPathAndLeadingBackslashes = false;
     internal bool TrimExtension = false;
