@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
-internal class GetFilesEveryFolderArgsFS : GetFilesBaseArgsFS
+public class GetFilesEveryFolderArgsFS : GetFilesBaseArgsFS
 {
     internal Action? Done = null;
     internal Action? DoneOnePercent = null;

@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
-internal class GetFilesBaseArgsFS
+public class GetFilesBaseArgsFS
 {
     internal bool TrimFirstPathAndLeadingBackslashes = false;
     internal Func<string, bool>? IsJunctionPoint = null;

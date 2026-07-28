@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
-internal class FSGetFiles
+public class FSGetFiles
 {
     internal static List<string> FilesOfExtension(string folder, string fileExt)
     {
@@ -27,7 +27,13 @@ internal class FSGetFiles
     }
 
 
-    internal static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
+    public static List<string> GetFilesEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, string mask, SearchOption searchOption,
+        GetFilesEveryFolderArgsFS? e = null)
+    {
+        return GetFilesEveryFolder(folder, mask, searchOption, e) ?? new List<string>();
+    }
+
+    public static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
         GetFilesEveryFolderArgsFS? e = null)
     {
 
