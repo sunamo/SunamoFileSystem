@@ -3,7 +3,7 @@ namespace SunamoFileSystem;
 using PathMs = Path;
 using TF = SunamoFileSystem._sunamo.SunamoFileIO.TF;
 
-public class FS
+public partial class FS
 {
     public const string DEndsWithReplaceInFile = "SubdomainHelperSimple.cs";
     protected static readonly List<char> invalidFileNameCharsReadonly = Path.GetInvalidFileNameChars().ToList();
