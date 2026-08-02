@@ -41,7 +41,7 @@ public class PathFormatDetectorService(ILogger logger)
         {
             return true;
         }
-        else if (!path.Contains('\\') && path.StartsWith('/'))
+        else if (!path.Contains('\\') && path.StartsWith("/"))
         {
             return false;
         }

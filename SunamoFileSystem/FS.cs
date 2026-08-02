@@ -243,7 +243,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     {
         try
         {
-            await File.WriteAllTextAsync(file, content);
+            await FileAsyncCompat45.WriteAllTextAsync(file, content);
         }
         catch (Exception)
         {
@@ -443,7 +443,7 @@ List<string>
 #if ASYNC
                 await
 #endif
-                    File.ReadAllTextAsync(item)).ToList());
+                    FileAsyncCompat45.ReadAllTextAsync(item)).ToList());
         CAG.CompareList(opts, count.c);
         return opts;
     }
@@ -858,7 +858,7 @@ void
 #if ASYNC
                         await
 #endif
-                            File.ReadAllTextAsync(item)).Trim() == string.Empty)
+                            FileAsyncCompat45.ReadAllTextAsync(item)).Trim() == string.Empty)
                     TryDeleteFile(item);
         }
     }
@@ -994,7 +994,7 @@ void
 #if ASYNC
                     await
 #endif
-                        File.ReadAllTextAsync(item);
+                        FileAsyncCompat45.ReadAllTextAsync(item);
                 var content2 = string.Empty;
                 if (fasterMethodForReplacing == null)
                     for (var i = 0; i < replaceFrom.Count; i++)
@@ -1007,7 +1007,7 @@ void
                 {
                     //PpkOnDrive ppk = PpkOnDrive.WroteOnDrive;
                     //ppk.Add(DateTime.Now.ToString() + " " + item);
-                    await File.WriteAllTextAsync(item, content2);
+                    await FileAsyncCompat45.WriteAllTextAsync(item, content2);
                     if (writeEveryReadedFileAsStatus)
                     {
                         //SunamoTemplateLogger.Instance.SavedToDrive(item);
@@ -1046,18 +1046,18 @@ void
 #if ASYNC
                 await
 #endif
-                    File.ReadAllTextAsync(item, Encoding.Default);
+                    FileAsyncCompat45.ReadAllTextAsync(item, Encoding.Default);
             if (true) //SH.ContainsDiacritic(df2))
             {
 #if ASYNC
                 await
 #endif
-                    File.WriteAllTextAsync(item, df2.RemoveDiacritics());
+                    FileAsyncCompat45.WriteAllTextAsync(item, df2.RemoveDiacritics());
                 df2 = SHReplace.ReplaceOnce(df2, "\u010F\u00BB\u017C", "");
 #if ASYNC
                 await
 #endif
-                    File.WriteAllTextAsync(item, df2);
+                    FileAsyncCompat45.WriteAllTextAsync(item, df2);
             }
         }
     }
@@ -1223,7 +1223,7 @@ void
                     File.Delete(item);
                     continue;
                 }
-                var realNewPath = new string(newpath);
+                var realNewPath = newpath;
                 var insertedCount = 0;
                 while (File.Exists(realNewPath))
                 {
@@ -1960,7 +1960,7 @@ string
 #if ASYNC
             await
 #endif
-                File.ReadAllTextAsync(path);
+                FileAsyncCompat45.ReadAllTextAsync(path);
     }
     /// <summary>
     /// Gets the file name from a path without the extension.
@@ -2964,7 +2964,12 @@ string
                 sourceFilePath = MakeUncLongPath(sourceFilePath);
                 fileTo = MakeUncLongPath(fileTo);
                 if (collisionOption == FileMoveCollisionOption.DontManipulate && File.Exists(fileTo)) return;
+#if NET48
+                if (collisionOption == FileMoveCollisionOption.Overwrite && File.Exists(fileTo)) File.Delete(fileTo);
+                File.Move(sourceFilePath, fileTo);
+#else
                 File.Move(sourceFilePath, fileTo, collisionOption == FileMoveCollisionOption.Overwrite);
+#endif
             }
             catch (Exception ex)
             {
@@ -3663,7 +3668,7 @@ string
     /// <param name="content">The content parameter.</param>
     public static async Task WriteAllText(string path, string content)
     {
-        await File.WriteAllTextAsync(path, content);
+        await FileAsyncCompat45.WriteAllTextAsync(path, content);
     }
     /// <summary>
     /// Determines if all paths in the list are in the same folder.
@@ -4676,7 +4681,7 @@ bool
 #if ASYNC
                     await
 #endif
-                        File.ReadAllTextAsync(selectedFile);
+                        FileAsyncCompat45.ReadAllTextAsync(selectedFile);
             }
             catch (Exception ex)
             {

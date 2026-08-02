@@ -33,7 +33,11 @@ public class FileSystemWatchers
         if (Watch)
         {
 
+#if NET48
+            var changeTypes = (WatcherChangeTypes[])Enum.GetValues(typeof(WatcherChangeTypes));
+#else
             var changeTypes = Enum.GetValues<WatcherChangeTypes>();
+#endif
             foreach (var item in changeTypes)
             {
                 _lastProcessedFile.Add(item, string.Empty);

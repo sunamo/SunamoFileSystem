@@ -359,7 +359,7 @@ internal class FSGetFiles
 #if DEBUG
         if (e.LoadFromFileWhenDebug)
             if (File.Exists(data))
-                File.WriteAllLinesAsync(data, result);
+                FileAsyncCompat45.WriteAllLinesAsync(data, result);
 #endif
         return result;
     }
