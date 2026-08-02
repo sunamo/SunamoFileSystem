@@ -1,8 +1,5 @@
 namespace SunamoFileSystem._sunamo.SunamoInterfaces.Interfaces;
 
-/// <summary>
-/// Interface for text output generator.
-/// </summary>
 internal interface ITextOutputGenerator
 {
     string PrependEveryNoWhite { get; set; }

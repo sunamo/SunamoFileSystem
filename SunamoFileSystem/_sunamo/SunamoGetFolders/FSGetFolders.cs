@@ -1,17 +1,11 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
-internal class FSGetFolders
+public class FSGetFolders
 {
 
 
 
 
-    /// <summary>
-    ///     A3 must be GetFilesArgs, not GetFoldersEveryFolder because is calling from GetFiles
-    /// </summary>
-    /// <param name="folder">The root directory to search in.</param>
-    /// <param name="list">The list to populate with found folder paths.</param>
-    /// <param name="e">Optional arguments for controlling folder retrieval behavior.</param>
     private static void GetFoldersEveryFolder(string folder, List<string> list, GetFilesArgsFS? e = null)
     {
         List<string>? folders = null;
@@ -20,7 +14,6 @@ internal class FSGetFolders
         {
             folders = Directory.GetDirectories(folder).ToList();
             folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
-            //#if DEBUG
             //            if (e.writeToDebugEveryLoadedFolder)
             //            {
             //                DebugLogger.Instance.WriteLine("GetFoldersEveryFolder: " + folder);
@@ -61,13 +54,12 @@ internal class FSGetFolders
         }
     }
 
-    /// <summary>
-    ///     It's always recursive
-    /// </summary>
-    /// <param name="folder">The root directory to search in.</param>
-    /// <param name="e">Optional arguments for controlling folder retrieval behavior.</param>
-    /// <returns>List of all folder paths found recursively.</returns>
-    internal static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
+    public static List<string> GetFoldersEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, GetFilesArgsFS? e = null)
+    {
+        return GetFoldersEveryFolder(folder, e);
+    }
+
+    public static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
     {
         if (e == null) e = new GetFilesArgsFS();
         var list = new List<string>();

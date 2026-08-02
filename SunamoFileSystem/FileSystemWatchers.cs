@@ -1,8 +1,5 @@
 namespace SunamoFileSystem;
 
-/// <summary>
-/// File system watcher for monitoring file changes in multiple directories
-/// </summary>
 public class FileSystemWatchers
 {
     private static readonly bool Watch = false;
@@ -11,20 +8,12 @@ public class FileSystemWatchers
     private readonly Action<string, bool> _onStart;
     private readonly Action<string, bool> _onStop;
 
-    /// <summary>
-    ///     In key are folders (never files), in value instance
-    /// </summary>
+    // In key are folders (never files), in value instance
     private readonly FsWatcherDictionary<string, FileSystemWatcher> _watchers = new();
-
 
     private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFile = new();
     private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFileOld = new();
 
-    /// <summary>
-    /// Initializes a new instance of the FileSystemWatchers class
-    /// </summary>
-    /// <param name="onStart">Action to invoke when file monitoring starts</param>
-    /// <param name="onStop">Action to invoke when file monitoring stops</param>
     public FileSystemWatchers(Action<string, bool> onStart, Action<string, bool> onStop)
     {
         _onStart = onStart;
@@ -32,12 +21,7 @@ public class FileSystemWatchers
 
         if (Watch)
         {
-
-#if NET48
-            var changeTypes = (WatcherChangeTypes[])Enum.GetValues(typeof(WatcherChangeTypes));
-#else
-            var changeTypes = Enum.GetValues<WatcherChangeTypes>();
-#endif
+            var changeTypes = ((WatcherChangeTypes[])Enum.GetValues(typeof(WatcherChangeTypes)));
             foreach (var item in changeTypes)
             {
                 _lastProcessedFile.Add(item, string.Empty);
@@ -46,12 +30,8 @@ public class FileSystemWatchers
         }
     }
 
-    /// <summary>
-    /// Starts monitoring the specified folder for file changes
-    /// Checks whether folder is already being monitored
-    /// Is called from ProcessFile
-    /// </summary>
-    /// <param name="path">The folder path to start monitoring</param>
+    // Checks whether folder is already being monitored
+    // Is called from ProcessFile
     public void Start(string path)
     {
         if (Watch)
@@ -62,7 +42,6 @@ public class FileSystemWatchers
             {
                 var fileSystemWatcher = RegisterSingleFolder(path);
 
-
                 DictionaryHelper.AddOrSet(_watchers, path, fileSystemWatcher);
             }
             else
@@ -72,12 +51,7 @@ public class FileSystemWatchers
         }
     }
 
-    /// <summary>
-    /// Registers a single folder for file system monitoring
-    /// Is called only from Start
-    /// </summary>
-    /// <param name="path">The folder path to register</param>
-    /// <returns>The configured FileSystemWatcher instance</returns>
+    // Is called only from Start
     private FileSystemWatcher RegisterSingleFolder(string path)
     {
         if (Watch)
@@ -106,11 +80,6 @@ public class FileSystemWatchers
         return _fileSystemWatcher;
     }
 
-    /// <summary>
-    /// Stops monitoring the specified folder
-    /// </summary>
-    /// <param name="path">The folder path to stop monitoring</param>
-    /// <param name="isFromFileSystemWatcher">Indicates if this was called from FileSystemWatcher event</param>
     public void Stop(string path, bool isFromFileSystemWatcher = false)
     {
         if (Watch)
@@ -125,9 +94,6 @@ public class FileSystemWatchers
         }
     }
 
-    /// <summary>
-    /// Handles file rename events
-    /// </summary>
     private void FileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
     {
         if (Watch)
@@ -166,9 +132,6 @@ public class FileSystemWatchers
         }
     }
 
-    /// <summary>
-    /// Handles file change events
-    /// </summary>
     private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
     {
         if (Watch)
@@ -176,7 +139,6 @@ public class FileSystemWatchers
             if (_lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
             _lastProcessedFile[e.ChangeType] = e.FullPath;
-
 
             if (File.Exists(e.FullPath))
             {
@@ -186,9 +148,6 @@ public class FileSystemWatchers
         }
     }
 
-    /// <summary>
-    /// Handles file deletion events
-    /// </summary>
     private void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
     {
         if (Watch)
@@ -196,7 +155,6 @@ public class FileSystemWatchers
             if (_lastProcessedFile[e.ChangeType] == e.FullPath) return;
 
             _lastProcessedFile[e.ChangeType] = e.FullPath;
-
 
             _onStop.Invoke(e.FullPath, true);
         }
