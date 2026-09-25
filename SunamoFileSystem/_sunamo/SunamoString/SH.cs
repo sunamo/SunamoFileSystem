@@ -8,22 +8,8 @@ internal class SH
         return text;
     }
 
-    /// <summary>
-    /// Wraps text with quote marks if needed.
-    /// </summary>
-    /// <param name="text">The text to wrap</param>
-    /// <returns>Text wrapped with quote marks</returns>
-    internal static string WrapWithQm(string text)
-    {
-        return WrapWithQm(text, true);
-    }
+    internal static string WrapWithQm(string text) => WrapWithQm(text, true);
 
-    /// <summary>
-    /// Wraps text with quote marks if needed.
-    /// </summary>
-    /// <param name="text">The text to wrap</param>
-    /// <param name="forceNotIncludeQm">Force not to include quote marks</param>
-    /// <returns>Text wrapped with quote marks if needed</returns>
     internal static string WrapWithQm(string text, bool? forceNotIncludeQm)
     {
         if (text.Contains(" ") && !forceNotIncludeQm.GetValueOrDefault()) return WrapWithQm(text);
@@ -31,22 +17,11 @@ internal class SH
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static string WrapWith(string text, string wrapper)
-    {
-        return wrapper + text + wrapper;
-    }
+    internal static string WrapWith(string text, string wrapper) => wrapper + text + wrapper;
 
     internal static int OccurencesOfStringIn(string text, string searchString)
-    {
-        return text.Split(new[] { searchString }, StringSplitOptions.None).Length - 1;
-    }
+        => text.Split(new[] { searchString }, StringSplitOptions.None).Length - 1;
 
-    /// <summary>
-    /// Checks if text contains a substring (supports negation with ! prefix).
-    /// </summary>
-    /// <param name="text">The text to search in</param>
-    /// <param name="contains">The substring to search for (prefix with ! for negation)</param>
-    /// <returns>True if contained (or not contained with negation)</returns>
     internal static bool IsContained(string text, string contains)
     {
         var (negation, contains2) = IsNegationTuple(contains);
@@ -83,7 +58,6 @@ internal class SH
     //    internal static Func<string, string> TextWithoutDiacritic;
     //    internal static Func<string, string> WrapWithQm;
     //    internal static Func<string, string, string, string> ReplaceOnce;
-    //    internal static Func<string, string, bool> IsContained;
     //    internal static Func<string, bool, bool, bool> ContainsOnlyCase;
 
     //    internal static Func<string, char[], bool> IsNumber;
@@ -117,10 +91,4 @@ internal class SH
         var substring = text.Substring(1);
         return text[0].ToString().ToUpper() + substring;
     }
-
-
-
-
-
-
 }

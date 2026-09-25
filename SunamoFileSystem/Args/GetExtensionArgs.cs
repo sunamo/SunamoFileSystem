@@ -1,18 +1,11 @@
 namespace SunamoFileSystem.Args;
 
-/// <summary>
-/// Arguments for getting file extension
-/// In original version exists only ReturnOriginalCase
-/// </summary>
+// In original version exists only ReturnOriginalCase
 public class GetExtensionArgs
 {
-    /// <summary>
-    /// If true, returns extension with original casing; otherwise returns lowercase
-    /// </summary>
+    // If true, returns extension with original casing; otherwise returns lowercase
     public bool ReturnOriginalCase { get; set; } = false;
 
-    /// <summary>
-    /// If true, files without extension are returned as-is; otherwise returns empty string
-    /// </summary>
+    // If true, files without extension are returned as-is; otherwise returns empty string
     public bool FilesWithoutExtensionReturnAsIs { get; set; } = false;
 }

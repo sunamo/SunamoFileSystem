@@ -1,8 +1,5 @@
 namespace SunamoFileSystem._sunamo;
 
-/// <summary>
-/// Service for letter and digit character collections
-/// </summary>
 internal class LetterAndDigitCharService
 {
     internal List<char> AllCharsWithoutSpecial = new();

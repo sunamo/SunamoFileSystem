@@ -1,26 +1,13 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
-internal class FSGetFiles
+public class FSGetFiles
 {
-    /// <summary>
-    ///     Non recursive
-    /// </summary>
-    /// <param name="folder">The directory path to search in.</param>
-    /// <param name="fileExt">The file extension to filter by.</param>
-    /// <returns>List of file paths with the specified extension.</returns>
     internal static List<string> FilesOfExtension(string folder, string fileExt)
     {
         return GetFiles(folder, "*." + fileExt, SearchOption.TopDirectoryOnly);
     }
 
 
-    /// <summary>
-    ///     Keys returns with normalized ext
-    ///     In case zero files of ext wont be included in dict
-    /// </summary>
-    /// <param name="folderFrom">The directory path to search in.</param>
-    /// <param name="extensions">The file extensions to filter by.</param>
-    /// <returns>Dictionary mapping normalized extensions to their file paths.</returns>
     internal static Dictionary<string, List<string>> FilesOfExtensions(string folderFrom, params string[] extensions)
     {
         var dict = new Dictionary<string, List<string>>();
@@ -34,28 +21,19 @@ internal class FSGetFiles
         return dict;
     }
 
-    /// <summary>
-    /// Gets files from the specified directory with the specified search pattern and search option
-    /// </summary>
-    /// <param name="folder">The directory path to search in</param>
-    /// <param name="searchPattern">The search pattern to match against file names</param>
-    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories</param>
-    /// <returns>List of file paths matching the search criteria</returns>
     internal static List<string> GetFiles(string folder, string searchPattern, SearchOption searchOption)
     {
         return Directory.GetFiles(folder, searchPattern, searchOption).ToList();
     }
 
 
-    /// <summary>
-    ///     In item1 is all directories, in Item2 all files
-    /// </summary>
-    /// <param name="folder">The root directory to search in.</param>
-    /// <param name="mask">The file search pattern mask.</param>
-    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories.</param>
-    /// <param name="e">Optional arguments for controlling the file retrieval behavior.</param>
-    /// <returns>List of file paths found, or null if the file count exceeds the limit.</returns>
-    internal static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
+    public static List<string> GetFilesEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, string mask, SearchOption searchOption,
+        GetFilesEveryFolderArgsFS? e = null)
+    {
+        return GetFilesEveryFolder(folder, mask, searchOption, e) ?? new List<string>();
+    }
+
+    public static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
         GetFilesEveryFolderArgsFS? e = null)
     {
 
@@ -79,9 +57,6 @@ internal class FSGetFiles
         }
 
         dirs = FSGetFolders.GetFoldersEveryFolder(folder, new GetFoldersEveryFolderArgs(e)).ToList();
-#if DEBUG
-        //int before = dirs.Count;
-#endif
         if (e.FilterFoundedFolders != null)
         {
             for (var i = dirs.Count - 1; i >= 0; i--)
@@ -93,9 +68,6 @@ internal class FSGetFiles
                 if (!e.FilterFoundedFolders.Invoke(si)) dirs.RemoveAt(i);
             }
         }
-#if DEBUG
-        //int after = dirs.Count;
-#endif
 
         #region MyRegion
 
@@ -135,9 +107,7 @@ internal class FSGetFiles
         {
             try
             {
-#if ASYNC
                 //TF.WaitD();
-#endif
                 //data.Clear();
                 var f = GetFiles(item, mask, SearchOption.TopDirectoryOnly);
                 data.AddRange(f);
@@ -156,19 +126,10 @@ internal class FSGetFiles
             }
 
             if (e.UseProgressBar) e.DoneOnePercent!();
-#if DEBUG
-            //before = data.Count;
-#endif
             if (e.FilterFoundedFiles != null)
                 for (var i = data.Count - 1; i >= 0; i--)
                     if (!e.FilterFoundedFiles(data[i]))
                         data.RemoveAt(i);
-#if DEBUG
-            //after = data.Count;
-            //if (before != 0 && after == 0)
-            //{
-            //}
-#endif
             list.AddRange(data);
             data.Clear();
         }
@@ -193,25 +154,9 @@ internal class FSGetFiles
 
 
 
-    /// <summary>
-    ///     When is occur Access denied exception, use GetFilesEveryFolder, which find files in every folder
-    ///     A1 have to be with ending backslash
-    ///     A4 must have underscore otherwise is suggested while I try type true
-    ///     A2 can be delimited by semicolon. In case more extension use GetFilesOfExtensions
-    /// </summary>
-    /// <param name="folder2">The directory path to search in, can be semicolon-delimited.</param>
-    /// <param name="mask">The file search pattern mask, can be semicolon or comma-delimited.</param>
-    /// <param name="searchOption">Specifies whether to search the current directory or all subdirectories.</param>
-    /// <param name="a">Optional arguments for controlling file retrieval behavior.</param>
-    /// <returns>List of file paths matching the search criteria.</returns>
     internal static List<string> GetFiles(string folder2, string mask, SearchOption searchOption,
         GetFilesArgsFS? a = null)
     {
-#if DEBUG
-        if (folder2.TrimEnd('\\') == @"\monoConsoleSqlClient")
-        {
-        }
-#endif
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
             //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
@@ -291,18 +236,6 @@ internal class FSGetFiles
         GetFilesMoreMascArgs? e = null)
     {
         if (e == null) e = new GetFilesMoreMascArgs();
-#if DEBUG
-        string? data = null;
-        if (e.LoadFromFileWhenDebug)
-        {
-            var text = FS.ReplaceInvalidFileNameChars(string.Join(path, masc, searchOption));
-            //d = AppData.ci.GetFile(AppFolders.Cache, "GetFilesMoreMasc" + text + ".txt");
-            //if (File.Exists(data))
-            //{
-            //    return File.ReadAllText(path).ToList();
-            //}
-        }
-#endif
         var count = ",";
         var sc = ";";
         var result = new List<string>();
@@ -356,11 +289,6 @@ internal class FSGetFiles
 
         if (result.Count > 0) result[0] = SH.FirstCharUpper(result[0]);
         CAChangeContent.ChangeContent0(null, result, SH.FirstCharUpper);
-#if DEBUG
-        if (e.LoadFromFileWhenDebug)
-            if (File.Exists(data))
-                File.WriteAllLinesAsync(data, result);
-#endif
         return result;
     }
 
@@ -399,11 +327,6 @@ internal class FSGetFiles
         if (a.ExcludeWithMethod != null) a.ExcludeWithMethod.Invoke(list);
     }
 
-    /// <summary>
-    ///     No recursive, all extension
-    /// </summary>
-    /// <param name="path">The directory path to search in.</param>
-    /// <returns>List of all files in the directory.</returns>
     internal static List<string> GetFiles(string path)
     {
         return GetFiles(path, "*", SearchOption.TopDirectoryOnly);

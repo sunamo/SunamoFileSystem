@@ -1,13 +1,8 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders.Args;
 
-/// <summary>
-/// Arguments for getting folders from every folder recursively
-/// </summary>
 internal class GetFoldersEveryFolderArgs : GetFilesArgsFS
 {
-    /// <summary>
-    /// Auto call WithEndSlash
-    /// </summary>
+    // Auto call WithEndSlash
     internal new bool TrimFirstPathAndLeadingBackslashes;
 
     internal new List<string>? ExcludeFromLocationsContains = null;

@@ -1,8 +1,5 @@
 namespace SunamoFileSystem._sunamo;
 
-/// <summary>
-/// Service for whitespace character collections
-/// </summary>
 internal class WhitespaceCharService
 {
     internal List<char> WhiteSpaceChars = new();
