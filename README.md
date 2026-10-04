@@ -1,5 +1,10 @@
 # SunamoFileSystem
 
+## Short description
+
+Rozsáhlá knihovna pro práci se souborovým systémem v .NET.
+
+
 Overall working with filesystem
 
 ## Overview
