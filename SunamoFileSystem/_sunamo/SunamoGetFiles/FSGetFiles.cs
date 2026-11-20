@@ -45,7 +45,7 @@ public class FSGetFiles
         // There is not exc handle needed, its slowly then
         if (e.UseProgressBarTime)
         {
-            var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
+            var message = "Loading" + " " + "FoldersTree" + "...";
             e.InsertProgressBarTime!(60);
             e.UpdateProgressBarText!(message);
         }
@@ -67,7 +67,7 @@ public class FSGetFiles
 
         if (e.UseProgressBar)
         {
-            var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
+            var message = "Loading" + " " + "FilesTree" + "...";
             e.InsertProgressBar!(dirs.Count);
             e.UpdateProgressBarText!(message);
         }

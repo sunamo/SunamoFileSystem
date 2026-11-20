@@ -814,7 +814,7 @@ await FileAsync.ReadAllTextAsync(item);
                     var newFn = to + " (" + serie + ")";
                     if (!Directory.Exists(newFn))
                     {
-                        resultMessage = Translate.FromKey(XlfKeys.FolderHasBeenRenamedTo) + " " + Path.GetFileName(newFn);
+                        resultMessage = "Folder has been renamed to" + " " + Path.GetFileName(newFn);
                         to = newFn;
                         break;
                     }
@@ -876,7 +876,7 @@ await FileAsync.ReadAllTextAsync(item);
     }
     public static void DeleteDuplicatedImages(List<string> files)
     {
-        throw new Exception(Translate.FromKey(XlfKeys.OnlyForTestFilesForAnotherApps) + ". ");
+        throw new Exception("Only for test files for another apps" + ". ");
     }
     public static void DeleteFilesWithSameContentWorking<TContent, ColType>(List<string> files, Func<string, TContent> readFunc) where TContent : notnull
     {
@@ -2562,10 +2562,10 @@ await FileAsync.ReadAllTextAsync(path);
     {
         // Not working, flags from GeoCachingTool wasnt transfered to standard
 #if NETFX_CORE
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-"Use methods in FS apps");
 #endif
 #if WINDOWS_UWP
-ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-Translate.FromKey(XlfKeys.UseMethodsInFSApps));
+ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-"Use methods in FS apps");
 #endif
         if (directoryPath == @"\\?\" || directoryPath == string.Empty) return false;
         var normalizedPath = MakeUncLongPath(directoryPath);
