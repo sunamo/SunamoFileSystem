@@ -4,10 +4,10 @@ namespace SunamoFileSystem.Tests;
 using SunamoGetFiles._public.SunamoArgs;
 
 /// <summary>
-/// 3 možnosti:
-/// 1/ zabalit do csproj archívy 
+/// 3 options:
+/// 1/ pack the archives into csproj 
 /// 2/ mockovat 
-/// 3/ úplně tyhle testy smazat
+/// 3/ delete these tests entirely
 /// </summary>
 public class FSManipulationWithoutMockTests
 {

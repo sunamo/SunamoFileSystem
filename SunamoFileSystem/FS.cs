@@ -114,11 +114,11 @@ public partial class FS
         foreach (var item in subFolders)
         {
             /*
-Zde mám chybu:
+ I have an error here:
 System.IO.DirectoryNotFoundException: 'Could not find a part of the path
             'E:\vs\Projects\PlatformIndependentNuGetPackages.net\Clients\node_modules\napi-wasm'.'
-            to musí být nějaká <|>, protože zde se mi to má dostat jen při sunamo nebo swod
-            nikoliv při sunamo.net
+            it must be some <|>, because here it should get only for sunamo or swod
+            not for sunamo.net
             */
             var subf = Directory.GetDirectories(item, folderName, SearchOption.TopDirectoryOnly).ToList();
             if (subf.Count == 1) result.Add(item);
@@ -162,8 +162,8 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     }
     public static string InsertBetweenFileNameAndExtension(string orig, string whatInsert)
     {
-        // Cesta by se zde hodila kvůli FS.CiStorageFile
-        // nicméně StorageFolder nevím zda se používá, takže to bude umět i bez toho
+        // The path would be useful here because of FS.CiStorageFile
+        // however I do not know whether StorageFolder is used, so it will work even without it
         var origS = orig;
         var fn = Path.GetFileNameWithoutExtension(origS);
         var element = GetExtension(origS);
@@ -187,8 +187,8 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
 
 
 
-    //    // Cesta by se zde hodila kvůli FS.CiStorageFile
-    //    // nicméně StorageFolder nevím zda se používá, takže to bude umět i bez toho
+    //    // The path would be useful here because of FS.CiStorageFile
+    //    // however I do not know whether StorageFolder is used, so it will work without it too
     public static string GetExtension(string value, GetExtensionArgs? args = null)
     {
         if (args == null) args = new GetExtensionArgs();
@@ -264,7 +264,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
             Path.GetFullPath(Path.Combine(Path.GetDirectoryName(fullPathToSecondFile)!, relativePath));
         return fullPathToFirstFile;
     }
-    // Proč to volám zde? Má se to volat value aplikacích kde to potřebuji
+    // Why do I call it here? It should be called in the applications where I need it
     //    // Must call Initialize here, not in Loaded of Window. when I run auto code in debug, it wont be initialized as is needed.
     public static string AbsoluteFromCombinePath(string path)
     {
@@ -450,7 +450,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     {
         var path = (ReplaceInAllFilesArgs)args;
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
-        // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
+        // I have to split it into individual variables to see what is used and what is not. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
         var fasterMethodForReplacing = path.FasterMethodForReplacing;
         var files = path.Files;
         var inDownloadedFolders = path.InDownloadedFolders;
@@ -518,7 +518,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
             Func<string, bool> EncodingHelperIsBinary)
     {
         #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
-        // musím to rozdělit na jednotlivé proměnné abych viděl co se používá a co ne. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
+        // I have to split it into individual variables to see what is used and what is not. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
         var fasterMethodForReplacing = args.FasterMethodForReplacing;
         var files = args.Files;
         var inDownloadedFolders = args.InDownloadedFolders;
@@ -622,9 +622,9 @@ await FileAsync.ReadAllTextAsync(item);
     public static string ShrinkLongPath(string actualFilePath)
     {
         // .NET 4.7.1
-        // Originally - 265 chars, 254 also too long: element:\Documents\vs\Projects\Recovered data 03-23 12_11_44\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - před odstraněním stejných souborů z duplicitních projektů\vs\Projects\merge-obří temp\temp1\temp\Facebook.cs
-        // 4+265 - OK: @"\\?\D:\_NewlyRecovered\Visual Studio 2020\Projects\vs\Projects\Recovered data 03-23 12_11_44\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - před odstraněním stejných souborů z duplicitních projektů\vs\Projects\merge-obří temp\temp1\temp\Facebook.cs"
-        // 216 - OK: data:\Recovered data 03-23 12_11_44012345678901234567890123456\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - před odstraněním stejných souborů z duplicitních projektů\vs\Projects\merge-obří temp\temp1\temp\
+        // Originally - 265 chars, 254 also too long: element:\Documents\vs\Projects\Recovered data 03-23 12_11_44\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - before removing identical files from duplicate projects\vs\Projects\merge-huge temp\temp1\temp\Facebook.cs
+        // 4+265 - OK: @"\\?\D:\_NewlyRecovered\Visual Studio 2020\Projects\vs\Projects\Recovered data 03-23 12_11_44\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - before removing identical files from duplicate projects\vs\Projects\merge-giant temp\temp1\temp\Facebook.cs"
+        // 216 - OK: data:\Recovered data 03-23 12_11_44012345678901234567890123456\Deep Scan result\Lost Partition1(NTFS)\Other lost files\c# projects - before removing identical files from duplicate projects\vs\Projects\merge-giant temp\temp1\temp\
         // for many API is different limits: https://stackoverflow.com/questions/265769/maximum-filename-length-in-ntfs-windows-xp-and-windows-vista
         // 237+11 - bad
         return @"\\?\" + actualFilePath;
@@ -1583,7 +1583,7 @@ await FileAsync.ReadAllTextAsync(path);
     public static string GetSizeInAutoString(double value, ComputerSizeUnits fromUnit)
     {
         if (fromUnit != ComputerSizeUnits.B)
-            // Získám hodnotu value bytech
+            // I get the value in bytes
             value = ConvertToSmallerComputerUnitSize(value, fromUnit, ComputerSizeUnits.B);
         if (value < 1024) return value + " B";
         var previous = value;
@@ -1761,7 +1761,7 @@ await FileAsync.ReadAllTextAsync(path);
         sourceFilePath = @"\\?\" + sourceFilePath;
         MakeUncLongPath(ref fileTo);
         CreateUpfoldersPsysicallyUnlessThere(fileTo);
-        // Toto tu je důležité, nevím který kokot to zakomentoval
+        // This is important here, I do not know who commented it out
         if (File.Exists(fileTo))
         {
             if (collisionOption == FileMoveCollisionOption.AddFileSize)
@@ -1832,7 +1832,7 @@ await FileAsync.ReadAllTextAsync(path);
         }
         catch (Exception)
         {
-            // Například příliš dlouhý název souboru
+            // For example too long a file name
             return 0;
         }
         if (fi.Exists) return fi.Length;
@@ -1904,7 +1904,7 @@ await FileAsync.ReadAllTextAsync(path);
                     var pr = FileUtilWhoIsLocking(jsFiles, true);
                     foreach (var item in pr) item.Kill();
                 }
-                // Používá se i ve web, musel bych tam includovat spoustu metod
+                // It is also used in the web, I would have to include a lot of methods there
                 try
                 {
                     File.Copy(jsFiles, value, true);
@@ -1932,7 +1932,7 @@ await FileAsync.ReadAllTextAsync(path);
     public static DateTime LastModified(string rel)
     {
         if (File.Exists(rel)) return File.GetLastWriteTime(rel);
-        // FileInfo mi držel soubor a vznikali chyby The process cannot access the file
+        // FileInfo held the file and errors occurred: The process cannot access the file
         return DateTime.MinValue;
     }
     public static bool TryDeleteDirectoryOrFile(string value)
@@ -2029,7 +2029,7 @@ await FileAsync.ReadAllTextAsync(path);
         }
         catch (Exception)
         {
-            // Je to try takže nevím co tu dělá tohle a
+            // It is a try so I do not know what this and a do here
         }
         var files = FSGetFiles.GetFiles(value, "*", SearchOption.AllDirectories);
         foreach (var item in files) File.SetAttributes(item, FileAttributes.Normal);
@@ -2254,7 +2254,7 @@ await FileAsync.ReadAllTextAsync(path);
 
     public static string GetDirectoryName(string path)
     {
-        // Zde zároveň vyhazuji výjimky
+        // I also throw exceptions here
         var deli = DetectPathDelimiterChar(path);
         if (string.IsNullOrEmpty(path)) ThrowEx.IsNullOrEmpty("path", path);
         if (!IsWindowsPathFormat(path)) ThrowEx.IsNotWindowsPathFormat("path", path, true, FS.IsWindowsPathFormat);
@@ -2304,7 +2304,7 @@ await FileAsync.ReadAllTextAsync(path);
     {
         if (!path.StartsWith(@"\\?\"))
         {
-            // value ASP.net mi vrátilo u každé directory.exists false. Byl jsem pod ApplicationPoolIdentity value IIS a bylo nastaveno Full Control pro IIS AppPool\DefaultAppPool
+            // value ASP.net returned directory.exists false for every directory. I was under ApplicationPoolIdentity value IIS and Full Control was set for IIS AppPool\DefaultAppPool
         }
         return path;
     }
@@ -2355,7 +2355,7 @@ await FileAsync.ReadAllTextAsync(path);
     }
     //        #region
     //        #endregion
-    //                // Získám hodnotu value bytech
+    //                // I get the value in bytes
     //        /// <summary>
     //        /// Create all upfolders of A1 with, if they dont exist
     //        /// </summary>
@@ -2372,9 +2372,9 @@ await FileAsync.ReadAllTextAsync(path);
     //        /// Change falseIfSizeZeroOrEmpty = false. Its extremely resource intensive
     //        /// </summary>
     //#endif
-    //                    // Musím to kontrolovat jen když je to tmp, logicky
-    //                            // Měl jsem tu chybu že ač exists bylo true, File.ReadAllText selhalo protože soubor neexistoval.
-    //                            // Vyřešil jsem to kontrolou přípony, snad
+    //                    // I only need to check it when it is tmp, logically
+    //                            // I had a bug where, although exists was true, File.ReadAllText failed because the file did not exist.
+    //                            // I solved it by checking the extension, hopefully
     //    // Cant return with end slash becuase is working also with files
 
 
@@ -2388,7 +2388,7 @@ await FileAsync.ReadAllTextAsync(path);
 
     //
     //        /// <summary>
-    //        /// Vrátí cestu a název souboru bez ext a ext
+    //        /// Returns the path and the file name without ext and the ext
     //        /// All returned is normal case
     //        /// </summary>
     //        /// <param name="fn"></param>
@@ -2453,7 +2453,7 @@ await FileAsync.ReadAllTextAsync(path);
         {
             fullPath = fullPath.Substring(directory.Length);
         }
-        // Nejdříve ořežu všechny přípony a to i tehdy, má li soubor více přípon
+        // First I trim all extensions, even if the file has multiple extensions
         if (serieStyle == SerieStyleFS.Brackets || serieStyle == SerieStyleFS.All)
             while (true)
             {
@@ -2593,7 +2593,7 @@ ThrowEx.IsNotAvailableInUwpWindowsStore(type, Exceptions.CallingMethod(), "  "+-
         {
             if (!exists) return false;
             var ext = Path.GetExtension(selectedFile).ToLower();
-            // Musím to kontrolovat jen když je to tmp, logicky
+            // I have to check it only when it is tmp, logically
             if (ext == ".tmp") return false;
             var content = string.Empty;
             try
@@ -2606,8 +2606,8 @@ await FileAsync.ReadAllTextAsync(selectedFile);
                 if (ex.Message.StartsWith("The process cannot access the file")) return true;
             }
             if (content == string.Empty)
-                // Měl jsem tu chybu že ač exists bylo true, File.ReadAllTextAsync selhalo protože soubor neexistoval.
-                // Vyřešil jsem to kontrolou přípony, snad
+                // I had a bug where even though exists was true, File.ReadAllTextAsync failed because the file did not exist.
+                // I solved it by checking the extension, hopefully
                 return false;
         }
         return exists;
@@ -2657,7 +2657,7 @@ await FileAsync.ReadAllTextAsync(selectedFile);
         catch (DirectoryNotFoundException)
         {
             files = new FileInfo[0];
-            //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api a zbylé složky value něm jsou junctiony které ale ztratily svůj cíl
+            // System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api and the remaining folders in it are junctions that lost their target
         }
         foreach (var fileInfo in files) size += fileInfo.Length;
         // Add subdirectory sizes.
@@ -2669,7 +2669,7 @@ await FileAsync.ReadAllTextAsync(selectedFile);
         catch (DirectoryNotFoundException)
         {
             subdirectories = new DirectoryInfo[0];
-            //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api a zbylé složky value něm jsou junctiony které ale ztratily svůj cíl
+            // System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\repos\EOM-7\Marvin\Module.VBtO\Clients\node_modules\@vbto\api'.' - api and the remaining folders in it are junctions that lost their target
         }
         foreach (var subdirectory in subdirectories) size += GetFolderSize(subdirectory);
         return size;

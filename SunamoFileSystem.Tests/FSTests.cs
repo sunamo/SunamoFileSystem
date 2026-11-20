@@ -57,10 +57,10 @@ public partial class FSTests
     [Fact]
     public void DeleteAllEmptyDirectoriesTest()
     {
-        // Jen takhle to funguje. Extrahovat tím že se složka sama vytvoří nejde.
+        // Only this way it works. Extracting it by having the folder create itself is not possible.
         var path = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoFileSystem\DeleteAllEmptyDirectoriesTest.zip";
         var p2 = Path.Combine(Path.GetDirectoryName(path)!, Path.GetFileNameWithoutExtension(path));
-        // extract pomocí System.IO.Compression
+        // extract using System.IO.Compression
         ZipFile.ExtractToDirectory(path, p2!);
         FS.DeleteAllEmptyDirectories(p2, ".stfolder");
     }

@@ -54,7 +54,7 @@ public class FSGetFolders
     {
         if (e == null) e = new GetFilesArgsFS();
         var list = new List<string>();
-        // zde progress bar nedává smysl. načítám to rekurzivně, tedy nevím na začátku kolik těch složek bude
+        // a progress bar makes no sense here. I load it recursively, so I do not know at the start how many folders there will be
         GetFoldersEveryFolder(folder, list, e);
         if (e.TrimFirstPathAndLeadingBackslashes)
             for (var i = 0; i < list.Count; i++)

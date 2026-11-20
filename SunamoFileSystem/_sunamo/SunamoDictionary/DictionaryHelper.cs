@@ -1,6 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoDictionary;
 
-// potřebuji celý SunamoDictionary nuget kvůli genericitě
+// I need the whole SunamoDictionary nuget because of genericity
 internal class DictionaryHelper
 {
     internal static void AddOrSet<T1, T2>(IDictionary<T1, T2> dictionary, T1 key, T2 value) where T1 : notnull

@@ -38,8 +38,8 @@ public class FSGetFiles
     {
 
         if (e == null) e = new GetFilesEveryFolderArgsFS();
-        // TODO: některé soubory vrací vícekrát. toto je workaround než zjistím proč
-        // TODO: je důležité se toho zbavit co nejdříve protože při načítání to zbytečně zpomaluje
+        // TODO: some files are returned multiple times. this is a workaround until I find out why
+        // TODO: it is important to get rid of this as soon as possible because it needlessly slows down loading
         var list = new List<string>();
         List<string>? dirs = null;
         // There is not exc handle needed, its slowly then
@@ -179,7 +179,7 @@ public class FSGetFiles
                     if (ex.Message.StartsWith(NetFxExceptionsNotTranslateAble
                             .TheNameOfTheFileCannotBeResolvedByTheSystem))
                     {
-                        // Nesmysl, celou dobu musím vědět text čím pracuji
+                        // Nonsense, I must know the text I am working with all the time
                     }
 
                     ThrowEx.Custom(ex);
