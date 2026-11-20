@@ -15,7 +15,6 @@ global using SunamoFileSystem._sunamo.SunamoExceptions;
 global using SunamoFileSystem._sunamo.SunamoGetFiles;
 global using SunamoFileSystem._sunamo.SunamoGetFolders;
 global using SunamoFileSystem._sunamo.SunamoGetFolders.Args;
-global using SunamoFileSystem._sunamo.SunamoLang.SunamoI18N;
 global using SunamoFileSystem._sunamo.SunamoString;
 global using SunamoFileSystem._sunamo.SunamoStringGetLines;
 global using SunamoFileSystem._sunamo.SunamoStringParts;
