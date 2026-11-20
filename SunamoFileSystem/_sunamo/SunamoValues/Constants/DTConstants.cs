@@ -25,41 +25,41 @@ internal class DTConstants
     internal static readonly DateTime UnixFsStart = new(YearStartUnixDate, 1, 1);
 
     internal static readonly List<string> DaysInWeekCS = new()
-        { Pondeli, Utery, Streda, Ctvrtek, Patek, Sobota, Nedele };
+        { MondayCs, TuesdayCs, WednesdayCs, ThursdayCs, FridayCs, SaturdayCs, SundayCs };
 
     internal static DateTime UnixTimeStartEpoch = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
     internal static DateTime WinTimeStartEpoch = new(1601, 1, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     internal static readonly List<string> MonthsInYearCZ = new()
-        { Leden, Unor, Brezen, Duben, Kveten, Cerven, Cervenec, Srpen, Zari, Rijen, Listopad, Prosinec };
+        { JanuaryCs, FebruaryCs, MarchCs, AprilCs, MayCs, JuneCs, JulyCs, AugustCs, SeptemberCs, OctoberCs, NovemberCs, DecemberCs };
 
     #region Days in week (Czech names)
 
-    internal const string Pondeli = "Pondělí";
-    internal const string Utery = "Úterý";
-    internal const string Streda = "Středa";
-    internal const string Ctvrtek = "Čtvrtek";
-    internal const string Patek = "Pátek";
-    internal const string Sobota = "Sobota";
-    internal const string Nedele = "Neděle";
+    internal const string MondayCs = "Pondělí";
+    internal const string TuesdayCs = "Úterý";
+    internal const string WednesdayCs = "Středa";
+    internal const string ThursdayCs = "Čtvrtek";
+    internal const string FridayCs = "Pátek";
+    internal const string SaturdayCs = "Sobota";
+    internal const string SundayCs = "Neděle";
 
     #endregion
 
     #region Months in year (Czech names)
 
-    internal const string Leden = "Leden";
-    internal const string Unor = "Únor";
-    internal const string Brezen = "Březen";
-    internal const string Duben = "Duben";
-    internal const string Kveten = "Květen";
-    internal const string Cerven = "Červen";
-    internal const string Cervenec = "Červenec";
-    internal const string Srpen = "Srpen";
-    internal const string Zari = "Září";
-    internal const string Rijen = "Říjen";
-    internal const string Listopad = "Listopad";
-    internal const string Prosinec = "Prosinec";
+    internal const string JanuaryCs = "Leden";
+    internal const string FebruaryCs = "Únor";
+    internal const string MarchCs = "Březen";
+    internal const string AprilCs = "Duben";
+    internal const string MayCs = "Květen";
+    internal const string JuneCs = "Červen";
+    internal const string JulyCs = "Červenec";
+    internal const string AugustCs = "Srpen";
+    internal const string SeptemberCs = "Září";
+    internal const string OctoberCs = "Říjen";
+    internal const string NovemberCs = "Listopad";
+    internal const string DecemberCs = "Prosinec";
 
     #endregion
 }

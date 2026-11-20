@@ -449,7 +449,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
     private static async Task ReplaceInAllFilesWorker(object args, Func<string, bool> EncodingHelperIsBinary)
     {
         var path = (ReplaceInAllFilesArgs)args;
-        #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
+        #region ReplaceInAllFilesArgsBase - Copy also to ReplaceInAllFilesWorker. See comment below
         // I have to split it into individual variables to see what is used and what is not. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
         var fasterMethodForReplacing = path.FasterMethodForReplacing;
         var files = path.Files;
@@ -517,7 +517,7 @@ System.IO.DirectoryNotFoundException: 'Could not find a part of the path
         ReplaceInAllFiles(IList<string> replaceFrom, IList<string> replaceTo, ReplaceInAllFilesArgsBase args,
             Func<string, bool> EncodingHelperIsBinary)
     {
-        #region ReplaceInAllFilesArgsBase - Zkopírovat i do ReplaceInAllFilesWorker. Viz comment níže
+        #region ReplaceInAllFilesArgsBase - Copy also to ReplaceInAllFilesWorker. See comment below
         // I have to split it into individual variables to see what is used and what is not. Deconstructing object is not available in .net 48 https://www.faesel.com/blog/deconstruct-objects-in-csharp-like-in-javascript
         var fasterMethodForReplacing = args.FasterMethodForReplacing;
         var files = args.Files;
@@ -2359,7 +2359,7 @@ await FileAsync.ReadAllTextAsync(path);
     //        /// <summary>
     //        /// Create all upfolders of A1 with, if they dont exist
     //        /// </summary>
-    //                    // TODO: Tady to nefunguje pro UWP/UAP apps protoze nemaji pristup k celemu disku. Zjistit co to je UWP/UAP/... a jak value nem ziskat/overit jakoukoliv slozku na disku
+    //                    // TODO: This does not work here for UWP/UAP apps because they have no access to the whole disk. Find out what UWP/UAP/... is and how to get/verify any folder on disk
     //        #region MyRegion
     //        #endregion
     //        /// <summary>
