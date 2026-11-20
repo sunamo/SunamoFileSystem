@@ -29,9 +29,6 @@ internal abstract class CollectionWithoutDuplicatesBase<T>
         c = new List<T>(list.ToList());
     }
 
-    // true = compareWithString
-    // false = !compareWithString
-    // null = allow null (can't compareWithString)
     internal bool? allowNull
     {
         get => _allowNull;

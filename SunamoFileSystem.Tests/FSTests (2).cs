@@ -28,7 +28,6 @@ public partial class FSTests
     [Fact]
     public void RenameNumberedSerieFilesTest()
     {
-        //FS.RenameNumberedSerieFiles;
     }
 
     [Fact]
@@ -49,7 +48,6 @@ public partial class FSTests
     [Fact]
     public void GetExtensionTest()
     {
-        //var builder = FS.GetExtension(".babelrc");
 
         var count = FS.GetExtension(".eslintrc_fromVbto");
 

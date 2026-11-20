@@ -42,13 +42,7 @@ public class FSGetFiles
         // TODO: je důležité se toho zbavit co nejdříve protože při načítání to zbytečně zpomaluje
         var list = new List<string>();
         List<string>? dirs = null;
-        //if (measureTime)
-        //{
-        //    //StopwatchStatic.Start();
-        //}
         // There is not exc handle needed, its slowly then
-        //try
-        //{
         if (e.UseProgressBarTime)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FoldersTree) + "...";
@@ -62,32 +56,15 @@ public class FSGetFiles
             for (var i = dirs.Count - 1; i >= 0; i--)
             {
                 var si = dirs[i];
-                //if (si.Contains(@"\standard\.git"))
-                //{
-                //}
                 if (!e.FilterFoundedFolders.Invoke(si)) dirs.RemoveAt(i);
             }
         }
 
         #region MyRegion
 
-        //ClipboardHelper.SetLines(dirs);
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new Exception(Translate.FromKey(XlfKeys.GetFilesWithPath)+": " + folder);
-        //}
 
         #endregion
 
-        //if (measureTime)
-        //{
-        //    StopwatchStatic.StopAndPrintElapsed("GetFoldersEveryFolder");
-        //}
-        //if (measureTime)
-        //{
-        //    StopwatchStatic.Start();
-        //}
         if (e.UseProgressBar)
         {
             var message = Translate.FromKey(XlfKeys.Loading) + " " + Translate.FromKey(XlfKeys.FilesTree) + "...";
@@ -96,19 +73,11 @@ public class FSGetFiles
         }
 
         var data = new List<string>();
-        //Není třeba, již volám dole e.Done(); / e.DonePartially();
-        //IProgressBarHelper pbh = null;
-        //if (e.progressBarHelper != null)
-        //{
-        //    pbh = e.progressBarHelper.CreateInstance(e.pb, dirs.Count, e.pb);
-        //}
         dirs.Insert(0, folder);
         foreach (var item in dirs)
         {
             try
             {
-                //TF.WaitD();
-                //data.Clear();
                 var f = GetFiles(item, mask, SearchOption.TopDirectoryOnly);
                 data.AddRange(f);
                 if (e.GetNullIfThereIsMoreThanXFiles != -1)
@@ -122,7 +91,6 @@ public class FSGetFiles
             {
                 ThrowEx.Custom(ex);
                 // Not throw exception, it's probably Access denied on Documents and Settings etc
-                //ThrowEx.FileSystemException( ex);
             }
 
             if (e.UseProgressBar) e.DoneOnePercent!();
@@ -136,14 +104,8 @@ public class FSGetFiles
 
         list = list.Distinct().ToList();
         if (e.UseProgressBar) e.Done!();
-        //if (measureTime)
-        //{
-        //    StopwatchStatic.StopAndPrintElapsed("GetFiles");
-        //}
-        //CAChangeContent.ChangeContent0(null, list, d2 => SH.FirstCharUpper(d2));
         for (var i = 0; i < list.Count; i++) list[i] = SH.FirstCharUpper(list[i]);
         if (e.TrimFirstPathAndLeadingBackslashes)
-            //list = CAChangeContent.ChangeContent0(null, list, d3 => d3 = d3.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
                 list[i] = list[i].Replace(folder, "").TrimStart('\\');
         return list;
@@ -158,14 +120,9 @@ public class FSGetFiles
         GetFilesArgsFS? a = null)
     {
         if (!Directory.Exists(folder2) && !folder2.Contains(";"))
-            //ThisApp.Warning(folder2 + "does not exists");
             return new List<string>();
         if (a == null) a = new GetFilesArgsFS();
         var folders = SHSplit.Split(folder2, ";");
-        //if (CA.PostfixIfNotEnding != null)
-        //{
-        //    CA.PostfixIfNotEnding("\"", folders);
-        //}
         for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\') + "\\";
         var list = new List<string>();
         foreach (var folder in folders)
@@ -174,55 +131,12 @@ public class FSGetFiles
             }
             else
             {
-                //Task.Run<>(async () => await FunctionAsync());
-                //var result = Task.Run<List<string>>(async () => await GetFilesMoreMascAsync(folder, mask, searchOption));
-                //return result.Result;
                 var l2 = GetFilesMoreMasc(folder, mask, searchOption,
                     new GetFilesMoreMascArgs { FollowJunctions = a.FollowJunctions });
                 list.AddRange(l2);
 
                 #region Commented
 
-                //if (mask.Contains(";"))
-                //{
-                //    //list = new List<string>();
-                //    var masces = SHSplit.Split(mask, ";");
-                //    foreach (var item in masces)
-                //    {
-                //        var masc = item;
-                //        if (getFilesArgs.useMascFromExtension)
-                //        {
-                //            masc = FS.MascFromExtension(item);
-                //        }
-                //        try
-                //        {
-                //            list.AddRange(GetFilesMoreMasc(folder, masc, searchOption));
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    try
-                //    {
-                //        var folder3 = FS.WithoutEndSlash(folder);
-                //        DirectoryInfo di = new DirectoryInfo(folder3);
-                //        var masc = mask;
-                //        if (getFilesArgs.useMascFromExtension)
-                //        {
-                //            masc = FS.MascFromExtension(mask);
-                //        }
-                //        var files = di.GetFiles(masc, searchOption);
-                //        var files2 = files.Select(data => data.FullName);
-                //        //list.AddRange(GetFiles(folder3, masc, searchOption));
-                //        list.AddRange(files2);
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //    }
-                //}
 
                 #endregion
             }
@@ -249,20 +163,12 @@ public class FSGetFiles
 
         #region Added 27-8-23
 
-        //if (searchOption == SearchOption.AllDirectories)
-        //{
-        //    foreach (var item in masks)
-        //    {
-        //        result.AddRange(GetFiles(path, item, SearchOption.TopDirectoryOnly));
-        //    }
-        //}
 
         #endregion
 
         if (e.DeleteFromDriveWhenCannotBeResolved)
             foreach (var item2 in masks)
             {
-                //if(SH.ContainsOnlyCase())
                 var item = FS.AllIncludeIfOnlyLetters(item2);
                 try
                 {
@@ -274,7 +180,6 @@ public class FSGetFiles
                             .TheNameOfTheFileCannotBeResolvedByTheSystem))
                     {
                         // Nesmysl, celou dobu musím vědět text čím pracuji
-                        //FS.TryDeleteDirectoryOrFile(path);
                     }
 
                     ThrowEx.Custom(ex);
@@ -306,7 +211,6 @@ public class FSGetFiles
             // I want to find files recursively
             foreach (var item in a.ExcludeFromLocationsContains)
                 list = list.Where(data => !data.Contains(item)).ToList();
-        //CA.RemoveWhichContains(list, item, false);
         Dictionary<string, DateTime>? dictLastModified = null;
         var isLastModifiedFromFn = a.LastModifiedFromFn != null;
         if (a.DontIncludeNewest || a.ByDateOfLastModifiedAsc || isLastModifiedFromFn)

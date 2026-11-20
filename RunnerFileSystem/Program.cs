@@ -48,13 +48,6 @@ internal partial class Program
     {
         await Task.Delay(1);
 
-        //FSTests t = new FSTests();
-        //t.RenameDirectoryTest();
-        //t.DeleteAllEmptyDirectoriesTest(false);
-        //t.MoveDirectoryNoRecursiveTest();
-        //t.CombineTest();
-        //t.MoveFileTest();
-        //t.GetFileSerieTest();
 
         FSManipulationWithoutMockTests t = new FSManipulationWithoutMockTests();
         await t.AllExtensionsInFolders();

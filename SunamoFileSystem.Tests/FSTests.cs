@@ -35,7 +35,6 @@ public partial class FSTests
     [Fact]
     public void GetFilesTest()
     {
-        //var data = FSGetFiles.GetFilesEveryFolder(logger, @"E:\vs\Projects\PlatformIndependentNuGetPackages2\_\", "*.cs", SearchOption.AllDirectories, new GetFilesEveryFolderArgs { excludeFromLocationsCOntains = new List<string>([@"\obj\", "de_mo"]) });
     }
     [Fact]
     public void InsertBetweenFileNameAndPathTest()
