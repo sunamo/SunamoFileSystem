@@ -1,4 +1,3 @@
-// variables names: ok
 global using SunamoFileSystem.Tests;
 global using ILogger = Microsoft.Extensions.Logging.ILogger;
 global using Microsoft.Extensions.Logging;

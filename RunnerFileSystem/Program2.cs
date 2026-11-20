@@ -1,4 +1,3 @@
-// variables names: ok
 namespace RunnerFileSystem;
 
 #if NET9_0_OR_GREATER
