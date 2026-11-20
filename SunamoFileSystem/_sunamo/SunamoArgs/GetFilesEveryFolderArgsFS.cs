@@ -1,5 +1,8 @@
 namespace SunamoFileSystem._sunamo.SunamoArgs;
 
+/// <summary>
+/// Represents the get files every folder args FS type.
+/// </summary>
 public class GetFilesEveryFolderArgsFS : GetFilesBaseArgsFS
 {
     internal Action? Done = null;

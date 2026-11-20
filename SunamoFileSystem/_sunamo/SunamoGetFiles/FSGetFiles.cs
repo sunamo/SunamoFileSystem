@@ -1,5 +1,8 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFiles;
 
+/// <summary>
+/// Represents the FS get files type.
+/// </summary>
 public class FSGetFiles
 {
     internal static List<string> FilesOfExtension(string folder, string fileExt)
@@ -27,12 +30,29 @@ public class FSGetFiles
     }
 
 
+    /// <summary>
+    /// Get files every folder.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folder">The folder.</param>
+    /// <param name="mask">The mask.</param>
+    /// <param name="searchOption">The search option.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get files every folder result.</returns>
     public static List<string> GetFilesEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, string mask, SearchOption searchOption,
         GetFilesEveryFolderArgsFS? e = null)
     {
         return GetFilesEveryFolder(folder, mask, searchOption, e) ?? new List<string>();
     }
 
+    /// <summary>
+    /// Get files every folder.
+    /// </summary>
+    /// <param name="folder">The folder.</param>
+    /// <param name="mask">The mask.</param>
+    /// <param name="searchOption">The search option.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get files every folder result.</returns>
     public static List<string>? GetFilesEveryFolder(string folder, string mask, SearchOption searchOption,
         GetFilesEveryFolderArgsFS? e = null)
     {

@@ -1,5 +1,8 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
+/// <summary>
+/// Represents the FS get folders type.
+/// </summary>
 public class FSGetFolders
 {
 
@@ -45,11 +48,24 @@ public class FSGetFolders
         }
     }
 
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folder">The folder.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, GetFilesArgsFS? e = null)
     {
         return GetFoldersEveryFolder(folder, e);
     }
 
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="folder">The folder.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
     {
         if (e == null) e = new GetFilesArgsFS();
