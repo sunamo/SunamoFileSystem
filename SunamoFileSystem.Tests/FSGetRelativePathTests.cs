@@ -1,4 +1,3 @@
-// variables names: ok
 namespace SunamoFileSystem.Tests;
 
 public partial class FSTests
@@ -7,7 +6,7 @@ public partial class FSTests
     [Fact]
     public void GetRelativePathTest()
     {
-        // potřebuji z A1 abych viděl A2
+        // I need from A1 to see A2
         var a1 = @"E:\vs\Projects\EverythingClient\"; //c.csproj
         var a2 = @"E:\vs\Projects\PlatformIndependentNuGetPackages\sunamo\sunamo.csproj";
 

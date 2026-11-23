@@ -1,7 +1,17 @@
 namespace SunamoFileSystem.Services;
 
+/// <summary>
+/// Path format detector service.
+/// </summary>
+/// <param name="logger">The logger.</param>
+/// <returns>The path format detector service result.</returns>
 public class PathFormatDetectorService(ILogger logger)
 {
+    /// <summary>
+    /// Is windows path format.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>The is windows path format result.</returns>
     public bool IsWindowsPathFormat(string path)
     {
         if (string.IsNullOrWhiteSpace(path)) return false;
@@ -16,6 +26,12 @@ public class PathFormatDetectorService(ILogger logger)
     }
 
     // Return true if Windows, false if Unix
+    /// <summary>
+    /// Detect path type.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="logIfIsNotUnixOrWindowsPath">The log if is not unix or windows path.</param>
+    /// <returns>The detect path type result.</returns>
     public bool? DetectPathType(string path, bool logIfIsNotUnixOrWindowsPath = false)
     {
         if (IsWindowsPathFormat(path))

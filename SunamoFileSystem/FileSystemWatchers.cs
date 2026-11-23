@@ -1,5 +1,8 @@
 namespace SunamoFileSystem;
 
+/// <summary>
+/// Represents the file system watchers type.
+/// </summary>
 public class FileSystemWatchers
 {
     private static readonly bool Watch = false;
@@ -14,6 +17,11 @@ public class FileSystemWatchers
     private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFile = new();
     private readonly Dictionary<WatcherChangeTypes, string> _lastProcessedFileOld = new();
 
+    /// <summary>
+    /// Initializes a new instance of the file system watchers class.
+    /// </summary>
+    /// <param name="onStart">The on start.</param>
+    /// <param name="onStop">The on stop.</param>
     public FileSystemWatchers(Action<string, bool> onStart, Action<string, bool> onStop)
     {
         _onStart = onStart;
@@ -32,6 +40,10 @@ public class FileSystemWatchers
 
     // Checks whether folder is already being monitored
     // Is called from ProcessFile
+    /// <summary>
+    /// Start.
+    /// </summary>
+    /// <param name="path">The path.</param>
     public void Start(string path)
     {
         if (Watch)
@@ -80,6 +92,11 @@ public class FileSystemWatchers
         return _fileSystemWatcher;
     }
 
+    /// <summary>
+    /// Stop.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="isFromFileSystemWatcher">The is from file system watcher.</param>
     public void Stop(string path, bool isFromFileSystemWatcher = false)
     {
         if (Watch)

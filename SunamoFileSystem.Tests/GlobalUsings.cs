@@ -1,4 +1,3 @@
-// variables names: ok
 global using Xunit;
 global using Microsoft.Extensions.Logging.Abstractions;
 global using Microsoft.Extensions.Logging;

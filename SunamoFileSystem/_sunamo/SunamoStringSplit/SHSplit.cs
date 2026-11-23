@@ -30,7 +30,6 @@ internal class SHSplit
             else
             {
                 stringBuilder.Insert(0, chars[i]);
-                //stringBuilder.Append(chars[i]);
             }
 
         var remainingText = stringBuilder.ToString();

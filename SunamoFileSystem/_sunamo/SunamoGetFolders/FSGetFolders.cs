@@ -1,5 +1,8 @@
 namespace SunamoFileSystem._sunamo.SunamoGetFolders;
 
+/// <summary>
+/// Represents the FS get folders type.
+/// </summary>
 public class FSGetFolders
 {
 
@@ -14,17 +17,12 @@ public class FSGetFolders
         {
             folders = Directory.GetDirectories(folder).ToList();
             folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
-            //            if (e.writeToDebugEveryLoadedFolder)
-            //            {
-            //                DebugLogger.Instance.WriteLine("GetFoldersEveryFolder: " + folder);
-            //            }
             //#endif
         }
         catch (Exception ex)
         {
             ThrowEx.Custom(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
 
         if (folders != null)
@@ -32,9 +30,6 @@ public class FSGetFolders
             CA.RemoveWhichContainsList(folders, e!.ExcludeFromLocationsContains, e.Wildcard);
             list.AddRange(folders);
             for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(folders[i], list, e);
-            //foreach (var item in folders)
-            //{
-            //}
         }
     }
 
@@ -50,25 +45,32 @@ public class FSGetFolders
         {
             ThrowEx.Custom(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
     }
 
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folder">The folder.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(Microsoft.Extensions.Logging.ILogger logger, string folder, GetFilesArgsFS? e = null)
     {
         return GetFoldersEveryFolder(folder, e);
     }
 
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="folder">The folder.</param>
+    /// <param name="e">The e.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(string folder, GetFilesArgsFS? e = null)
     {
         if (e == null) e = new GetFilesArgsFS();
         var list = new List<string>();
-        // zde progress bar nedává smysl. načítám to rekurzivně, tedy nevím na začátku kolik těch složek bude
-        //IProgressBarHelper pbh = null;
-        //if (a.progressBarHelper != null)
-        //{
-        //    pbh = a.progressBarHelper.CreateInstance(a.pb, files.Count, this);
-        //}
+        // a progress bar makes no sense here. I load it recursively, so I do not know at the start how many folders there will be
         GetFoldersEveryFolder(folder, list, e);
         if (e.TrimFirstPathAndLeadingBackslashes)
             for (var i = 0; i < list.Count; i++)

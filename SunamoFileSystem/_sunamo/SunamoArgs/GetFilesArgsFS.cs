@@ -2,6 +2,9 @@ namespace SunamoFileSystem._sunamo.SunamoArgs;
 
 // TODO: Should this inherit from GetFoldersEveryFolderArgs?
 // TODO: This class has issues - need to clean up what should be here
+/// <summary>
+/// Represents the get files args FS type.
+/// </summary>
 public class GetFilesArgsFS : GetFilesBaseArgsFS
 {
     internal new bool TrimFirstPathAndLeadingBackslashes = false;

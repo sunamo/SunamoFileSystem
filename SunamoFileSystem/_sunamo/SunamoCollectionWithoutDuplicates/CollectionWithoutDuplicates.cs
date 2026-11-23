@@ -1,7 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoCollectionWithoutDuplicates;
 
-// EN: Collection that does not allow duplicate values.
-// CZ: Kolekce která nepovoluje duplicitní hodnoty.
+// Collection that does not allow duplicate values.
 internal class CollectionWithoutDuplicates<T> : CollectionWithoutDuplicatesBase<T>
 {
     internal CollectionWithoutDuplicates()

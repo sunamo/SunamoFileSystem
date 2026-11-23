@@ -1,7 +1,6 @@
 namespace SunamoFileSystem._sunamo.SunamoCollectionWithoutDuplicates;
 
-// EN: Base class for collections that do not allow duplicate values.
-// CZ: Základní třída pro kolekce které nepovolují duplicitní hodnoty.
+// Base class for collections that do not allow duplicate values.
 internal abstract class CollectionWithoutDuplicatesBase<T>
 {
     internal static bool BreakOnDebugger = false;
@@ -29,9 +28,6 @@ internal abstract class CollectionWithoutDuplicatesBase<T>
         c = new List<T>(list.ToList());
     }
 
-    // true = compareWithString
-    // false = !compareWithString
-    // null = allow null (can't compareWithString)
     internal bool? allowNull
     {
         get => _allowNull;

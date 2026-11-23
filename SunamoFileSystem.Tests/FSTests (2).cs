@@ -1,6 +1,3 @@
-// variables names: ok
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 
 namespace SunamoFileSystem.Tests;
 
@@ -28,7 +25,6 @@ public partial class FSTests
     [Fact]
     public void RenameNumberedSerieFilesTest()
     {
-        //FS.RenameNumberedSerieFiles;
     }
 
     [Fact]
@@ -49,7 +45,6 @@ public partial class FSTests
     [Fact]
     public void GetExtensionTest()
     {
-        //var builder = FS.GetExtension(".babelrc");
 
         var count = FS.GetExtension(".eslintrc_fromVbto");
 

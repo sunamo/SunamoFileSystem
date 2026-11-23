@@ -1,4 +1,3 @@
-// variables names: ok
 namespace RunnerFileSystem;
 
 #if NET9_0_OR_GREATER
@@ -38,6 +37,11 @@ internal partial class Program
             RunInDebugAsync = RunInDebugAsync,
             ServiceCollection = Services,
             IsDebug =
+#if DEBUG
+                true
+#else
+                false
+#endif
         });
 
         Console.WriteLine("Finished");
@@ -48,13 +52,6 @@ internal partial class Program
     {
         await Task.Delay(1);
 
-        //FSTests t = new FSTests();
-        //t.RenameDirectoryTest();
-        //t.DeleteAllEmptyDirectoriesTest(false);
-        //t.MoveDirectoryNoRecursiveTest();
-        //t.CombineTest();
-        //t.MoveFileTest();
-        //t.GetFileSerieTest();
 
         FSManipulationWithoutMockTests t = new FSManipulationWithoutMockTests();
         await t.AllExtensionsInFolders();
