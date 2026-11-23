@@ -37,6 +37,11 @@ internal partial class Program
             RunInDebugAsync = RunInDebugAsync,
             ServiceCollection = Services,
             IsDebug =
+#if DEBUG
+                true
+#else
+                false
+#endif
         });
 
         Console.WriteLine("Finished");
